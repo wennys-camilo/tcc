@@ -1,4 +1,4 @@
-import '../../domain/models/cras_chart.dart';
+import 'package:tcc/app/modules/cras/domain/models/cras_chart.dart';
 
 class CrasState {
   final List<String> humidityList;

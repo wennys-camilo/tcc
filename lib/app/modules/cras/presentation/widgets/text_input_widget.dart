@@ -10,7 +10,8 @@ class TextInputWidget extends StatelessWidget {
   final bool enabled;
   final TextInputType? keyboardType;
   final bool decimalInput;
-
+  final String? Function(String?)? validator;
+  final String? initalValue;
   const TextInputWidget({
     Key? key,
     this.controller,
@@ -21,14 +22,18 @@ class TextInputWidget extends StatelessWidget {
     this.enabled = true,
     this.keyboardType,
     this.decimalInput = false,
+    this.validator,
+    this.initalValue,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
+      initialValue: initalValue,
       enabled: enabled,
       controller: controller,
       textAlign: TextAlign.center,
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       decoration: InputDecoration(
         border: const OutlineInputBorder(),
         enabledBorder:
@@ -48,6 +53,7 @@ class TextInputWidget extends StatelessWidget {
           : const TextInputType.numberWithOptions(decimal: true),
       onChanged: onChanged,
       readOnly: readOnly,
+      validator: validator,
     );
   }
 }
