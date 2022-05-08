@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'core/presentation/themes/app_theme.dart';
 
 class AppWidget extends StatelessWidget {
@@ -13,6 +14,9 @@ class AppWidget extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Slidy',
       theme: ThemeData(
+        textTheme: GoogleFonts.robotoTextTheme(
+          Theme.of(context).textTheme,
+        ),
         primarySwatch: Colors.blue,
         colorScheme:
             ColorScheme.fromSwatch().copyWith(primary: AppTheme.colors.primary),

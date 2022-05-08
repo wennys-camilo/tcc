@@ -30,9 +30,10 @@ class DrawerItemTileWidget extends StatelessWidget {
         title: Text(
           title,
           style: TextStyle(
-              fontSize: 15,
               fontWeight: FontWeight.bold,
-              color: selected ? AppTheme.colors.primary : Colors.black),
+              color: selected
+                  ? AppTheme.colors.primary
+                  : Colors.black.withOpacity(0.7)),
         ),
       ),
     );

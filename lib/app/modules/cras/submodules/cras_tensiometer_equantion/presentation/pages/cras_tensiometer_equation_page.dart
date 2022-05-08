@@ -7,8 +7,10 @@ class CrasTensiometerEquationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: CustomDrawer(),
-      appBar: AppBar(),
+      drawer: const CustomDrawer(),
+      appBar: AppBar(
+        title: const Text('Equação da Cras/Tensiômetro'),
+      ),
     );
   }
 }
