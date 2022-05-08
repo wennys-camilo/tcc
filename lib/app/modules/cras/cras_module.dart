@@ -1,6 +1,8 @@
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:tcc/app/modules/cras/presentation/pages/cras_page.dart';
 import 'package:tcc/app/modules/cras/submodules/cras_tensiometer_equantion/cras_tensiometer_equation_module.dart';
+import 'package:tcc/app/modules/cras/submodules/culture_irrigation_system_data/culture_irrigation_system_module.dart';
+import 'package:tcc/app/modules/cras/submodules/soil_data/soil_data_module.dart';
 import 'domain/usecases/fetch_list_cras_usecase_impl.dart';
 import 'domain/usecases/save_list_cras_usecase_impl.dart';
 import 'external/datasources/local/cras_local_datasource_impl.dart';
@@ -30,7 +32,15 @@ class CrasModule extends Module {
           ModuleRoute(
             '/cras-equation-tensiometer',
             module: CrasTensiometerEquationModule(),
-          )
+          ),
+          ModuleRoute(
+            '/soil-data',
+            module: SoilDataModule(),
+          ),
+          ModuleRoute(
+            '/culture-irrigation-system',
+            module: CultureIrrigationSystemModule(),
+          ),
         ]),
     ChildRoute('/chart', child: (_, args) => ChartWidget(data: args.data)),
   ];

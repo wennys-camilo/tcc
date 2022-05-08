@@ -27,7 +27,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 icon: Icons.water,
                 selected: Modular.to.path.endsWith('/cras'),
                 onTap: () {
-                  Modular.to.navigate('/cras');
+                  Modular.to.pushNamed('/cras');
                 },
               ),
               DrawerItemTileWidget(
@@ -36,23 +36,24 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 selected:
                     Modular.to.path.endsWith('/cras-equation-tensiometer/'),
                 onTap: () {
-                  Modular.to.navigate('/cras-equation-tensiometer');
+                  Modular.to.pushNamed('/cras-equation-tensiometer/');
                 },
               ),
               DrawerItemTileWidget(
                 title: 'DADOS DO SOLO',
                 icon: Icons.water,
-                selected: Modular.to.path.endsWith('/as'),
+                selected: Modular.to.path.endsWith('/soil-data/'),
                 onTap: () {
-                  Modular.to.navigate('/cras');
+                  Modular.to.pushNamed('/soil-data/');
                 },
               ),
               DrawerItemTileWidget(
                 title: 'DADOS DA CULTURA E DO SISTEMA DE IRRIGAÇÃO',
                 icon: Icons.water,
-                selected: Modular.to.path.endsWith('/crsasasasas'),
+                selected:
+                    Modular.to.path.endsWith('/culture-irrigation-system/'),
                 onTap: () {
-                  Modular.to.navigate('/cras');
+                  Modular.to.pushNamed('/culture-irrigation-system/');
                 },
               ),
               DrawerItemTileWidget(
@@ -60,7 +61,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 icon: Icons.water,
                 selected: Modular.to.path.endsWith('/sassaas'),
                 onTap: () {
-                  Modular.to.navigate('/cras');
+                  //Modular.to.navigate('/cras');
                 },
               ),
             ],

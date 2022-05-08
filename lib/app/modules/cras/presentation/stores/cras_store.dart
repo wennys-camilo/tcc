@@ -31,7 +31,6 @@ class CrasStore extends StreamStore<Failure, CrasState> {
   }
 
   Future<void> fetch() async {
-    setLoading(true);
     final response = await _fetchListCrasUsecase();
     response.fold(setError, (list) {
       if (list.isNotEmpty) {
@@ -50,7 +49,6 @@ class CrasStore extends StreamStore<Failure, CrasState> {
         );
       }
     });
-    setLoading(false);
   }
 
   onChangeEdit() {

@@ -1,6 +1,6 @@
 class CrasChart {
   final int kpa;
-  final num humidity;
+  final double humidity;
   CrasChart({
     required this.kpa,
     required this.humidity,

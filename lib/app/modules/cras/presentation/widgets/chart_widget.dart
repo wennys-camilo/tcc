@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import 'package:syncfusion_flutter_charts/charts.dart';
 
 import '../../domain/models/cras_chart.dart';
@@ -22,7 +23,10 @@ class _ChartWidgetState extends State<ChartWidget> {
     _trackballBehavior = TrackballBehavior(
         enable: true,
         tooltipDisplayMode: TrackballDisplayMode.groupAllPoints,
-        activationMode: ActivationMode.singleTap);
+        activationMode: ActivationMode.singleTap,
+        tooltipSettings: const InteractiveTooltip(
+          decimalPlaces: 5,
+        ));
   }
 
   @override

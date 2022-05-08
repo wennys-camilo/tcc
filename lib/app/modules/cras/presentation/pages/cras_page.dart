@@ -92,10 +92,11 @@ class _CrasPageState extends ModularState<CrasPage, CrasStore> {
 
         kpa100HumidityByWeight.text =
             (double.parse(state.humidityList[3]) * 100).toStringAsFixed(2);
+
         kpa800Humidity.text = state.humidityList[4];
 
         kpa800HumidityByWeight.text =
-            (double.parse(state.humidityList[3]) * 100).toStringAsFixed(2);
+            (double.parse(state.humidityList[4]) * 100).toStringAsFixed(2);
 
         kpa1500Humidity.text = state.humidityList[5];
 
@@ -124,67 +125,146 @@ class _CrasPageState extends ModularState<CrasPage, CrasStore> {
             child: Form(
               key: _formKey,
               child: TripleBuilder<CrasStore, Failure, CrasState>(
+                  store: store,
                   builder: (context, triple) {
-                return Column(
-                  children: [
-                    const SizedBox(
-                      height: 20,
-                    ),
-                    Container(
-                      constraints: const BoxConstraints(maxWidth: 800),
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          const SizedBox(
-                            width: 10,
+                    return Column(
+                      children: [
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Container(
+                          constraints: const BoxConstraints(maxWidth: 800),
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Flexible(
+                                child: Column(
+                                  children: [
+                                    const Text(
+                                      'Potencial (kpa)',
+                                      maxLines: 1,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    const SizedBox(
+                                      height: 15,
+                                    ),
+                                    TextInputWidget(
+                                      controller: kpa10,
+                                      readOnly: true,
+                                      labelText: 'Kpa',
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Flexible(
+                                flex: 2,
+                                child: Column(
+                                  children: [
+                                    const Text(
+                                      'Umidade',
+                                      maxLines: 1,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    const SizedBox(
+                                      height: 15,
+                                    ),
+                                    TextInputWidget(
+                                      enabled:
+                                          triple.state.humidityList.isEmpty ||
+                                              triple.state.edit,
+                                      controller: kpa10Humidity,
+                                      decimalInput: true,
+                                      labelText: 'Kg água/kg solo',
+                                      onChanged: (value) {
+                                        if (value.isNotEmpty) {
+                                          kpa10HumidityByWeight.text =
+                                              (double.parse(value) * 100)
+                                                  .toStringAsFixed(2);
+                                        } else {
+                                          kpa10HumidityByWeight.text = "";
+                                        }
+                                      },
+                                      validator: (value) {
+                                        if (value!.isEmpty) {
+                                          return "Campo Obrigatório";
+                                        }
+                                        return null;
+                                      },
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Flexible(
+                                flex: 2,
+                                child: Column(
+                                  children: [
+                                    const Text(
+                                      'Umidade em peso',
+                                      maxLines: 1,
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.bold),
+                                    ),
+                                    const SizedBox(
+                                      height: 15,
+                                    ),
+                                    TextInputWidget(
+                                      controller: kpa10HumidityByWeight,
+                                      labelText: "%",
+                                      enabled: false,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                            ],
                           ),
-                          Flexible(
-                            child: Column(
-                              children: [
-                                const Text(
-                                  'Potencial (kpa)',
-                                  maxLines: 1,
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                const SizedBox(
-                                  height: 15,
-                                ),
-                                TextInputWidget(
-                                  controller: kpa10,
+                        ),
+                        Container(
+                          constraints: const BoxConstraints(maxWidth: 800),
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Flexible(
+                                child: TextInputWidget(
+                                  controller: kpa30,
                                   readOnly: true,
                                   labelText: 'Kpa',
                                 ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Flexible(
-                            flex: 2,
-                            child: Column(
-                              children: [
-                                const Text(
-                                  'Umidade',
-                                  maxLines: 1,
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                const SizedBox(
-                                  height: 15,
-                                ),
-                                TextInputWidget(
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Flexible(
+                                flex: 2,
+                                child: TextInputWidget(
                                   enabled: triple.state.humidityList.isEmpty ||
                                       triple.state.edit,
-                                  controller: kpa10Humidity,
-                                  decimalInput: true,
+                                  controller: kpa30Humidity,
                                   labelText: 'Kg água/kg solo',
+                                  decimalInput: true,
                                   onChanged: (value) {
                                     if (value.isNotEmpty) {
-                                      kpa10HumidityByWeight.text =
+                                      kpa30HumidityByWeight.text =
                                           (double.parse(value) * 100)
                                               .toStringAsFixed(2);
                                     } else {
-                                      kpa10HumidityByWeight.text = "";
+                                      kpa30HumidityByWeight.text = "";
                                     }
                                   },
                                   validator: (value) {
@@ -194,379 +274,305 @@ class _CrasPageState extends ModularState<CrasPage, CrasStore> {
                                     return null;
                                   },
                                 ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Flexible(
-                            flex: 2,
-                            child: Column(
-                              children: [
-                                const Text(
-                                  'Umidade em peso',
-                                  maxLines: 1,
-                                  style: TextStyle(fontWeight: FontWeight.bold),
-                                ),
-                                const SizedBox(
-                                  height: 15,
-                                ),
-                                TextInputWidget(
-                                  controller: kpa10HumidityByWeight,
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Flexible(
+                                flex: 2,
+                                child: TextInputWidget(
+                                  controller: kpa30HumidityByWeight,
                                   labelText: "%",
                                   enabled: false,
                                 ),
-                              ],
-                            ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                            ],
                           ),
-                          const SizedBox(
-                            width: 10,
+                        ),
+                        Container(
+                          constraints: const BoxConstraints(maxWidth: 800),
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Flexible(
+                                child: TextInputWidget(
+                                  controller: kpa60,
+                                  readOnly: true,
+                                  labelText: 'Kpa',
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Flexible(
+                                flex: 2,
+                                child: TextInputWidget(
+                                  enabled: triple.state.humidityList.isEmpty ||
+                                      triple.state.edit,
+                                  controller: kpa60Humidity,
+                                  labelText: 'Kg água/kg solo',
+                                  decimalInput: true,
+                                  onChanged: (value) {
+                                    if (value.isNotEmpty) {
+                                      kpa60HumidityByWeight.text =
+                                          (double.parse(value) * 100)
+                                              .toStringAsFixed(2);
+                                    } else {
+                                      kpa60HumidityByWeight.text = "";
+                                    }
+                                  },
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return "Campo Obrigatório";
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Flexible(
+                                flex: 2,
+                                child: TextInputWidget(
+                                  controller: kpa60HumidityByWeight,
+                                  labelText: "%",
+                                  enabled: false,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      constraints: const BoxConstraints(maxWidth: 800),
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          const SizedBox(
-                            width: 10,
+                        ),
+                        Container(
+                          constraints: const BoxConstraints(maxWidth: 800),
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Flexible(
+                                child: TextInputWidget(
+                                  controller: kpa100,
+                                  readOnly: true,
+                                  labelText: 'Kpa',
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Flexible(
+                                flex: 2,
+                                child: TextInputWidget(
+                                  enabled: triple.state.humidityList.isEmpty ||
+                                      triple.state.edit,
+                                  controller: kpa100Humidity,
+                                  labelText: 'Kg água/kg solo',
+                                  decimalInput: true,
+                                  onChanged: (value) {
+                                    if (value.isNotEmpty) {
+                                      kpa100HumidityByWeight.text =
+                                          (double.parse(value) * 100)
+                                              .toStringAsFixed(2);
+                                    } else {
+                                      kpa100HumidityByWeight.text = "";
+                                    }
+                                  },
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return "Campo Obrigatório";
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Flexible(
+                                flex: 2,
+                                child: TextInputWidget(
+                                  controller: kpa100HumidityByWeight,
+                                  labelText: "%",
+                                  enabled: false,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                            ],
                           ),
-                          Flexible(
-                            child: TextInputWidget(
-                              controller: kpa30,
-                              readOnly: true,
-                              labelText: 'Kpa',
-                            ),
+                        ),
+                        Container(
+                          constraints: const BoxConstraints(maxWidth: 800),
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Flexible(
+                                child: TextInputWidget(
+                                  controller: kpa800,
+                                  readOnly: true,
+                                  labelText: 'Kpa',
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Flexible(
+                                flex: 2,
+                                child: TextInputWidget(
+                                  enabled: triple.state.humidityList.isEmpty ||
+                                      triple.state.edit,
+                                  controller: kpa800Humidity,
+                                  labelText: 'Kg água/kg solo',
+                                  decimalInput: true,
+                                  onChanged: (value) {
+                                    if (value.isNotEmpty) {
+                                      kpa800HumidityByWeight.text =
+                                          (double.parse(value) * 100)
+                                              .toStringAsFixed(2);
+                                    } else {
+                                      kpa800HumidityByWeight.text = "";
+                                    }
+                                  },
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return "Campo Obrigatório";
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Flexible(
+                                flex: 2,
+                                child: TextInputWidget(
+                                  controller: kpa800HumidityByWeight,
+                                  labelText: "%",
+                                  enabled: false,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                            ],
                           ),
-                          const SizedBox(
-                            width: 10,
+                        ),
+                        Container(
+                          constraints: const BoxConstraints(maxWidth: 800),
+                          padding: const EdgeInsets.all(8.0),
+                          child: Row(
+                            children: [
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Flexible(
+                                child: TextInputWidget(
+                                  controller: kpa1500,
+                                  readOnly: true,
+                                  labelText: 'Kpa',
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Flexible(
+                                flex: 2,
+                                child: TextInputWidget(
+                                  enabled: triple.state.humidityList.isEmpty ||
+                                      triple.state.edit,
+                                  controller: kpa1500Humidity,
+                                  labelText: 'Kg água/kg solo',
+                                  decimalInput: true,
+                                  onChanged: (value) {
+                                    if (value.isNotEmpty) {
+                                      kpa1500HumidityByWeight.text =
+                                          (double.parse(value) * 100)
+                                              .toStringAsFixed(2);
+                                    } else {
+                                      kpa1500HumidityByWeight.text = "";
+                                    }
+                                  },
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return "Campo Obrigatório";
+                                    }
+                                    return null;
+                                  },
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                              Flexible(
+                                flex: 2,
+                                child: TextInputWidget(
+                                  controller: kpa1500HumidityByWeight,
+                                  labelText: "%",
+                                  enabled: false,
+                                ),
+                              ),
+                              const SizedBox(
+                                width: 10,
+                              ),
+                            ],
                           ),
-                          Flexible(
-                            flex: 2,
-                            child: TextInputWidget(
-                              enabled: triple.state.humidityList.isEmpty ||
-                                  triple.state.edit,
-                              controller: kpa30Humidity,
-                              labelText: 'Kg água/kg solo',
-                              decimalInput: true,
-                              onChanged: (value) {
-                                if (value.isNotEmpty) {
-                                  kpa30HumidityByWeight.text =
-                                      (double.parse(value) * 100)
-                                          .toStringAsFixed(2);
-                                } else {
-                                  kpa30HumidityByWeight.text = "";
-                                }
-                              },
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return "Campo Obrigatório";
-                                }
-                                return null;
-                              },
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Flexible(
-                            flex: 2,
-                            child: TextInputWidget(
-                              controller: kpa30HumidityByWeight,
-                              labelText: "%",
-                              enabled: false,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      constraints: const BoxConstraints(maxWidth: 800),
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Flexible(
-                            child: TextInputWidget(
-                              controller: kpa60,
-                              readOnly: true,
-                              labelText: 'Kpa',
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Flexible(
-                            flex: 2,
-                            child: TextInputWidget(
-                              enabled: triple.state.humidityList.isEmpty ||
-                                  triple.state.edit,
-                              controller: kpa60Humidity,
-                              labelText: 'Kg água/kg solo',
-                              decimalInput: true,
-                              onChanged: (value) {
-                                if (value.isNotEmpty) {
-                                  kpa60HumidityByWeight.text =
-                                      (double.parse(value) * 100)
-                                          .toStringAsFixed(2);
-                                } else {
-                                  kpa60HumidityByWeight.text = "";
-                                }
-                              },
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return "Campo Obrigatório";
-                                }
-                                return null;
-                              },
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Flexible(
-                            flex: 2,
-                            child: TextInputWidget(
-                              controller: kpa60HumidityByWeight,
-                              labelText: "%",
-                              enabled: false,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      constraints: const BoxConstraints(maxWidth: 800),
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Flexible(
-                            child: TextInputWidget(
-                              controller: kpa100,
-                              readOnly: true,
-                              labelText: 'Kpa',
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Flexible(
-                            flex: 2,
-                            child: TextInputWidget(
-                              enabled: triple.state.humidityList.isEmpty ||
-                                  triple.state.edit,
-                              controller: kpa100Humidity,
-                              labelText: 'Kg água/kg solo',
-                              decimalInput: true,
-                              onChanged: (value) {
-                                if (value.isNotEmpty) {
-                                  kpa100HumidityByWeight.text =
-                                      (double.parse(value) * 100)
-                                          .toStringAsFixed(2);
-                                } else {
-                                  kpa100HumidityByWeight.text = "";
-                                }
-                              },
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return "Campo Obrigatório";
-                                }
-                                return null;
-                              },
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Flexible(
-                            flex: 2,
-                            child: TextInputWidget(
-                              controller: kpa100HumidityByWeight,
-                              labelText: "%",
-                              enabled: false,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      constraints: const BoxConstraints(maxWidth: 800),
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Flexible(
-                            child: TextInputWidget(
-                              controller: kpa800,
-                              readOnly: true,
-                              labelText: 'Kpa',
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Flexible(
-                            flex: 2,
-                            child: TextInputWidget(
-                              enabled: triple.state.humidityList.isEmpty ||
-                                  triple.state.edit,
-                              controller: kpa800Humidity,
-                              labelText: 'Kg água/kg solo',
-                              decimalInput: true,
-                              onChanged: (value) {
-                                if (value.isNotEmpty) {
-                                  kpa800HumidityByWeight.text =
-                                      (double.parse(value) * 100)
-                                          .toStringAsFixed(2);
-                                } else {
-                                  kpa800HumidityByWeight.text = "";
-                                }
-                              },
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return "Campo Obrigatório";
-                                }
-                                return null;
-                              },
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Flexible(
-                            flex: 2,
-                            child: TextInputWidget(
-                              controller: kpa800HumidityByWeight,
-                              labelText: "%",
-                              enabled: false,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      constraints: const BoxConstraints(maxWidth: 800),
-                      padding: const EdgeInsets.all(8.0),
-                      child: Row(
-                        children: [
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Flexible(
-                            child: TextInputWidget(
-                              controller: kpa1500,
-                              readOnly: true,
-                              labelText: 'Kpa',
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Flexible(
-                            flex: 2,
-                            child: TextInputWidget(
-                              enabled: triple.state.humidityList.isEmpty ||
-                                  triple.state.edit,
-                              controller: kpa1500Humidity,
-                              labelText: 'Kg água/kg solo',
-                              decimalInput: true,
-                              onChanged: (value) {
-                                if (value.isNotEmpty) {
-                                  kpa1500HumidityByWeight.text =
-                                      (double.parse(value) * 100)
-                                          .toStringAsFixed(2);
-                                } else {
-                                  kpa1500HumidityByWeight.text = "";
-                                }
-                              },
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return "Campo Obrigatório";
-                                }
-                                return null;
-                              },
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                          Flexible(
-                            flex: 2,
-                            child: TextInputWidget(
-                              controller: kpa1500HumidityByWeight,
-                              labelText: "%",
-                              enabled: false,
-                            ),
-                          ),
-                          const SizedBox(
-                            width: 10,
-                          ),
-                        ],
-                      ),
-                    ),
-                    Container(
-                      constraints: const BoxConstraints(maxWidth: 800),
-                      padding: const EdgeInsets.all(15.0),
-                      child: SizedBox(
-                        height: 40,
-                        width: MediaQuery.of(context).size.width,
-                        child: TextButton(
-                          style: TextButton.styleFrom(
-                            backgroundColor:
-                                triple.state.humidityList.isEmpty ||
+                        ),
+                        Container(
+                          constraints: const BoxConstraints(maxWidth: 800),
+                          padding: const EdgeInsets.all(15.0),
+                          child: SizedBox(
+                            height: 40,
+                            width: MediaQuery.of(context).size.width,
+                            child: TextButton(
+                              style: TextButton.styleFrom(
+                                backgroundColor: triple
+                                            .state.humidityList.isEmpty ||
                                         triple.state.edit
                                     ? AppTheme.colors.primary
                                     : AppTheme.colors.primary.withOpacity(0.3),
-                          ),
-                          child: const Text(
-                            'Salvar',
-                            style: TextStyle(
-                              color: Colors.white,
+                              ),
+                              child: const Text(
+                                'Salvar',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                              onPressed: triple.state.humidityList.isEmpty ||
+                                      triple.state.edit
+                                  ? () {
+                                      if (_formKey.currentState!.validate()) {
+                                        store.save([
+                                          kpa10Humidity.text,
+                                          kpa30Humidity.text,
+                                          kpa60Humidity.text,
+                                          kpa100Humidity.text,
+                                          kpa800Humidity.text,
+                                          kpa1500Humidity.text,
+                                        ]);
+                                      }
+                                    }
+                                  : null,
                             ),
                           ),
-                          onPressed: triple.state.humidityList.isEmpty ||
-                                  triple.state.edit
-                              ? () {
-                                  if (_formKey.currentState!.validate()) {
-                                    store.save([
-                                      kpa10Humidity.text,
-                                      kpa30Humidity.text,
-                                      kpa60Humidity.text,
-                                      kpa100Humidity.text,
-                                      kpa800Humidity.text,
-                                      kpa1500Humidity.text,
-                                    ]);
-                                  }
-                                }
-                              : null,
                         ),
-                      ),
-                    ),
-                  ],
-                );
-              }),
+                      ],
+                    );
+                  }),
             ),
           ),
         ),
@@ -584,6 +590,7 @@ class _CrasPageState extends ModularState<CrasPage, CrasStore> {
                         : AppTheme.colors.primary,
                     onPressed: () {
                       store.onChangeEdit();
+                      if (_formKey.currentState!.validate()) {}
                     },
                     label: Icon(triple.state.edit ? Icons.close : Icons.edit),
                     heroTag: null,
