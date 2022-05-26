@@ -10,7 +10,13 @@ class CrasStore extends StreamStore<Failure, CrasState> {
   final SaveListCrasUsecase _saveListCrasUsecase;
   final FetchListCrasUsecase _fetchListCrasUsecase;
   CrasStore(this._saveListCrasUsecase, this._fetchListCrasUsecase)
-      : super(CrasState(humidityList: [], chartList: [], edit: false));
+      : super(CrasState(
+          humidityList: [],
+          chartList: [],
+          edit: false,
+          equotion: '',
+          square: '',
+        ));
 
   Future<void> save(List<String> values) async {
     final response = await _saveListCrasUsecase(values);
@@ -53,5 +59,13 @@ class CrasStore extends StreamStore<Failure, CrasState> {
 
   onChangeEdit() {
     update(state.copyWith(edit: !state.edit));
+  }
+
+  onChangeEquation(String value) {
+    update(state.copyWith(equotion: value));
+  }
+
+  onChangeSquare(String value) {
+    update(state.copyWith(square: value));
   }
 }

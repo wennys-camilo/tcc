@@ -1,29 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_modular/flutter_modular.dart';
+import 'package:flutter_triple/flutter_triple.dart';
 
 import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:tcc/app/core/domain/domain.dart';
+import 'package:tcc/app/modules/cras/presentation/state/cras_state.dart';
+import 'package:tcc/app/modules/cras/presentation/stores/cras_store.dart';
 
 import '../../domain/models/cras_chart.dart';
 
-class ChartWidget extends StatefulWidget {
+class CrasChartPage extends StatefulWidget {
   final List<CrasChart> data;
 
-  const ChartWidget({Key? key, required this.data}) : super(key: key);
+  const CrasChartPage({Key? key, required this.data}) : super(key: key);
 
   @override
-  State<ChartWidget> createState() => _ChartWidgetState();
+  State<CrasChartPage> createState() => _CrasChartPageState();
 }
 
-class _ChartWidgetState extends State<ChartWidget> {
+class _CrasChartPageState extends ModularState<CrasChartPage, CrasStore> {
   late TrackballBehavior _trackballBehavior;
-  late String equotion;
-  late String square;
 
   @override
   void initState() {
     super.initState();
-    equotion = "";
-    square = "";
+
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
@@ -60,12 +62,15 @@ class _ChartWidgetState extends State<ChartWidget> {
         child: SfCartesianChart(
           annotations: <CartesianChartAnnotation>[
             CartesianChartAnnotation(
-                widget: Column(
-                  children: [
-                    Text(equotion),
-                    Text(square),
-                  ],
-                ),
+                widget: TripleBuilder<CrasStore, Failure, CrasState>(
+                    builder: (context, triple) {
+                  return Column(
+                    children: [
+                      Text(triple.state.equotion),
+                      Text(triple.state.square),
+                    ],
+                  );
+                }),
                 // Coordinate unit type
                 coordinateUnit: CoordinateUnit.logicalPixel,
                 x: 700,
@@ -88,16 +93,14 @@ class _ChartWidgetState extends State<ChartWidget> {
                       /*print('Slope value: ' + args.slope![0].toString());
                       print('rSquare value: ' + args.rSquaredValue.toString());
                       print(
+                    //TODO: VERIDICAR E EXCLUIR WIDGET
                           'Intercept value (x): ' + args.intercept.toString());*/
-
-                      square = (double.parse(
+                      store.onChangeSquare((double.parse(
                               (args.rSquaredValue)!.toStringAsFixed(4)))
-                          .toString();
-                      print(
-                          "R² = ${double.parse((args.rSquaredValue)!.toStringAsFixed(4))}");
+                          .toString());
 
-                      print(
-                          'y = ${double.parse(args.intercept!.toStringAsFixed(3))}x^${double.parse((args.slope![0]).toStringAsFixed(3))}');
+                      store.onChangeEquation(
+                          ('y = ${double.parse(args.intercept!.toStringAsFixed(3))}x^${double.parse((args.slope![0]).toStringAsFixed(3))}'));
                     }),
               ],
             ),

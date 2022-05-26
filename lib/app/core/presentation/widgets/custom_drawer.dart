@@ -59,9 +59,9 @@ class _CustomDrawerState extends State<CustomDrawer> {
               DrawerItemTileWidget(
                 title: 'MAJEJO DA IRRIGAÇÃO COM TENSIÔMETRO',
                 icon: Icons.water,
-                selected: Modular.to.path.endsWith('/sassaas'),
+                selected: Modular.to.path.endsWith('/irrigation-management/'),
                 onTap: () {
-                  //Modular.to.navigate('/cras');
+                  Modular.to.pushNamed('/irrigation-management/');
                 },
               ),
             ],

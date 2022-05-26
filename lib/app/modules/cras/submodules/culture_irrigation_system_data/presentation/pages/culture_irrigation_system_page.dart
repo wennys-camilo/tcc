@@ -22,7 +22,7 @@ class _CultureIrrigationSystemPageState extends ModularState<
   @override
   void initState() {
     super.initState();
-    kcController = TextEditingController();
+    kcController = TextEditingController(text: '30 a 60');
   }
 
   @override
