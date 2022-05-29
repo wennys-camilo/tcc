@@ -576,7 +576,7 @@ class _CrasPageState extends ModularState<CrasPage, CrasStore> {
             ),
           ),
         ),
-        floatingActionButton: TripleBuilder<CrasStore, Exception, CrasState>(
+        floatingActionButton: TripleBuilder<CrasStore, Failure, CrasState>(
           store: store,
           builder: (context, triple) {
             if (triple.state.humidityList.isNotEmpty) {
@@ -601,8 +601,10 @@ class _CrasPageState extends ModularState<CrasPage, CrasStore> {
                   FloatingActionButton.extended(
                     backgroundColor: AppTheme.colors.primary,
                     onPressed: () {
-                      Modular.to.pushNamed('/chart',
-                          arguments: triple.state.chartList);
+                      Modular.to.pushNamed('/chart', arguments: [
+                        triple.state.chartList,
+                        store,
+                      ]);
                     },
                     label: const Icon(Icons.show_chart),
                     heroTag: null,

@@ -1,25 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_modular/flutter_modular.dart';
-import 'package:flutter_triple/flutter_triple.dart';
-
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:tcc/app/core/domain/domain.dart';
-import 'package:tcc/app/modules/cras/presentation/state/cras_state.dart';
 import 'package:tcc/app/modules/cras/presentation/stores/cras_store.dart';
-
 import '../../domain/models/cras_chart.dart';
 
 class CrasChartPage extends StatefulWidget {
   final List<CrasChart> data;
-
-  const CrasChartPage({Key? key, required this.data}) : super(key: key);
+  final CrasStore crasStore;
+  const CrasChartPage({Key? key, required this.data, required this.crasStore})
+      : super(key: key);
 
   @override
   State<CrasChartPage> createState() => _CrasChartPageState();
 }
 
-class _CrasChartPageState extends ModularState<CrasChartPage, CrasStore> {
+class _CrasChartPageState extends State<CrasChartPage> {
   late TrackballBehavior _trackballBehavior;
 
   @override
@@ -60,7 +55,7 @@ class _CrasChartPageState extends ModularState<CrasChartPage, CrasStore> {
       ),
       body: Center(
         child: SfCartesianChart(
-          annotations: <CartesianChartAnnotation>[
+          /*annotations: <CartesianChartAnnotation>[
             CartesianChartAnnotation(
                 widget: TripleBuilder<CrasStore, Failure, CrasState>(
                     builder: (context, triple) {
@@ -75,7 +70,7 @@ class _CrasChartPageState extends ModularState<CrasChartPage, CrasStore> {
                 coordinateUnit: CoordinateUnit.logicalPixel,
                 x: 700,
                 y: 20)
-          ],
+          ],*/
           primaryXAxis: NumericAxis(interval: 200, maximum: 1600),
           primaryYAxis: NumericAxis(),
           trackballBehavior: _trackballBehavior,
@@ -95,12 +90,13 @@ class _CrasChartPageState extends ModularState<CrasChartPage, CrasStore> {
                       print(
                     //TODO: VERIDICAR E EXCLUIR WIDGET
                           'Intercept value (x): ' + args.intercept.toString());*/
-                      store.onChangeSquare((double.parse(
-                              (args.rSquaredValue)!.toStringAsFixed(4)))
-                          .toString());
 
-                      store.onChangeEquation(
-                          ('y = ${double.parse(args.intercept!.toStringAsFixed(3))}x^${double.parse((args.slope![0]).toStringAsFixed(3))}'));
+                      /*store.onChangeSquare((double.parse(
+                              (args.rSquaredValue)!.toStringAsFixed(4)))
+                          .toString());*/
+
+                      /*store.onChangeEquation(
+                          ('y = ${double.parse(args.intercept!.toStringAsFixed(3))}x^${double.parse((args.slope![0]).toStringAsFixed(3))}'));*/
                     }),
               ],
             ),

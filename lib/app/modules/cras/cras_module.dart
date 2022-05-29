@@ -10,7 +10,6 @@ import 'external/datasources/local/cras_local_datasource_impl.dart';
 import 'infra/repositories/cras_repository_impl.dart';
 import 'presentation/pages/cras_chart_page.dart';
 import 'presentation/stores/cras_store.dart';
-import 'presentation/widgets/chart_widget.dart';
 
 class CrasModule extends Module {
   @override
@@ -27,10 +26,8 @@ class CrasModule extends Module {
     ChildRoute(Modular.initialRoute,
         child: (_, args) => const RouterOutlet(),
         children: [
-          ChildRoute(
-            '/cras',
-            child: (_, args) => const CrasPage(),
-          ),
+          ChildRoute('/cras',
+              child: (_, args) => const CrasPage(), children: []),
           ModuleRoute(
             '/cras-equation-tensiometer',
             module: CrasTensiometerEquationModule(),
@@ -48,6 +45,10 @@ class CrasModule extends Module {
             module: IrrigationManagementModule(),
           ),
         ]),
-    ChildRoute('/chart', child: (_, args) => CrasChartPage(data: args.data)),
+    ChildRoute('/chart',
+        child: (_, args) => CrasChartPage(
+              data: args.data[0],
+              crasStore: args.data[1],
+            )),
   ];
 }
