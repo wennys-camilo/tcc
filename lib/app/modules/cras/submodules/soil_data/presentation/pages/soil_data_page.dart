@@ -1,24 +1,33 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_modular/flutter_modular.dart';
-import 'package:tcc/app/core/presentation/themes/app_theme.dart';
-import 'package:tcc/app/core/presentation/widgets/custom_drawer.dart';
-import 'package:tcc/app/modules/cras/presentation/widgets/text_input_widget.dart';
-import 'package:tcc/app/modules/cras/submodules/soil_data/presentation/store/soil_data_store.dart';
-
+import '../../../../domain/models/soil_data.dart';
+import '../../../../../../core/presentation/themes/app_theme.dart';
+import '../../../../../../core/presentation/widgets/custom_drawer.dart';
 import '../../../../presentation/widgets/drop_down_wisget.dart';
+import '../../../../presentation/widgets/text_input_widget.dart';
+import '../store/local_soil_data_store.dart';
+import '../store/soil_data_store.dart';
 
 class SoilDataPage extends StatefulWidget {
-  const SoilDataPage({Key? key}) : super(key: key);
+  final SoilDataStore store;
+  final LocalSoilDataStore localSoilDataStore;
+  const SoilDataPage(
+      {Key? key, required this.store, required this.localSoilDataStore})
+      : super(key: key);
 
   @override
   State<SoilDataPage> createState() => _SoilDataPageState();
 }
 
-class _SoilDataPageState extends ModularState<SoilDataPage, SoilDataStore> {
+class _SoilDataPageState extends State<SoilDataPage> {
+  SoilDataStore get store => widget.store;
+
   late final TextEditingController fieldCapacityVoltageController;
   late final TextEditingController fieldCapacityMoistureController;
   late final TextEditingController moistureAtWiltingPointController;
+  late final TextEditingController soilDensityController;
+  late final GlobalKey<FormState> _formkey;
 
+  late final FocusNode soilDensityfocusNode;
   @override
   void initState() {
     super.initState();
@@ -27,6 +36,26 @@ class _SoilDataPageState extends ModularState<SoilDataPage, SoilDataStore> {
         text: store.moisure(fieldCapacityVoltageController.text));
     moistureAtWiltingPointController =
         TextEditingController(text: store.moistureAtWiltingPoint());
+    soilDensityfocusNode = FocusNode();
+    soilDensityController = TextEditingController();
+    _formkey = GlobalKey<FormState>();
+
+    widget.localSoilDataStore.observer(
+      onState: (state) {
+        if (state.soilData.soilTexture.isNotEmpty) {
+          store.onChangeSoilTexture(state.soilData.soilTexture);
+          fieldCapacityVoltageController.text =
+              state.soilData.fieldCapacityVoltage;
+          fieldCapacityMoistureController.text =
+              state.soilData.fieldCapacityHumidity;
+          moistureAtWiltingPointController.text =
+              state.soilData.wiltingPointMoisture;
+          soilDensityController.text = state.soilData.soilDensity;
+        }
+      },
+    );
+
+    widget.localSoilDataStore.fetchSoilData();
   }
 
   @override
@@ -40,105 +69,141 @@ class _SoilDataPageState extends ModularState<SoilDataPage, SoilDataStore> {
         child: Container(
           height: MediaQuery.of(context).size.height,
           color: AppTheme.colors.primary.withOpacity(0.1),
-          child: Column(
-            children: [
-              const SizedBox(
-                height: 10,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: DropDownWidget(
-                  value: store.state.soilTexture,
-                  onChanged: (value) {
-                    store.onChangeSoilTexture(value);
-                    if (value == 0) {
-                      fieldCapacityVoltageController.text = '10';
+          child: Form(
+            key: _formkey,
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: DropDownWidget<String>(
+                    value: store.state.soilTexture,
+                    onChanged: (value) {
+                      store.onChangeSoilTexture(value!);
+                      if (value == '0') {
+                        fieldCapacityVoltageController.text = '10';
+                      } else if (value == '1') {
+                        fieldCapacityVoltageController.text = "30";
+                      } else if (value == '2') {
+                        fieldCapacityVoltageController.text = "30";
+                      }
                       store.onChangeCapacityVoltage(
                           fieldCapacityVoltageController.text);
-                    } else if (value == 1) {
-                      fieldCapacityVoltageController.text = "30";
-                      store.onChangeCapacityVoltage(
-                          fieldCapacityVoltageController.text);
-                    } else if (value == 2) {
-                      fieldCapacityVoltageController.text = "30";
-                      store.onChangeCapacityVoltage(
-                          fieldCapacityVoltageController.text);
-                    }
-
-                    fieldCapacityMoistureController.text =
-                        store.moisure(fieldCapacityVoltageController.text);
-                  },
-                  items: const [
-                    DropdownMenuItem(
-                      child: Center(
-                        child: Text(
-                          'Arenosa',
+                      fieldCapacityMoistureController.text =
+                          store.moisure(fieldCapacityVoltageController.text);
+                    },
+                    items: const [
+                      DropdownMenuItem(
+                        child: Center(
+                          child: Text(
+                            'Arenosa',
+                          ),
                         ),
+                        value: '0',
                       ),
-                      value: 0,
-                    ),
-                    DropdownMenuItem(
-                      child: Center(
-                        child: Text('Média'),
+                      DropdownMenuItem(
+                        child: Center(
+                          child: Text('Média'),
+                        ),
+                        value: '1',
                       ),
-                      value: 1,
-                    ),
-                    DropdownMenuItem(
-                      child: Center(
-                        child: Text('Argilosa'),
-                      ),
-                      value: 2,
-                    )
-                  ],
-                  labelText: 'Textura do Solo',
-                  style: const TextStyle(fontSize: 18, color: Colors.black),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextInputWidget(
-                  fillColor: AppTheme.colors.greyLight,
-                  controller: fieldCapacityVoltageController,
-                  enabled: false,
-                  labelText: 'Tensão da Capacidade de Campo',
-                  style: TextStyle(
-                    color: AppTheme.colors.secondary,
+                      DropdownMenuItem(
+                        child: Center(
+                          child: Text('Argilosa'),
+                        ),
+                        value: '2',
+                      )
+                    ],
+                    labelText: 'Textura do Solo',
+                    style: const TextStyle(fontSize: 18, color: Colors.black),
                   ),
-                  suffixText: 'kPa',
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextInputWidget(
-                  fillColor: AppTheme.colors.greyLight,
-                  controller: fieldCapacityMoistureController,
-                  enabled: false,
-                  style: TextStyle(color: AppTheme.colors.secondary),
-                  labelText: 'Umidade da Capacidade de Campo (UCC):',
-                  suffixText: '%',
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextInputWidget(
+                    fillColor: AppTheme.colors.greyLight,
+                    controller: fieldCapacityVoltageController,
+                    enabled: false,
+                    labelText: 'Tensão da Capacidade de Campo',
+                    style: TextStyle(
+                      color: AppTheme.colors.secondary,
+                    ),
+                    suffixText: 'kPa',
+                  ),
                 ),
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: TextInputWidget(
-                  fillColor: AppTheme.colors.greyLight,
-                  enabled: false,
-                  style: TextStyle(color: AppTheme.colors.secondary),
-                  controller: moistureAtWiltingPointController,
-                  labelText: 'Umidade no ponto de murcha (UPM):',
-                  suffixText: '%',
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextInputWidget(
+                    fillColor: AppTheme.colors.greyLight,
+                    controller: fieldCapacityMoistureController,
+                    enabled: false,
+                    style: TextStyle(color: AppTheme.colors.secondary),
+                    labelText: 'Umidade da Capacidade de Campo (UCC):',
+                    suffixText: '%',
+                  ),
                 ),
-              ),
-              const Padding(
-                padding: EdgeInsets.all(8.0),
-                child: TextInputWidget(
-                  labelText: 'Densidade do solo (ds):',
-                  suffixText: 'g/cm³',
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: TextInputWidget(
+                    fillColor: AppTheme.colors.greyLight,
+                    enabled: false,
+                    style: TextStyle(color: AppTheme.colors.secondary),
+                    controller: moistureAtWiltingPointController,
+                    labelText: 'Umidade no ponto de murcha (UPM):',
+                    suffixText: '%',
+                  ),
                 ),
-              ),
-            ],
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    children: [
+                      const Text('g/cm³'),
+                      TextInputWidget(
+                        focusNode: soilDensityfocusNode,
+                        controller: soilDensityController,
+                        labelText: 'Densidade do solo (ds):',
+                        validator: (value) {
+                          if (value!.isEmpty) {
+                            return 'Campo Obrigatório';
+                          }
+                          return null;
+                        },
+                        onChanged: store.onChangeSoilDensity,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
+      ),
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: AppTheme.colors.primary,
+        onPressed: () {
+          if (_formkey.currentState!.validate()) {
+            soilDensityfocusNode.unfocus();
+            store.saveSoilData(
+              SoilData(
+                soilTexture: store.state.soilTexture,
+                fieldCapacityVoltage: fieldCapacityVoltageController.text,
+                fieldCapacityHumidity: fieldCapacityMoistureController.text,
+                wiltingPointMoisture: moistureAtWiltingPointController.text,
+                soilDensity: soilDensityController.text,
+              ),
+            );
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Dados solo salvos!'),
+              ),
+            );
+          }
+        },
+        label: const Icon(Icons.save),
+        heroTag: null,
       ),
     );
   }

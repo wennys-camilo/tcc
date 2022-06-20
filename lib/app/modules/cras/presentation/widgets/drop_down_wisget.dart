@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../../../../core/presentation/themes/app_theme.dart';
 
-class DropDownWidget extends StatelessWidget {
-  final void Function(dynamic)? onChanged;
-  final List<DropdownMenuItem<dynamic>>? items;
+class DropDownWidget<T> extends StatelessWidget {
+  final void Function(T?)? onChanged;
+  final List<DropdownMenuItem<T>>? items;
   final String? labelText;
-  final dynamic value;
+  final T? value;
   final TextStyle? style;
   final String? suffixText;
   const DropDownWidget({
@@ -14,14 +14,14 @@ class DropDownWidget extends StatelessWidget {
     required this.onChanged,
     required this.items,
     this.labelText,
-    required this.value,
+    this.value,
     this.style,
     this.suffixText,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return DropdownButtonFormField<dynamic>(
+    return DropdownButtonFormField<T>(
       isExpanded: true,
       value: value,
       decoration: InputDecoration(

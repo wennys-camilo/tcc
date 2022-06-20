@@ -11,7 +11,7 @@ class FetchListCrasUsecaseImpl implements FetchListCrasUsecase {
 
   @override
   Future<Either<Failure, List<String>>> call() async {
-    final response = await _repository.fetch();
+    final response = await _repository.fetchChart();
     return response;
   }
 }

@@ -1,17 +1,20 @@
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:tcc/app/modules/cras/submodules/irrigation_management/presentation/pages/irrigation_management_page.dart';
-
+import 'presentation/pages/irrigation_management_page.dart';
 import 'presentation/store/irrigation_management_store.dart';
 
 class IrrigationManagementModule extends Module {
   @override
-  final List<Bind> binds = [Bind((i) => IrrigationManagementStore())];
+  final List<Bind> binds = [
+    Bind((i) => IrrigationManagementStore(i.get(), i.get())),
+  ];
 
   @override
   final List<ModularRoute> routes = [
     ChildRoute(
       Modular.initialRoute,
-      child: (_, args) => const IrrigationManagementPage(),
+      child: (context, args) => IrrigationManagementPage(
+        store: context.read(),
+      ),
     )
   ];
 }

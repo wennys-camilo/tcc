@@ -17,6 +17,7 @@ class TextInputWidget extends StatelessWidget {
   final TextStyle? style;
   final bool centerText;
   final Color? fillColor;
+  final FocusNode? focusNode;
   const TextInputWidget(
       {Key? key,
       this.controller,
@@ -33,7 +34,8 @@ class TextInputWidget extends StatelessWidget {
       this.labelStyle,
       this.style,
       this.centerText = true,
-      this.fillColor})
+      this.fillColor,
+      this.focusNode})
       : super(key: key);
 
   @override
@@ -41,6 +43,7 @@ class TextInputWidget extends StatelessWidget {
     return IgnorePointer(
       ignoring: !enabled,
       child: TextFormField(
+        focusNode: focusNode,
         initialValue: initalValue,
         style: style,
         controller: controller,
