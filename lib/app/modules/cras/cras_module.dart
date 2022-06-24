@@ -1,5 +1,7 @@
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:tcc/app/modules/cras/domain/usecases/fetch_culture_data_usecase_impl.dart';
 import 'package:tcc/app/modules/cras/domain/usecases/fetch_soil_data_usecase_impl.dart';
+import 'package:tcc/app/modules/cras/domain/usecases/save_culture_data_usecase_impl.dart';
 import 'package:tcc/app/modules/cras/domain/usecases/save_soil_data_usecase_impl.dart';
 import 'package:tcc/app/modules/cras/presentation/pages/cras_page.dart';
 import 'package:tcc/app/modules/cras/submodules/cras_tensiometer_equantion/cras_tensiometer_equation_module.dart';
@@ -18,7 +20,7 @@ import 'presentation/stores/cras_store.dart';
 class CrasModule extends Module {
   @override
   final List<Bind> binds = [
-    Bind.factory(((i) => CrasLocalDataSourceImpl(i.get()))),
+    Bind((i) => CrasLocalDataSourceImpl(i.get())),
     Bind(((i) => CrasRepositoryImpl(i.get()))),
     Bind(((i) => SaveListCrasUsecaseImpl(i.get()))),
     Bind(((i) => FetchListCrasUsecaseImpl(i.get()))),
@@ -26,6 +28,8 @@ class CrasModule extends Module {
     Bind((i) => SaveEquotionUsecaseImpl(i.get())),
     Bind((i) => SaveSoilDataUsecaseImpl(i.get())),
     Bind((i) => FetchSoilDataUsecaseImpl(i.get())),
+    Bind((i) => SaveCultureDataUsecaseImpl(i.get())),
+    Bind((i) => FetchCultureDataUsecaseImpl(i.get())),
     Bind((i) => CrasStore(i.get(), i.get())),
   ];
 

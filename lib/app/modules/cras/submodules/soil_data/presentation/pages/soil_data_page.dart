@@ -31,6 +31,7 @@ class _SoilDataPageState extends State<SoilDataPage> {
   @override
   void initState() {
     super.initState();
+
     fieldCapacityVoltageController = TextEditingController(text: '10');
     fieldCapacityMoistureController = TextEditingController(
         text: store.moisure(fieldCapacityVoltageController.text));

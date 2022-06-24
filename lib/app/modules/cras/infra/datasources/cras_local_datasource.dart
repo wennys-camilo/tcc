@@ -1,4 +1,5 @@
 import '../../domain/models/cras_equotion.dart';
+import '../../domain/models/culture_data.dart';
 import '../../domain/models/soil_data.dart';
 
 abstract class CrasLocalDataSource {
@@ -8,4 +9,6 @@ abstract class CrasLocalDataSource {
   Future<CrasEquotion?> fetchEquotion();
   Future<void> saveSoilData(SoilData soilData);
   Future<SoilData?> fetchSoilData();
+  Future<void> saveCultureData(CultureData cultureData);
+  Future<CultureData?> fetchCultureData();
 }

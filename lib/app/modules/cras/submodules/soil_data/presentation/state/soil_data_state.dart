@@ -4,6 +4,7 @@ class SoilDataState {
   final double fieldCapacityMoisture;
   final String moistureAtWiltingPoint;
   final String soilDensity;
+
   SoilDataState({
     required this.soilTexture,
     required this.capacityVoltage,

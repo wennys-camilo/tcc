@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:tcc/app/core/presentation/widgets/custom_drawer.dart';
-import 'package:tcc/app/modules/cras/presentation/widgets/text_input_widget.dart';
-import 'package:tcc/app/modules/cras/submodules/cras_tensiometer_equantion/presentation/store/cras_tensiometer_equation_store.dart';
-import 'package:tcc/app/modules/cras/submodules/cras_tensiometer_equantion/presentation/store/equotion_store.dart';
 import '../../../../../../core/presentation/themes/app_theme.dart';
+import '../../../../../../core/presentation/widgets/custom_drawer.dart';
+import '../../../../presentation/widgets/text_input_widget.dart';
+import '../store/cras_tensiometer_equation_store.dart';
+import '../store/equotion_store.dart';
 
 class CrasTensiometerEquationPage extends StatefulWidget {
   final CrasTensiometerEquotionStore store;

@@ -1,8 +1,10 @@
 import 'dart:convert';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:tcc/app/modules/cras/domain/models/cras_equotion.dart';
+import 'package:tcc/app/modules/cras/domain/models/culture_data.dart';
 import 'package:tcc/app/modules/cras/domain/models/soil_data.dart';
 import 'package:tcc/app/modules/cras/external/mappers/cras_equotion_mapper.dart';
+import 'package:tcc/app/modules/cras/external/mappers/culture_data_mapper.dart';
 
 import '../../../../../core/domain/helpers/errors/failure.dart';
 import '../../../infra/datasources/cras_local_datasource.dart';
@@ -93,6 +95,36 @@ class CrasLocalDataSourceImpl implements CrasLocalDataSource {
       final response = await _localStorage.read(key: 'soil_data');
       if (response != null) {
         return SoilDataMapper().from(jsonDecode(response));
+      }
+      return null;
+    } on Failure {
+      rethrow;
+    } catch (error, stackTrace) {
+      throw DatasourceFailure(
+          message: error.toString(), stackTrace: stackTrace);
+    }
+  }
+
+  @override
+  Future<void> saveCultureData(CultureData cultureData) async {
+    try {
+      await _localStorage.write(
+          key: 'culture_data',
+          value: jsonEncode(CultureDataMapper().to(cultureData)));
+    } on Failure {
+      rethrow;
+    } catch (error, stackTrace) {
+      throw DatasourceFailure(
+          message: error.toString(), stackTrace: stackTrace);
+    }
+  }
+
+  @override
+  Future<CultureData?> fetchCultureData() async {
+    try {
+      final response = await _localStorage.read(key: 'culture_data');
+      if (response != null) {
+        return CultureDataMapper().from(jsonDecode(response));
       }
       return null;
     } on Failure {

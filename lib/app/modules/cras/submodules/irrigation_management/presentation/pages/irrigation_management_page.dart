@@ -4,6 +4,7 @@ import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_triple/flutter_triple.dart';
 import 'package:intl/intl.dart';
+import 'package:logger/logger.dart';
 import 'package:tcc/app/core/presentation/widgets/show_dialog_widget.dart';
 import '../../../../../../core/domain/domain.dart';
 import '../../../../../../core/presentation/widgets/custom_drawer.dart';
@@ -28,10 +29,21 @@ class IrrigationManagementPage extends StatefulWidget {
 class _IrrigationManagementPageState extends State<IrrigationManagementPage> {
   IrrigationManagementStore get store => widget.store;
   late final TextEditingController currentSoilMoistureLayer1;
+  late final TextEditingController layer1Depth;
+  late final TextEditingController layer2Depth;
+  late final TextEditingController laminaLiquidaIrrigacao1;
+  late final TextEditingController laminaBrutaIrrigacao1;
+  late final Logger logger;
 
   @override
   void initState() {
     super.initState();
+    logger = Logger();
+    layer1Depth = TextEditingController(text: '20');
+    layer2Depth = TextEditingController(text: '10');
+    currentSoilMoistureLayer1 = TextEditingController();
+    laminaLiquidaIrrigacao1 = TextEditingController();
+    laminaBrutaIrrigacao1 = TextEditingController();
     store.observer(onState: (state) {
       if (state.needSoilData) {
         ShowDialogWidget(
@@ -44,8 +56,9 @@ class _IrrigationManagementPageState extends State<IrrigationManagementPage> {
         ).show(context);
       }
     });
-    currentSoilMoistureLayer1 = TextEditingController();
+    store.fetchSoilData();
     store.fetchEquotion();
+    store.fetchCultureData();
   }
 
   @override
@@ -80,17 +93,19 @@ class _IrrigationManagementPageState extends State<IrrigationManagementPage> {
                       // enabled: true,
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(16, 0, 16, 8),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
                     child: TextInputWidget(
+                      controller: layer1Depth,
                       labelText: 'Profundidade camada 1 (superior)',
                       suffixText: 'cm',
                       keyboardType: TextInputType.number,
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
                     child: TextInputWidget(
+                      controller: layer2Depth,
                       labelText: 'Profundidade camada 2 (inferior)',
                       suffixText: 'cm',
                       keyboardType: TextInputType.number,
@@ -115,6 +130,30 @@ class _IrrigationManagementPageState extends State<IrrigationManagementPage> {
                             100);
                         currentSoilMoistureLayer1.text =
                             calculationCurrentSoilMoisture.toStringAsFixed(2);
+
+                        //CALCULO LL
+                        var calculoLaminaLiquidaIrrigcao = ((double.parse(triple
+                                        .state.soilData.fieldCapacityHumidity) -
+                                    calculationCurrentSoilMoisture) /
+                                10) *
+                            double.parse(triple.state.soilData.soilDensity) *
+                            double.parse(layer1Depth.text);
+
+                        laminaLiquidaIrrigacao1.text =
+                            calculoLaminaLiquidaIrrigcao.toStringAsFixed(2);
+
+                        //CALCULO LB
+                        var calculoLaminaBruta = calculoLaminaLiquidaIrrigcao /
+                            (triple.state.cultureData.efficiency / 100);
+                        laminaBrutaIrrigacao1.text =
+                            calculoLaminaBruta.toStringAsFixed(2);
+
+                        if (value <=
+                            double.parse(
+                                triple.state.soilData.fieldCapacityVoltage)) {
+                          laminaLiquidaIrrigacao1.text = 'Solo na CC';
+                          laminaBrutaIrrigacao1.text = "Solo na CC";
+                        }
                       },
                       items: store.state.readingTensiometer.map((value) {
                         return DropdownMenuItem(
@@ -128,6 +167,7 @@ class _IrrigationManagementPageState extends State<IrrigationManagementPage> {
                   Padding(
                     padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
                     child: TextInputWidget(
+                      enabled: false,
                       centerText: false,
                       controller: currentSoilMoistureLayer1,
                       labelText: 'Umidade atual do solo (Ua):',
@@ -135,17 +175,23 @@ class _IrrigationManagementPageState extends State<IrrigationManagementPage> {
                       keyboardType: TextInputType.number,
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
                     child: TextInputWidget(
+                      centerText: false,
+                      controller: laminaLiquidaIrrigacao1,
+                      enabled: false,
                       labelText: 'Lâmina líquida de irrigação (LL):',
                       suffixText: 'mm',
                       keyboardType: TextInputType.number,
                     ),
                   ),
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
                     child: TextInputWidget(
+                      centerText: false,
+                      controller: laminaBrutaIrrigacao1,
+                      enabled: false,
                       labelText: 'Lâmina bruta de irrigação (LB):',
                       suffixText: 'mm',
                       keyboardType: TextInputType.number,

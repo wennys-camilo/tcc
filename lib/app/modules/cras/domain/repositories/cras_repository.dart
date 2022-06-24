@@ -1,6 +1,7 @@
 import 'package:dartz/dartz.dart';
 import '../../../../core/domain/helpers/errors/failure.dart';
 import '../models/cras_equotion.dart';
+import '../models/culture_data.dart';
 import '../models/soil_data.dart';
 
 abstract class CrasRepository {
@@ -10,4 +11,6 @@ abstract class CrasRepository {
   Future<Either<Failure, CrasEquotion?>> fetchEquotion();
   Future<Either<Failure, Unit>> saveSoilData(SoilData soilData);
   Future<Either<Failure, SoilData?>> fetchSoilData();
+  Future<Either<Failure, Unit>> saveCultureData(CultureData cultureData);
+  Future<Either<Failure, CultureData?>> fetchCultureData();
 }

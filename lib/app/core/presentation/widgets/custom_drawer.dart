@@ -27,7 +27,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 icon: Icons.water,
                 selected: Modular.to.path.endsWith('/cras'),
                 onTap: () {
-                  Modular.to.pushNamed('/cras');
+                  Modular.to.navigate('/cras');
                 },
               ),
               DrawerItemTileWidget(
@@ -36,7 +36,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 selected:
                     Modular.to.path.endsWith('/cras-equation-tensiometer/'),
                 onTap: () {
-                  Modular.to.pushNamed('/cras-equation-tensiometer/');
+                  Modular.to.navigate('/cras-equation-tensiometer/');
                 },
               ),
               DrawerItemTileWidget(
@@ -44,7 +44,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 icon: Icons.water,
                 selected: Modular.to.path.endsWith('/soil-data/'),
                 onTap: () {
-                  Modular.to.pushNamed('/soil-data/');
+                  Modular.to.navigate('/soil-data/');
                 },
               ),
               DrawerItemTileWidget(
@@ -53,7 +53,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 selected:
                     Modular.to.path.endsWith('/culture-irrigation-system/'),
                 onTap: () {
-                  Modular.to.pushNamed('/culture-irrigation-system/');
+                  Modular.to.navigate('/culture-irrigation-system/');
                 },
               ),
               DrawerItemTileWidget(
@@ -61,7 +61,7 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 icon: Icons.water,
                 selected: Modular.to.path.endsWith('/irrigation-management/'),
                 onTap: () {
-                  Modular.to.pushNamed('/irrigation-management/');
+                  Modular.to.navigate('/irrigation-management/');
                 },
               ),
             ],

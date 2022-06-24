@@ -1,5 +1,6 @@
 import 'package:dartz/dartz.dart';
 import 'package:tcc/app/modules/cras/domain/models/cras_equotion.dart';
+import 'package:tcc/app/modules/cras/domain/models/culture_data.dart';
 import 'package:tcc/app/modules/cras/domain/models/soil_data.dart';
 
 import '../../../../core/domain/helpers/errors/failure.dart';
@@ -65,6 +66,26 @@ class CrasRepositoryImpl implements CrasRepository {
   Future<Either<Failure, SoilData?>> fetchSoilData() async {
     try {
       final response = await _localDataSource.fetchSoilData();
+      return Right(response);
+    } on Failure catch (error) {
+      return Left(error);
+    }
+  }
+
+  @override
+  Future<Either<Failure, Unit>> saveCultureData(CultureData cultureData) async {
+    try {
+      await _localDataSource.saveCultureData(cultureData);
+      return const Right(unit);
+    } on Failure catch (error) {
+      return Left(error);
+    }
+  }
+
+  @override
+  Future<Either<Failure, CultureData?>> fetchCultureData() async {
+    try {
+      final response = await _localDataSource.fetchCultureData();
       return Right(response);
     } on Failure catch (error) {
       return Left(error);

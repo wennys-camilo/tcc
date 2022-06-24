@@ -1,4 +1,5 @@
 import 'package:tcc/app/modules/cras/domain/models/cras_equotion.dart';
+import 'package:tcc/app/modules/cras/domain/models/culture_data.dart';
 import 'package:tcc/app/modules/cras/domain/models/soil_data.dart';
 
 class IrrigationManagementState {
@@ -7,12 +8,14 @@ class IrrigationManagementState {
   final int? readingOnLayerOneTensiometer;
   final SoilData soilData;
   final bool needSoilData;
+  final CultureData cultureData;
   IrrigationManagementState({
     required this.readingTensiometer,
     required this.crasEquotion,
     required this.readingOnLayerOneTensiometer,
     required this.soilData,
     required this.needSoilData,
+    required this.cultureData,
   });
 
   IrrigationManagementState copyWith({
@@ -21,6 +24,7 @@ class IrrigationManagementState {
     int? readingOnLayerOneTensiometer,
     SoilData? soilData,
     bool? needSoilData,
+    CultureData? cultureData,
   }) {
     return IrrigationManagementState(
       readingTensiometer: readingTensiometer ?? this.readingTensiometer,
@@ -29,6 +33,7 @@ class IrrigationManagementState {
           readingOnLayerOneTensiometer ?? this.readingOnLayerOneTensiometer,
       soilData: soilData ?? this.soilData,
       needSoilData: needSoilData ?? this.needSoilData,
+      cultureData: cultureData ?? this.cultureData,
     );
   }
 
@@ -48,6 +53,15 @@ class IrrigationManagementState {
         soilDensity: '',
       ),
       needSoilData: false,
+      cultureData: CultureData(
+        plantingDate: '',
+        rootSystem: 0,
+        efficiency: 0,
+        cultivateHybrid: '',
+        criticalVoltage: '',
+        culture: '',
+        blade: '',
+      ),
     );
   }
 }
