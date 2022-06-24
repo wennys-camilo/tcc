@@ -13,10 +13,10 @@ class CrasRepositoryImpl implements CrasRepository {
   const CrasRepositoryImpl(this._localDataSource);
 
   @override
-  Future<Either<Failure, Unit>> saveChart(List<String> value) async {
+  Future<Either<Failure, bool>> saveChart(List<String> value) async {
     try {
-      await _localDataSource.saveChart(value);
-      return const Right(unit);
+      final response = await _localDataSource.saveChart(value);
+      return Right(response);
     } on Failure catch (error) {
       return Left(error);
     }
@@ -33,10 +33,10 @@ class CrasRepositoryImpl implements CrasRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> saveEquotion(CrasEquotion crasEquotion) async {
+  Future<Either<Failure, bool>> saveEquotion(CrasEquotion crasEquotion) async {
     try {
-      await _localDataSource.saveEquotion(crasEquotion);
-      return const Right(unit);
+      final response = await _localDataSource.saveEquotion(crasEquotion);
+      return Right(response);
     } on Failure catch (error) {
       return Left(error);
     }
@@ -53,10 +53,10 @@ class CrasRepositoryImpl implements CrasRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> saveSoilData(SoilData soilData) async {
+  Future<Either<Failure, bool>> saveSoilData(SoilData soilData) async {
     try {
-      await _localDataSource.saveSoilData(soilData);
-      return const Right(unit);
+      final response = await _localDataSource.saveSoilData(soilData);
+      return Right(response);
     } on Failure catch (error) {
       return Left(error);
     }
@@ -73,10 +73,10 @@ class CrasRepositoryImpl implements CrasRepository {
   }
 
   @override
-  Future<Either<Failure, Unit>> saveCultureData(CultureData cultureData) async {
+  Future<Either<Failure, bool>> saveCultureData(CultureData cultureData) async {
     try {
-      await _localDataSource.saveCultureData(cultureData);
-      return const Right(unit);
+      final response = await _localDataSource.saveCultureData(cultureData);
+      return Right(response);
     } on Failure catch (error) {
       return Left(error);
     }

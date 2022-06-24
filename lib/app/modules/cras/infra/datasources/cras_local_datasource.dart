@@ -3,12 +3,12 @@ import '../../domain/models/culture_data.dart';
 import '../../domain/models/soil_data.dart';
 
 abstract class CrasLocalDataSource {
-  Future<void> saveChart(List<String> value);
+  Future<bool> saveChart(List<String> value);
   Future<List<String>> fetchChart();
-  Future<void> saveEquotion(CrasEquotion crasEquotion);
+  Future<bool> saveEquotion(CrasEquotion crasEquotion);
   Future<CrasEquotion?> fetchEquotion();
-  Future<void> saveSoilData(SoilData soilData);
+  Future<bool> saveSoilData(SoilData soilData);
   Future<SoilData?> fetchSoilData();
-  Future<void> saveCultureData(CultureData cultureData);
+  Future<bool> saveCultureData(CultureData cultureData);
   Future<CultureData?> fetchCultureData();
 }

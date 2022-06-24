@@ -9,6 +9,8 @@ class DropDownWidget<T> extends StatelessWidget {
   final T? value;
   final TextStyle? style;
   final String? suffixText;
+  final Color? color;
+  final String? Function(T?)? validator;
   const DropDownWidget({
     Key? key,
     required this.onChanged,
@@ -17,17 +19,20 @@ class DropDownWidget<T> extends StatelessWidget {
     this.value,
     this.style,
     this.suffixText,
+    this.color,
+    this.validator,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return DropdownButtonFormField<T>(
+      autovalidateMode: AutovalidateMode.onUserInteraction,
       isExpanded: true,
       value: value,
       decoration: InputDecoration(
         suffixText: suffixText,
         filled: true,
-        fillColor: AppTheme.colors.white,
+        fillColor: color ?? AppTheme.colors.white,
         labelText: labelText,
         border: const OutlineInputBorder(),
         enabledBorder:
@@ -39,6 +44,7 @@ class DropDownWidget<T> extends StatelessWidget {
       onChanged: onChanged,
       items: items,
       style: style,
+      validator: validator,
     );
   }
 }

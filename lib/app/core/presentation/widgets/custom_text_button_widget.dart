@@ -19,7 +19,7 @@ class CustomTextButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return SizedBox(
       height: height ?? 50,
       width: MediaQuery.of(context).size.width,
       child: ElevatedButton(
@@ -31,7 +31,7 @@ class CustomTextButtonWidget extends StatelessWidget {
           ),
           backgroundColor: enabled
               ? MaterialStateProperty.all<Color>(
-                  backgroundcolor ?? Color(0xff003299),
+                  backgroundcolor ?? const Color(0xff003299),
                 )
               : MaterialStateProperty.all<Color>(
                   Colors.grey,

@@ -64,6 +64,14 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   Modular.to.navigate('/irrigation-management/');
                 },
               ),
+              DrawerItemTileWidget(
+                title: 'REGISTROS DE IRRIGAÇÃO',
+                icon: Icons.list_alt,
+                selected: Modular.to.path.endsWith('/registers-irrigation/'),
+                onTap: () {
+                  Modular.to.navigate('/registers-irrigation/');
+                },
+              ),
             ],
           );
         }),

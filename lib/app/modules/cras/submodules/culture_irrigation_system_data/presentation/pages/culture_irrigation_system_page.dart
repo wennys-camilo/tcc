@@ -31,7 +31,7 @@ class _CultureIrrigationSystemPageState
   CultureIrrigationSystemStore get store => widget.store;
 
   late final GlobalKey<FormState> _formKey;
-
+  late final TextEditingController dateinput;
   late final TextEditingController kcController;
   late final TextEditingController cultivateHybrid;
   late final TextEditingController blade;
@@ -39,6 +39,7 @@ class _CultureIrrigationSystemPageState
   @override
   void initState() {
     super.initState();
+    dateinput = TextEditingController();
     _formKey = GlobalKey<FormState>();
     cultivateHybrid = TextEditingController();
     blade = TextEditingController();
@@ -48,10 +49,12 @@ class _CultureIrrigationSystemPageState
       cultivateHybrid.text = state.cultureData.cultivateHybrid;
       store.onChangeCultivateHybrid(state.cultureData.cultivateHybrid);
       store.onChangePlantinDate(DateTime.parse(state.cultureData.plantingDate));
+      dateinput.text = DateFormat(" d 'de' MMMM 'de' y", "pt_BR")
+          .format(DateTime.parse(state.cultureData.plantingDate));
       store.onChangeRootSystem(state.cultureData.rootSystem);
-      blade.text = store.state.blade;
+      blade.text = state.cultureData.blade;
       store.onChangeBlade(state.cultureData.blade);
-      store.onChangeEfficiency(store.state.efficiency);
+      store.onChangeEfficiency(state.cultureData.efficiency);
       kcController.text = state.cultureData.criticalVoltage;
       store.onChangeCriticalVoltage(state.cultureData.criticalVoltage);
     });
@@ -120,11 +123,41 @@ class _CultureIrrigationSystemPageState
                     ),
                     Padding(
                       padding: const EdgeInsets.all(8.0),
+                      child: TextField(
+                        controller: dateinput,
+                        decoration: const InputDecoration(
+                            suffixIcon: Icon(Icons.calendar_month),
+                            border: OutlineInputBorder(),
+                            enabledBorder: OutlineInputBorder(
+                                borderSide: BorderSide(width: 0)),
+                            labelText: "Data de Plantio"),
+                        readOnly: true,
+                        onTap: () async {
+                          DateTime? pickedDate = await showDatePicker(
+                              context: context,
+                              initialDate: triple.state.plantingDate,
+                              firstDate: DateTime(2000),
+                              lastDate: DateTime(2101));
+                          if (pickedDate != null) {
+                            String formattedDate =
+                                DateFormat(" d 'de' MMMM 'de' y", "pt_BR")
+                                    .format(pickedDate);
+
+                            store.onChangePlantinDate(pickedDate);
+                            setState(() {
+                              dateinput.text = formattedDate;
+                            });
+                          } else {}
+                        },
+                      ),
+                    ),
+                    /*Padding(
+                      padding: const EdgeInsets.all(8.0),
                       child: FormBuilderDateTimePicker(
                         lastDate: DateTime.now(),
                         initialValue: triple.state.plantingDate,
                         name: 'date',
-                        //initialDate: triple.state.plantingDate,
+                        initialDate: triple.state.plantingDate,
                         onChanged: (value) {
                           if (value != null) {
                             store.onChangePlantinDate(value);
@@ -139,9 +172,8 @@ class _CultureIrrigationSystemPageState
                               borderSide: BorderSide(width: 0)),
                         ),
                         format: DateFormat(" d 'de' MMMM 'de' y", "pt_BR"),
-                        // enabled: true,
                       ),
-                    ),
+                    ),*/
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextInputWidget(
@@ -170,6 +202,7 @@ class _CultureIrrigationSystemPageState
                     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextInputWidget(
+                        decimalInput: true,
                         controller: blade,
                         labelText: 'Lâmina à 100% (velocidade máxima):',
                         centerText: false,

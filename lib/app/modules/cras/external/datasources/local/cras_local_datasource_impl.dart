@@ -1,5 +1,5 @@
 import 'dart:convert';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tcc/app/modules/cras/domain/models/cras_equotion.dart';
 import 'package:tcc/app/modules/cras/domain/models/culture_data.dart';
 import 'package:tcc/app/modules/cras/domain/models/soil_data.dart';
@@ -11,14 +11,15 @@ import '../../../infra/datasources/cras_local_datasource.dart';
 import '../../mappers/soil_data_mapper.dart';
 
 class CrasLocalDataSourceImpl implements CrasLocalDataSource {
-  final FlutterSecureStorage _localStorage;
+  final SharedPreferences _localStorage;
 
   const CrasLocalDataSourceImpl(this._localStorage);
 
   @override
-  Future<void> saveChart(List<String> value) async {
+  Future<bool> saveChart(List<String> value) async {
     try {
-      await _localStorage.write(key: 'cras', value: jsonEncode(value));
+      final response = await _localStorage.setString('cras', jsonEncode(value));
+      return response;
     } on Failure {
       rethrow;
     } catch (error, stackTrace) {
@@ -31,7 +32,7 @@ class CrasLocalDataSourceImpl implements CrasLocalDataSource {
   Future<List<String>> fetchChart() async {
     try {
       List<dynamic>? list;
-      var response = await _localStorage.read(key: 'cras');
+      var response = _localStorage.getString('cras');
       if (response != null) {
         list = jsonDecode(response);
       } else if (response == null) {
@@ -47,11 +48,11 @@ class CrasLocalDataSourceImpl implements CrasLocalDataSource {
   }
 
   @override
-  Future<void> saveEquotion(CrasEquotion crasEquotion) async {
+  Future<bool> saveEquotion(CrasEquotion crasEquotion) async {
     try {
-      await _localStorage.write(
-          key: 'curve_equation',
-          value: jsonEncode(CrasEquotionMapper().to(crasEquotion)));
+      final response = await _localStorage.setString(
+          'curve_equation', jsonEncode(CrasEquotionMapper().to(crasEquotion)));
+      return response;
     } on Failure {
       rethrow;
     } catch (error, stackTrace) {
@@ -63,7 +64,7 @@ class CrasLocalDataSourceImpl implements CrasLocalDataSource {
   @override
   Future<CrasEquotion?> fetchEquotion() async {
     try {
-      final response = await _localStorage.read(key: 'curve_equation');
+      final response = _localStorage.getString('curve_equation');
       if (response != null) {
         return CrasEquotionMapper().from(jsonDecode(response));
       }
@@ -77,10 +78,11 @@ class CrasLocalDataSourceImpl implements CrasLocalDataSource {
   }
 
   @override
-  Future<void> saveSoilData(SoilData soilData) async {
+  Future<bool> saveSoilData(SoilData soilData) async {
     try {
-      await _localStorage.write(
-          key: 'soil_data', value: jsonEncode(SoilDataMapper().to(soilData)));
+      final response = await _localStorage.setString(
+          'soil_data', jsonEncode(SoilDataMapper().to(soilData)));
+      return response;
     } on Failure {
       rethrow;
     } catch (error, stackTrace) {
@@ -92,7 +94,7 @@ class CrasLocalDataSourceImpl implements CrasLocalDataSource {
   @override
   Future<SoilData?> fetchSoilData() async {
     try {
-      final response = await _localStorage.read(key: 'soil_data');
+      final response = _localStorage.getString('soil_data');
       if (response != null) {
         return SoilDataMapper().from(jsonDecode(response));
       }
@@ -106,11 +108,11 @@ class CrasLocalDataSourceImpl implements CrasLocalDataSource {
   }
 
   @override
-  Future<void> saveCultureData(CultureData cultureData) async {
+  Future<bool> saveCultureData(CultureData cultureData) async {
     try {
-      await _localStorage.write(
-          key: 'culture_data',
-          value: jsonEncode(CultureDataMapper().to(cultureData)));
+      final response = await _localStorage.setString(
+          'culture_data', jsonEncode(CultureDataMapper().to(cultureData)));
+      return response;
     } on Failure {
       rethrow;
     } catch (error, stackTrace) {
@@ -122,7 +124,7 @@ class CrasLocalDataSourceImpl implements CrasLocalDataSource {
   @override
   Future<CultureData?> fetchCultureData() async {
     try {
-      final response = await _localStorage.read(key: 'culture_data');
+      final response = _localStorage.getString('culture_data');
       if (response != null) {
         return CultureDataMapper().from(jsonDecode(response));
       }

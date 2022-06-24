@@ -11,7 +11,7 @@ class SaveListCrasUsecaseImpl implements SaveListCrasUsecase {
   const SaveListCrasUsecaseImpl(this._repository);
 
   @override
-  Future<Either<Failure, Unit>> call(List<String> value) async {
+  Future<Either<Failure, bool>> call(List<String> value) async {
     final response = await _repository.saveChart(value);
     return response;
   }

@@ -5,12 +5,12 @@ import '../models/culture_data.dart';
 import '../models/soil_data.dart';
 
 abstract class CrasRepository {
-  Future<Either<Failure, Unit>> saveChart(List<String> value);
+  Future<Either<Failure, bool>> saveChart(List<String> value);
   Future<Either<Failure, List<String>>> fetchChart();
-  Future<Either<Failure, Unit>> saveEquotion(CrasEquotion crasEquotion);
+  Future<Either<Failure, bool>> saveEquotion(CrasEquotion crasEquotion);
   Future<Either<Failure, CrasEquotion?>> fetchEquotion();
-  Future<Either<Failure, Unit>> saveSoilData(SoilData soilData);
+  Future<Either<Failure, bool>> saveSoilData(SoilData soilData);
   Future<Either<Failure, SoilData?>> fetchSoilData();
-  Future<Either<Failure, Unit>> saveCultureData(CultureData cultureData);
+  Future<Either<Failure, bool>> saveCultureData(CultureData cultureData);
   Future<Either<Failure, CultureData?>> fetchCultureData();
 }

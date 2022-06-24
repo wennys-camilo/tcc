@@ -1,9 +1,12 @@
+import 'package:tcc/app/modules/cras/domain/models/cras_chart.dart';
+
 class SoilDataState {
   final String soilTexture;
   final int capacityVoltage;
   final double fieldCapacityMoisture;
   final String moistureAtWiltingPoint;
   final String soilDensity;
+  final List<CrasChart> lisCrasChart;
 
   SoilDataState({
     required this.soilTexture,
@@ -11,6 +14,7 @@ class SoilDataState {
     required this.fieldCapacityMoisture,
     required this.moistureAtWiltingPoint,
     required this.soilDensity,
+    required this.lisCrasChart,
   });
 
   SoilDataState copyWith({
@@ -19,6 +23,7 @@ class SoilDataState {
     double? fieldCapacityMoisture,
     String? moistureAtWiltingPoint,
     String? soilDensity,
+    List<CrasChart>? lisCrasChart,
   }) {
     return SoilDataState(
       soilTexture: soilTexture ?? this.soilTexture,
@@ -28,6 +33,7 @@ class SoilDataState {
       moistureAtWiltingPoint:
           moistureAtWiltingPoint ?? this.moistureAtWiltingPoint,
       soilDensity: soilDensity ?? this.soilDensity,
+      lisCrasChart: lisCrasChart ?? this.lisCrasChart,
     );
   }
 
@@ -38,6 +44,7 @@ class SoilDataState {
       fieldCapacityMoisture: 0,
       moistureAtWiltingPoint: '',
       soilDensity: '',
+      lisCrasChart: [],
     );
   }
 }

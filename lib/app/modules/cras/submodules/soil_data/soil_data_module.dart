@@ -6,7 +6,7 @@ import 'presentation/store/soil_data_store.dart';
 class SoilDataModule extends Module {
   @override
   final List<Bind> binds = [
-    Bind((i) => SoilDataStore(i.get(), i.get())),
+    Bind((i) => SoilDataStore(i.get(), i.get(), i.get())),
     Bind((i) => LocalSoilDataStore(i.get())),
   ];
 

@@ -10,7 +10,7 @@ class SaveSoilDataUsecaseImpl implements SaveSoilDataUsecase {
   const SaveSoilDataUsecaseImpl(this._repository);
 
   @override
-  Future<Either<Failure, Unit>> call(SoilData soilData) async {
+  Future<Either<Failure, bool>> call(SoilData soilData) async {
     final response = await _repository.saveSoilData(soilData);
     return response;
   }

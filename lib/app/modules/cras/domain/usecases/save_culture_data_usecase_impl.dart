@@ -10,7 +10,7 @@ class SaveCultureDataUsecaseImpl implements SaveCultureDataUsecase {
   const SaveCultureDataUsecaseImpl(this._repository);
 
   @override
-  Future<Either<Failure, Unit>> call(CultureData cultureData) async {
+  Future<Either<Failure, bool>> call(CultureData cultureData) async {
     final response = await _repository.saveCultureData(cultureData);
     return response;
   }

@@ -10,7 +10,7 @@ class SaveEquotionUsecaseImpl implements SaveEquotionUsecase {
   const SaveEquotionUsecaseImpl(this._repository);
 
   @override
-  Future<Either<Failure, Unit>> call(CrasEquotion crasEquotion) async {
+  Future<Either<Failure, bool>> call(CrasEquotion crasEquotion) async {
     final response = await _repository.saveEquotion(crasEquotion);
     return response;
   }
