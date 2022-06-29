@@ -600,8 +600,9 @@ class _CrasPageState extends ModularState<CrasPage, CrasStore> {
                   ),
                   FloatingActionButton.extended(
                     backgroundColor: AppTheme.colors.primary,
-                    onPressed: () {
+                    onPressed: () async {
                       Modular.to.pushNamed('/chart', arguments: [
+                        await store.getFittedPoints(triple.state.chartList),
                         triple.state.chartList,
                         store,
                       ]);

@@ -4,7 +4,6 @@ class CrasState {
   final List<String> humidityList;
   final List<CrasChart> chartList;
   final bool edit;
-
   final String equotion;
   final String square;
 

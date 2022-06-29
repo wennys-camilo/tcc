@@ -41,7 +41,7 @@ class CrasModule extends Module {
     Bind((i) => FetchSoilDataUsecaseImpl(i.get())),
     Bind((i) => SaveCultureDataUsecaseImpl(i.get())),
     Bind((i) => FetchCultureDataUsecaseImpl(i.get())),
-    Bind((i) => CrasStore(i.get(), i.get())),
+    Bind((i) => CrasStore(i.get(), i.get(), i.get())),
   ];
 
   @override
@@ -75,7 +75,8 @@ class CrasModule extends Module {
     ChildRoute('/chart',
         child: (_, args) => CrasChartPage(
               data: args.data[0],
-              crasStore: args.data[1],
+              points: args.data[1],
+              crasStore: args.data[2],
             )),
   ];
 }

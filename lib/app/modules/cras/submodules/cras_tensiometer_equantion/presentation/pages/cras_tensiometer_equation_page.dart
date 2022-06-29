@@ -33,7 +33,7 @@ class _CrasTensiometerEquationPageState
       exponentTextEditController.text = state.crasEquotion.exponent;
     });
     equotionStore.fetchEquotion();
-    store.save();
+    //store.save();
   }
 
   @override
