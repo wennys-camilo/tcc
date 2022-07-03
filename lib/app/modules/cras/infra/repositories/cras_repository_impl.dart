@@ -1,4 +1,5 @@
 import 'package:dartz/dartz.dart';
+import 'package:tcc/app/modules/cras/domain/models/cras_chart.dart';
 import 'package:tcc/app/modules/cras/domain/models/cras_equotion.dart';
 import 'package:tcc/app/modules/cras/domain/models/culture_data.dart';
 import 'package:tcc/app/modules/cras/domain/models/soil_data.dart';
@@ -11,6 +12,26 @@ class CrasRepositoryImpl implements CrasRepository {
   final CrasLocalDataSource _localDataSource;
 
   const CrasRepositoryImpl(this._localDataSource);
+
+  @override
+  Future<Either<Failure, bool>> saveCras(List<CrasChart> value) async {
+    try {
+      final response = await _localDataSource.saveCras(value);
+      return Right(response);
+    } on Failure catch (error) {
+      return Left(error);
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<CrasChart>>> fetchCras() async {
+    try {
+      final response = _localDataSource.fetchCras();
+      return Right(response);
+    } on Failure catch (error) {
+      return Left(error);
+    }
+  }
 
   @override
   Future<Either<Failure, bool>> saveChart(List<String> value) async {

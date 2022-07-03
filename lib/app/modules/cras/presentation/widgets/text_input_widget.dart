@@ -50,11 +50,13 @@ class TextInputWidget extends StatelessWidget {
         textAlign: centerText ? TextAlign.center : TextAlign.start,
         autovalidateMode: AutovalidateMode.onUserInteraction,
         decoration: InputDecoration(
+          //errorStyle: TextStyle(height: 0),
           suffixText: suffixText,
           labelStyle: labelStyle,
           border: const OutlineInputBorder(),
           enabledBorder:
-              const OutlineInputBorder(borderSide: BorderSide(width: 0)),
+              const OutlineInputBorder(borderSide: BorderSide(width: 1)),
+
           // ignore: prefer_if_null_operators
           fillColor: fillColor != null
               ? fillColor

@@ -4,7 +4,7 @@ import 'package:flutter_triple/flutter_triple.dart';
 import 'package:intl/intl.dart';
 import 'package:tcc/app/core/domain/domain.dart';
 import 'package:tcc/app/core/presentation/widgets/custom_drawer.dart';
-import 'package:tcc/app/modules/cras/presentation/widgets/drop_down_wisget.dart';
+import 'package:tcc/app/modules/cras/presentation/widgets/drop_down_widget.dart';
 import 'package:tcc/app/modules/cras/presentation/widgets/text_input_widget.dart';
 import 'package:tcc/app/modules/cras/submodules/culture_irrigation_system_data/presentation/state/culture_irrigation_system_state.dart';
 import 'package:tcc/app/modules/cras/submodules/culture_irrigation_system_data/presentation/stores/culture_irrigation_system_store.dart';
@@ -69,166 +69,195 @@ class _CultureIrrigationSystemPageState
       ),
       drawer: const CustomDrawer(),
       body: SingleChildScrollView(
-        child: Form(
-          key: _formKey,
-          child: TripleBuilder<CultureIrrigationSystemStore, Failure,
-                  CultureIrrigationSystemState>(
-              store: store,
-              builder: (context, triple) {
-                return Column(
-                  children: [
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: DropDownWidget<String>(
-                        value: triple.state.culture,
-                        onChanged: (value) {
-                          if (value == '0') {
-                            kcController.text = "30 a 60";
-                          } else if (value == '1') {
-                            kcController.text = "35 a 50";
-                          } else if (value == '2') {
-                            kcController.text = "40 a 60";
-                          }
-                          store.onChangeCriticalVoltage(kcController.text);
-                          store.onChangeCulture(value!);
-                        },
-                        items: const [
-                          DropdownMenuItem(
-                            child: Text('Soja'),
-                            value: '0',
-                          ),
-                          DropdownMenuItem(
-                            child: Text('Milho'),
-                            value: '1',
-                          ),
-                          DropdownMenuItem(
-                            child: Text('Feijão'),
-                            value: '2',
-                          )
-                        ],
-                        labelText: 'Cultura',
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextInputWidget(
-                        controller: cultivateHybrid,
-                        labelText: 'Cultivar/híbrido',
-                        centerText: false,
-                        onChanged: store.onChangeCultivateHybrid,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextField(
-                        controller: dateinput,
-                        decoration: const InputDecoration(
-                            suffixIcon: Icon(Icons.calendar_month),
-                            border: OutlineInputBorder(),
-                            enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(width: 0)),
-                            labelText: "Data de Plantio"),
-                        readOnly: true,
-                        onTap: () async {
-                          DateTime? pickedDate = await showDatePicker(
-                              context: context,
-                              initialDate: triple.state.plantingDate,
-                              firstDate: DateTime(2000),
-                              lastDate: DateTime(2101));
-                          if (pickedDate != null) {
-                            String formattedDate =
-                                DateFormat(" d 'de' MMMM 'de' y", "pt_BR")
-                                    .format(pickedDate);
-
-                            store.onChangePlantinDate(pickedDate);
-                            setState(() {
-                              dateinput.text = formattedDate;
-                            });
-                          } else {}
-                        },
-                      ),
-                    ),
-                    /*Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: FormBuilderDateTimePicker(
-                        lastDate: DateTime.now(),
-                        initialValue: triple.state.plantingDate,
-                        name: 'date',
-                        initialDate: triple.state.plantingDate,
-                        onChanged: (value) {
-                          if (value != null) {
-                            store.onChangePlantinDate(value);
-                          }
-                        },
-                        inputType: InputType.date,
-                        decoration: const InputDecoration(
-                          suffixIcon: Icon(Icons.calendar_month),
-                          labelText: 'Data de Plantio',
-                          border: OutlineInputBorder(),
-                          enabledBorder: OutlineInputBorder(
-                              borderSide: BorderSide(width: 0)),
+        child: Center(
+          child: Container(
+            constraints: const BoxConstraints(maxWidth: 800),
+            child: Form(
+              key: _formKey,
+              child: TripleBuilder<CultureIrrigationSystemStore, Failure,
+                      CultureIrrigationSystemState>(
+                  store: store,
+                  builder: (context, triple) {
+                    return Column(
+                      children: [
+                        const SizedBox(
+                          height: 10,
                         ),
-                        format: DateFormat(" d 'de' MMMM 'de' y", "pt_BR"),
-                      ),
-                    ),*/
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextInputWidget(
-                        readOnly: true,
-                        controller: kcController,
-                        labelText: 'Tensão Crítica par a Cultura (Tc)',
-                        centerText: false,
-                        suffixText: "kPa",
-                        onChanged: store.onChangeCriticalVoltage,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: DropDownWidget<int>(
-                        value: triple.state.rootSystem,
-                        onChanged: (value) => store.onChangeRootSystem(value!),
-                        items: store.state.effectiveRootSystemList.map((value) {
-                          return DropdownMenuItem(
-                            child: Text("$value"),
-                            value: value,
-                          );
-                        }).toList(),
-                        labelText: 'Prof. efetiva do sistema radicular (Z)',
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextInputWidget(
-                        decimalInput: true,
-                        controller: blade,
-                        labelText: 'Lâmina à 100% (velocidade máxima):',
-                        centerText: false,
-                        suffixText: "mm/volta",
-                        keyboardType: const TextInputType.numberWithOptions(
-                            decimal: true),
-                        onChanged: store.onChangeBlade,
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: DropDownWidget<int>(
-                        value: triple.state.efficiency,
-                        onChanged: (value) => store.onChangeEfficiency(value!),
-                        items: store.state.irrigationEfficiency.map((value) {
-                          return DropdownMenuItem(
-                            child: Text("$value %"),
-                            value: value,
-                          );
-                        }).toList(),
-                        labelText: 'Eficiência de Irrigação (Ei):',
-                      ),
-                    ),
-                  ],
-                );
-              }),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: DropDownWidget<String>(
+                            value: triple.state.culture,
+                            onChanged: (value) {
+                              if (value == '0') {
+                                kcController.text = "30 a 60";
+                              } else if (value == '1') {
+                                kcController.text = "35 a 50";
+                              } else if (value == '2') {
+                                kcController.text = "40 a 60";
+                              }
+                              store.onChangeCriticalVoltage(kcController.text);
+                              store.onChangeCulture(value!);
+                            },
+                            items: const [
+                              DropdownMenuItem(
+                                child: Text('Soja'),
+                                value: '0',
+                              ),
+                              DropdownMenuItem(
+                                child: Text('Milho'),
+                                value: '1',
+                              ),
+                              DropdownMenuItem(
+                                child: Text('Feijão'),
+                                value: '2',
+                              )
+                            ],
+                            labelText: 'Cultura',
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextInputWidget(
+                            controller: cultivateHybrid,
+                            labelText: 'Cultivar/híbrido',
+                            centerText: false,
+                            onChanged: store.onChangeCultivateHybrid,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "Campo Obrigatório";
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextFormField(
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            controller: dateinput,
+                            decoration: const InputDecoration(
+                                suffixIcon: Icon(Icons.calendar_month),
+                                border: OutlineInputBorder(),
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(width: 1)),
+                                labelText: "Data de Plantio"),
+                            readOnly: true,
+                            onTap: () async {
+                              DateTime? pickedDate = await showDatePicker(
+                                  context: context,
+                                  initialDate: triple.state.plantingDate,
+                                  firstDate: DateTime(2000),
+                                  lastDate: DateTime(2101));
+                              if (pickedDate != null) {
+                                String formattedDate =
+                                    DateFormat(" d 'de' MMMM 'de' y", "pt_BR")
+                                        .format(pickedDate);
+
+                                store.onChangePlantinDate(pickedDate);
+                                setState(() {
+                                  dateinput.text = formattedDate;
+                                });
+                              } else {}
+                            },
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "Campo Obrigatório";
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                        /*Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: FormBuilderDateTimePicker(
+                            lastDate: DateTime.now(),
+                            initialValue: triple.state.plantingDate,
+                            name: 'date',
+                            initialDate: triple.state.plantingDate,
+                            onChanged: (value) {
+                              if (value != null) {
+                                store.onChangePlantinDate(value);
+                              }
+                            },
+                            inputType: InputType.date,
+                            decoration: const InputDecoration(
+                              suffixIcon: Icon(Icons.calendar_month),
+                              labelText: 'Data de Plantio',
+                              border: OutlineInputBorder(),
+                              enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(width: 0)),
+                            ),
+                            format: DateFormat(" d 'de' MMMM 'de' y", "pt_BR"),
+                          ),
+                        ),*/
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextInputWidget(
+                            readOnly: true,
+                            controller: kcController,
+                            labelText: 'Tensão Crítica par a Cultura (Tc)',
+                            centerText: false,
+                            suffixText: "kPa",
+                            onChanged: store.onChangeCriticalVoltage,
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: DropDownWidget<int>(
+                            value: triple.state.rootSystem,
+                            onChanged: (value) =>
+                                store.onChangeRootSystem(value!),
+                            items: store.state.effectiveRootSystemList
+                                .map((value) {
+                              return DropdownMenuItem(
+                                child: Text("$value"),
+                                value: value,
+                              );
+                            }).toList(),
+                            labelText: 'Prof. efetiva do sistema radicular (Z)',
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextInputWidget(
+                            decimalInput: true,
+                            controller: blade,
+                            labelText: 'Lâmina à 100% (velocidade máxima):',
+                            centerText: false,
+                            suffixText: "mm/volta",
+                            keyboardType: const TextInputType.numberWithOptions(
+                                decimal: true),
+                            onChanged: store.onChangeBlade,
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "Campo Obrigatório";
+                              }
+                              return null;
+                            },
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: DropDownWidget<int>(
+                            value: triple.state.efficiency,
+                            onChanged: (value) =>
+                                store.onChangeEfficiency(value!),
+                            items:
+                                store.state.irrigationEfficiency.map((value) {
+                              return DropdownMenuItem(
+                                child: Text("$value %"),
+                                value: value,
+                              );
+                            }).toList(),
+                            labelText: 'Eficiência de Irrigação (Ei):',
+                          ),
+                        ),
+                      ],
+                    );
+                  }),
+            ),
+          ),
         ),
       ),
       floatingActionButton: FloatingActionButton.extended(

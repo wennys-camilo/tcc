@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+/*import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_triple/flutter_triple.dart';
 import 'package:tcc/app/core/presentation/widgets/custom_drawer.dart';
@@ -532,6 +532,11 @@ class _CrasPageState extends ModularState<CrasPage, CrasStore> {
                             ],
                           ),
                         ),
+                        TextButton(
+                            onPressed: () {
+                              Modular.to.navigate('/edit-cras/');
+                            },
+                            child: const Text('asas')),
                         Container(
                           constraints: const BoxConstraints(maxWidth: 800),
                           padding: const EdgeInsets.all(15.0),
@@ -620,3 +625,4 @@ class _CrasPageState extends ModularState<CrasPage, CrasStore> {
     );
   }
 }
+*/

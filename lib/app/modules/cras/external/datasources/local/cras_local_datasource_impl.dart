@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:tcc/app/modules/cras/domain/models/cras_chart.dart';
 import 'package:tcc/app/modules/cras/domain/models/cras_equotion.dart';
 import 'package:tcc/app/modules/cras/domain/models/culture_data.dart';
 import 'package:tcc/app/modules/cras/domain/models/soil_data.dart';
 import 'package:tcc/app/modules/cras/external/mappers/cras_equotion_mapper.dart';
+import 'package:tcc/app/modules/cras/external/mappers/cras_mapper.dart';
 import 'package:tcc/app/modules/cras/external/mappers/culture_data_mapper.dart';
 
 import '../../../../../core/domain/helpers/errors/failure.dart';
@@ -20,6 +22,42 @@ class CrasLocalDataSourceImpl implements CrasLocalDataSource {
     try {
       final response = await _localStorage.setString('cras', jsonEncode(value));
       return response;
+    } on Failure {
+      rethrow;
+    } catch (error, stackTrace) {
+      throw DatasourceFailure(
+          message: error.toString(), stackTrace: stackTrace);
+    }
+  }
+
+  //REFATORAÇÃO PARA SALVAR A LISTA DO CRAS
+  @override
+  Future<bool> saveCras(List<CrasChart> value) async {
+    try {
+      final response = await _localStorage.setString(
+          'cras_1',
+          json.encode(value
+              .map<Map<String, dynamic>>((e) => CrasMapper().to(e))
+              .toList()));
+      return response;
+    } on Failure {
+      rethrow;
+    } catch (error, stackTrace) {
+      throw DatasourceFailure(
+          message: error.toString(), stackTrace: stackTrace);
+    }
+  }
+
+  @override
+  List<CrasChart> fetchCras() {
+    try {
+      final response = _localStorage.getString('cras_1');
+      if (response == null) {
+        return [];
+      }
+      return (json.decode(response) as List<dynamic>)
+          .map<CrasChart>((e) => CrasMapper().from(e))
+          .toList();
     } on Failure {
       rethrow;
     } catch (error, stackTrace) {

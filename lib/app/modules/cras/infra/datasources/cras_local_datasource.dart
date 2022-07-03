@@ -1,3 +1,4 @@
+import '../../domain/models/cras_chart.dart';
 import '../../domain/models/cras_equotion.dart';
 import '../../domain/models/culture_data.dart';
 import '../../domain/models/soil_data.dart';
@@ -11,4 +12,6 @@ abstract class CrasLocalDataSource {
   Future<SoilData?> fetchSoilData();
   Future<bool> saveCultureData(CultureData cultureData);
   Future<CultureData?> fetchCultureData();
+  Future<bool> saveCras(List<CrasChart> value);
+  List<CrasChart> fetchCras();
 }

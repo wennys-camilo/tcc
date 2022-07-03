@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter_triple/flutter_triple.dart';
 import 'package:logger/logger.dart';
+import 'package:tcc/app/modules/cras/domain/usecases/fetch_cras_usecase.dart';
 import 'package:tcc/app/modules/cras/domain/usecases/save_equotion_usecase.dart';
 
 import '../../../../core/domain/helpers/errors/failure.dart';
@@ -15,61 +16,29 @@ class CrasStore extends StreamStore<Failure, CrasState> {
   final SaveListCrasUsecase _saveListCrasUsecase;
   final FetchListCrasUsecase _fetchListCrasUsecase;
   final SaveEquotionUsecase _saveEquotionUsecase;
-  Logger logger = Logger();
+  final FetchCrasUsecase _fetchCrasUsecase;
+
   CrasStore(
     this._saveListCrasUsecase,
     this._fetchListCrasUsecase,
     this._saveEquotionUsecase,
+    this._fetchCrasUsecase,
   ) : super(CrasState(
           humidityList: [],
           chartList: [],
-          edit: false,
           equotion: '',
           square: '',
         ));
 
-  Future<void> save(List<String> values) async {
-    final response = await _saveListCrasUsecase(values);
-    response.fold(setError, (sucess) async {
-      update(state.copyWith(
-        humidityList: values,
-        chartList: [
-          CrasChart(kpa: 10, humidity: double.parse(values[0])),
-          CrasChart(kpa: 30, humidity: double.parse(values[1])),
-          CrasChart(kpa: 60, humidity: double.parse(values[2])),
-          CrasChart(kpa: 100, humidity: double.parse(values[3])),
-          CrasChart(kpa: 800, humidity: double.parse(values[4])),
-          CrasChart(kpa: 1500, humidity: double.parse(values[5])),
-        ],
-        edit: false,
-      ));
-      await getFittedPoints(triple.state.chartList);
+  //TODO: NOVA FORMA DE OBTER CRAS
+  Future<List<CrasChart>> fetchList() async {
+    final response = await _fetchCrasUsecase();
+    response.fold((l) {}, (result) async {
+      update(state.copyWith(chartList: result));
+      await getFittedPoints(result);
+      return result;
     });
-  }
-
-  Future<void> fetch() async {
-    final response = await _fetchListCrasUsecase();
-    response.fold(setError, (list) {
-      if (list.isNotEmpty) {
-        update(
-          state.copyWith(
-            humidityList: list,
-            chartList: [
-              CrasChart(kpa: 10, humidity: double.parse(list[0])),
-              CrasChart(kpa: 30, humidity: double.parse(list[1])),
-              CrasChart(kpa: 60, humidity: double.parse(list[2])),
-              CrasChart(kpa: 100, humidity: double.parse(list[3])),
-              CrasChart(kpa: 800, humidity: double.parse(list[4])),
-              CrasChart(kpa: 1500, humidity: double.parse(list[5])),
-            ],
-          ),
-        );
-      }
-    });
-  }
-
-  onChangeEdit() {
-    update(state.copyWith(edit: !state.edit));
+    return [];
   }
 
   onChangeEquation(String value) {
@@ -81,6 +50,7 @@ class CrasStore extends StreamStore<Failure, CrasState> {
   }
 
   Future<List<CrasChart>> getFittedPoints(List<CrasChart> data) async {
+    Logger logger = Logger();
     List<num> sums = [0, 0, 0, 0];
     List<CrasChart> fittedPoints = [];
     num a;

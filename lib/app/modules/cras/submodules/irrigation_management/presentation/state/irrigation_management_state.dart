@@ -14,6 +14,7 @@ class IrrigationManagementState {
   final CultureData cultureData;
   final DateTime? readingDate;
   final String bluntBlade;
+  final String message;
   IrrigationManagementState({
     required this.readingTensiometer,
     required this.crasEquotion,
@@ -24,6 +25,7 @@ class IrrigationManagementState {
     required this.cultureData,
     required this.readingDate,
     required this.bluntBlade,
+    required this.message,
   });
 
   String get readingDateFormated =>
@@ -39,6 +41,7 @@ class IrrigationManagementState {
     CultureData? cultureData,
     DateTime? readingDate,
     String? bluntBlade,
+    String? message,
   }) {
     return IrrigationManagementState(
       readingTensiometer: readingTensiometer ?? this.readingTensiometer,
@@ -52,11 +55,13 @@ class IrrigationManagementState {
       cultureData: cultureData ?? this.cultureData,
       readingDate: readingDate ?? this.readingDate,
       bluntBlade: bluntBlade ?? this.bluntBlade,
+      message: message ?? this.message,
     );
   }
 
   static IrrigationManagementState initialState() {
     return IrrigationManagementState(
+      message: '',
       readingTensiometer: List.generate(90, (index) => index + 1),
       crasEquotion: CrasEquotion(
         coefficient: '',

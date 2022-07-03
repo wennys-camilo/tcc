@@ -5,7 +5,7 @@ import 'package:tcc/app/modules/cras/submodules/soil_data/presentation/state/soi
 import '../../../../domain/models/soil_data.dart';
 import '../../../../../../core/presentation/themes/app_theme.dart';
 import '../../../../../../core/presentation/widgets/custom_drawer.dart';
-import '../../../../presentation/widgets/drop_down_wisget.dart';
+import '../../../../presentation/widgets/drop_down_widget.dart';
 import '../../../../presentation/widgets/text_input_widget.dart';
 import '../store/local_soil_data_store.dart';
 import '../store/soil_data_store.dart';
@@ -77,125 +77,133 @@ class _SoilDataPageState extends State<SoilDataPage> {
       ),
       body: SingleChildScrollView(
         child: Container(
-          height: MediaQuery.of(context).size.height,
           color: AppTheme.colors.primary.withOpacity(0.1),
-          child: Form(
-            key: _formkey,
-            child: TripleBuilder<SoilDataStore, Failure, SoilDataState>(
-                store: store,
-                builder: (context, triple) {
-                  return Column(
-                    children: [
-                      const SizedBox(
-                        height: 10,
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: DropDownWidget<String>(
-                          value: triple.state.soilTexture,
-                          onChanged: (value) {
-                            store.onChangeSoilTexture(value!);
-                            if (value == '0') {
-                              fieldCapacityVoltageController.text = '10';
-                            } else if (value == '1') {
-                              fieldCapacityVoltageController.text = "30";
-                            } else if (value == '2') {
-                              fieldCapacityVoltageController.text = "30";
-                            }
-                            store.onChangeCapacityVoltage(
-                                fieldCapacityVoltageController.text);
-                            store.setUCC();
-                            fieldCapacityMoistureController.text = store
-                                .state.fieldCapacityMoisture
-                                .toStringAsFixed(2);
-                          },
-                          items: const [
-                            DropdownMenuItem(
-                              child: Center(
-                                child: Text(
-                                  'Arenosa',
-                                ),
-                              ),
-                              value: '0',
-                            ),
-                            DropdownMenuItem(
-                              child: Center(
-                                child: Text('Média'),
-                              ),
-                              value: '1',
-                            ),
-                            DropdownMenuItem(
-                              child: Center(
-                                child: Text('Argilosa'),
-                              ),
-                              value: '2',
-                            )
-                          ],
-                          labelText: 'Textura do Solo',
-                          style: const TextStyle(
-                              fontSize: 18, color: Colors.black),
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: TextInputWidget(
-                          fillColor: AppTheme.colors.greyLight,
-                          controller: fieldCapacityVoltageController,
-                          enabled: false,
-                          labelText: 'Tensão da Capacidade de Campo',
-                          style: TextStyle(
-                            color: AppTheme.colors.secondary,
+          child: Center(
+            child: Container(
+              constraints: const BoxConstraints(maxWidth: 800),
+              height: MediaQuery.of(context).size.height,
+              child: Form(
+                key: _formkey,
+                child: TripleBuilder<SoilDataStore, Failure, SoilDataState>(
+                    store: store,
+                    builder: (context, triple) {
+                      return Column(
+                        children: [
+                          const SizedBox(
+                            height: 10,
                           ),
-                          suffixText: 'kPa',
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: TextInputWidget(
-                          fillColor: AppTheme.colors.greyLight,
-                          controller: fieldCapacityMoistureController,
-                          enabled: false,
-                          style: TextStyle(color: AppTheme.colors.secondary),
-                          labelText: 'Umidade da Capacidade de Campo (UCC):',
-                          suffixText: '%',
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: TextInputWidget(
-                          fillColor: AppTheme.colors.greyLight,
-                          enabled: false,
-                          style: TextStyle(color: AppTheme.colors.secondary),
-                          controller: moistureAtWiltingPointController,
-                          labelText: 'Umidade no ponto de murcha (UPM):',
-                          suffixText: '%',
-                        ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.end,
-                          children: [
-                            const Text('g/cm³'),
-                            TextInputWidget(
-                              decimalInput: true,
-                              focusNode: soilDensityfocusNode,
-                              controller: soilDensityController,
-                              labelText: 'Densidade do solo (ds):',
-                              validator: (value) {
-                                if (value!.isEmpty) {
-                                  return 'Campo Obrigatório';
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: DropDownWidget<String>(
+                              value: triple.state.soilTexture,
+                              onChanged: (value) {
+                                store.onChangeSoilTexture(value!);
+                                if (value == '0') {
+                                  fieldCapacityVoltageController.text = '10';
+                                } else if (value == '1') {
+                                  fieldCapacityVoltageController.text = "30";
+                                } else if (value == '2') {
+                                  fieldCapacityVoltageController.text = "30";
                                 }
-                                return null;
+                                store.onChangeCapacityVoltage(
+                                    fieldCapacityVoltageController.text);
+                                store.setUCC();
+                                fieldCapacityMoistureController.text = store
+                                    .state.fieldCapacityMoisture
+                                    .toStringAsFixed(2);
                               },
-                              onChanged: store.onChangeSoilDensity,
+                              items: const [
+                                DropdownMenuItem(
+                                  child: Center(
+                                    child: Text(
+                                      'Arenosa',
+                                    ),
+                                  ),
+                                  value: '0',
+                                ),
+                                DropdownMenuItem(
+                                  child: Center(
+                                    child: Text('Média'),
+                                  ),
+                                  value: '1',
+                                ),
+                                DropdownMenuItem(
+                                  child: Center(
+                                    child: Text('Argilosa'),
+                                  ),
+                                  value: '2',
+                                )
+                              ],
+                              labelText: 'Textura do Solo',
+                              style: const TextStyle(
+                                  fontSize: 18, color: Colors.black),
                             ),
-                          ],
-                        ),
-                      ),
-                    ],
-                  );
-                }),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextInputWidget(
+                              fillColor: AppTheme.colors.greyLight,
+                              controller: fieldCapacityVoltageController,
+                              enabled: false,
+                              labelText: 'Tensão da Capacidade de Campo',
+                              style: TextStyle(
+                                color: AppTheme.colors.secondary,
+                              ),
+                              suffixText: 'kPa',
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextInputWidget(
+                              fillColor: AppTheme.colors.greyLight,
+                              controller: fieldCapacityMoistureController,
+                              enabled: false,
+                              style:
+                                  TextStyle(color: AppTheme.colors.secondary),
+                              labelText:
+                                  'Umidade da Capacidade de Campo (UCC):',
+                              suffixText: '%',
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: TextInputWidget(
+                              fillColor: AppTheme.colors.greyLight,
+                              enabled: false,
+                              style:
+                                  TextStyle(color: AppTheme.colors.secondary),
+                              controller: moistureAtWiltingPointController,
+                              labelText: 'Umidade no ponto de murcha (UPM):',
+                              suffixText: '%',
+                            ),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.end,
+                              children: [
+                                const Text('g/cm³'),
+                                TextInputWidget(
+                                  decimalInput: true,
+                                  focusNode: soilDensityfocusNode,
+                                  controller: soilDensityController,
+                                  labelText: 'Densidade do solo (ds):',
+                                  validator: (value) {
+                                    if (value!.isEmpty) {
+                                      return 'Campo Obrigatório';
+                                    }
+                                    return null;
+                                  },
+                                  onChanged: store.onChangeSoilDensity,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      );
+                    }),
+              ),
+            ),
           ),
         ),
       ),

@@ -1,8 +1,10 @@
 import 'package:flutter_modular/flutter_modular.dart';
+import 'package:tcc/app/modules/cras/domain/usecases/fetch_cras_usecase_impl.dart';
 import 'package:tcc/app/modules/cras/domain/usecases/fetch_culture_data_usecase_impl.dart';
 import 'package:tcc/app/modules/cras/domain/usecases/fetch_registers_irrigation_usecase_impl.dart';
 import 'package:tcc/app/modules/cras/domain/usecases/fetch_soil_data_usecase_impl.dart';
 import 'package:tcc/app/modules/cras/domain/usecases/remove_register_irrigation_usecase_impl.dart';
+import 'package:tcc/app/modules/cras/domain/usecases/save_cras_usecase_impl.dart';
 import 'package:tcc/app/modules/cras/domain/usecases/save_culture_data_usecase_impl.dart';
 import 'package:tcc/app/modules/cras/domain/usecases/save_register_irrigation_usecase_impl.dart';
 import 'package:tcc/app/modules/cras/domain/usecases/save_soil_data_usecase_impl.dart';
@@ -11,6 +13,7 @@ import 'package:tcc/app/modules/cras/infra/repositories/irrigation_record_reposi
 import 'package:tcc/app/modules/cras/presentation/pages/cras_page.dart';
 import 'package:tcc/app/modules/cras/submodules/cras_tensiometer_equantion/cras_tensiometer_equation_module.dart';
 import 'package:tcc/app/modules/cras/submodules/culture_irrigation_system_data/culture_irrigation_system_module.dart';
+import 'package:tcc/app/modules/cras/submodules/edit_cras/edit_cras_module.dart';
 import 'package:tcc/app/modules/cras/submodules/irrigation_management/irrigation_management_module.dart';
 import 'package:tcc/app/modules/cras/submodules/irrigation_records/irrigation_records_module.dart';
 import 'package:tcc/app/modules/cras/submodules/soil_data/soil_data_module.dart';
@@ -21,6 +24,7 @@ import 'domain/usecases/save_list_cras_usecase_impl.dart';
 import 'external/datasources/local/cras_local_datasource_impl.dart';
 import 'infra/repositories/cras_repository_impl.dart';
 import 'presentation/pages/cras_chart_page.dart';
+import 'presentation/pages/new_home_page.dart';
 import 'presentation/stores/cras_store.dart';
 
 class CrasModule extends Module {
@@ -41,7 +45,9 @@ class CrasModule extends Module {
     Bind((i) => FetchSoilDataUsecaseImpl(i.get())),
     Bind((i) => SaveCultureDataUsecaseImpl(i.get())),
     Bind((i) => FetchCultureDataUsecaseImpl(i.get())),
-    Bind((i) => CrasStore(i.get(), i.get(), i.get())),
+    Bind((i) => SaveCrasUsecaseImpl(i.get())),
+    Bind((i) => FetchCrasUsecaseImpl(i.get())),
+    Bind((i) => CrasStore(i.get(), i.get(), i.get(), i.get())),
   ];
 
   @override
@@ -50,7 +56,10 @@ class CrasModule extends Module {
         child: (_, args) => const RouterOutlet(),
         children: [
           ChildRoute('/cras',
-              child: (_, args) => const CrasPage(), children: []),
+              child: (context, args) => NewHomePage(
+                    store: context.read(),
+                  ),
+              children: []),
           ModuleRoute(
             '/cras-equation-tensiometer',
             module: CrasTensiometerEquationModule(),
@@ -70,6 +79,10 @@ class CrasModule extends Module {
           ModuleRoute(
             '/registers-irrigation',
             module: IrrigationRecordsModule(),
+          ),
+          ModuleRoute(
+            '/edit-cras',
+            module: EditCrasModule(),
           ),
         ]),
     ChildRoute('/chart',

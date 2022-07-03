@@ -36,9 +36,7 @@ class DropDownWidget<T> extends StatelessWidget {
         labelText: labelText,
         border: const OutlineInputBorder(),
         enabledBorder:
-            const OutlineInputBorder(borderSide: BorderSide(width: 0)),
-        focusedBorder:
-            const OutlineInputBorder(borderSide: BorderSide(width: 0)),
+            const OutlineInputBorder(borderSide: BorderSide(width: 1)),
         isDense: true,
       ),
       onChanged: onChanged,

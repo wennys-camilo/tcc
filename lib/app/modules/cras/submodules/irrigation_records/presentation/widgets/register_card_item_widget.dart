@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import '../../../../../../core/presentation/themes/app_theme.dart';
 import '../../../../domain/models/irrigation_record.dart';
 import '../../../soil_data/presentation/utils/culture_type.dart';
@@ -59,7 +60,9 @@ class RegisterCardItemWidget extends StatelessWidget {
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Text(
-                      register.dataLeitura,
+                      DateFormat('dd/MM/yyy').format(
+                        DateTime.parse(register.dataLeitura),
+                      ),
                       style: const TextStyle(
                         color: Colors.white,
                       ),

@@ -24,13 +24,39 @@ class IrrigationManagementStore
 
   var uuid = Uuid();
 
+  requestData() async {
+    bool isNeedData = false;
+    String message = '';
+    await Future.wait([
+      _fetchCultureDataUsecase().then((value) => value.fold((l) {}, (response) {
+            if (response == null) {
+              isNeedData = true;
+              message = 'Preencha os dados de Cultura';
+            }
+          })),
+      _fetchSoilDataUsecase().then((value) => value.fold((l) {}, (response) {
+            if (response == null) {
+              isNeedData = true;
+              message = 'Preencha os dados de Solo';
+            }
+          })),
+      _fetchEquotionUsecase().then((value) => value.fold((l) {}, (response) {
+            if (response == null) {
+              isNeedData = true;
+              message = 'Preencha a Curva de Retenção';
+            }
+          }))
+    ]);
+    update(state.copyWith(needSoilData: isNeedData, message: message));
+  }
+
   Future<void> fetchCultureData() async {
     final response = await _fetchCultureDataUsecase();
     response.fold((l) {}, (result) {
       if (result != null) {
         update(state.copyWith(cultureData: result));
       } else {
-        update(state.copyWith(needSoilData: true));
+        //update(state.copyWith(needSoilData: true));
       }
     });
   }
@@ -41,7 +67,7 @@ class IrrigationManagementStore
       if (result != null) {
         update(state.copyWith(soilData: result));
       } else {
-        update(state.copyWith(needSoilData: true));
+        //update(state.copyWith(needSoilData: true));
       }
     });
   }
@@ -68,7 +94,7 @@ class IrrigationManagementStore
       if (result != null) {
         update(state.copyWith(crasEquotion: result));
       } else {
-        update(state.copyWith(needSoilData: true));
+        //update(state.copyWith(needSoilData: true));
       }
     });
   }
@@ -81,7 +107,7 @@ class IrrigationManagementStore
       culTivarHibrido: triple.state.cultureData.cultivateHybrid,
       dataPlantio: DateFormat('dd/MM/yyyy')
           .format(DateTime.parse(triple.state.cultureData.plantingDate)),
-      dataLeitura: triple.state.readingDateFormated,
+      dataLeitura: triple.state.readingDate.toString(),
       tensaoMedia: ((triple.state.readingOnLayerOneTensiometer! +
                   triple.state.readingOnLayerTwoTensiometer!) /
               2)

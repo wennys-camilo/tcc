@@ -45,65 +45,71 @@ class _CrasTensiometerEquationPageState
       ),
       body: Container(
         color: AppTheme.colors.primary.withOpacity(0.1),
-        child: Column(
-          children: [
-            const SizedBox(
-              height: 10,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  const Flexible(
-                    flex: 5,
-                    child: Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        'Coeficiente da Curva de retenção de água do solo:',
-                        style: TextStyle(
-                          fontSize: 15,
+        child: Center(
+          child: Container(
+            constraints: const BoxConstraints(maxWidth: 800),
+            width: MediaQuery.of(context).size.width,
+            child: Column(
+              children: [
+                const SizedBox(
+                  height: 10,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      const Expanded(
+                        flex: 4,
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            'Coeficiente da Curva de retenção de água do solo:',
+                            style: TextStyle(
+                              fontSize: 15,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
-                  Flexible(
-                    flex: 5,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextInputWidget(
-                        controller: coefficientTextEditController,
+                      Flexible(
+                        flex: 5,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextInputWidget(
+                            controller: coefficientTextEditController,
+                          ),
+                        ),
                       ),
-                    ),
+                    ],
                   ),
-                ],
-              ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    children: [
+                      const Expanded(
+                        flex: 4,
+                        child: Padding(
+                          padding: EdgeInsets.all(8.0),
+                          child: Text(
+                            'Expoente da Curva de retençao de água do solo:',
+                          ),
+                        ),
+                      ),
+                      Flexible(
+                        flex: 5,
+                        child: Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextInputWidget(
+                            controller: exponentTextEditController,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  const Flexible(
-                    flex: 5,
-                    child: Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Text(
-                        'Expoente da Curva de retençao de água do solo:',
-                      ),
-                    ),
-                  ),
-                  Flexible(
-                    flex: 5,
-                    child: Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextInputWidget(
-                        controller: exponentTextEditController,
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );
