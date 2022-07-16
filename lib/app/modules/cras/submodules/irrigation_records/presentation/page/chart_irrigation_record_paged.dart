@@ -1,14 +1,13 @@
 import 'package:flutter/material.dart';
-
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:tcc/app/modules/cras/domain/models/irrigation_record.dart';
+import 'package:tcc/app/modules/cras/submodules/irrigation_records/presentation/store/irrigation_records_store.dart';
 
 class ChartIrrigationRecordPage extends StatefulWidget {
-  final List<IrrigationRecord> data;
-
+  final IrrigationRecordsStore store;
   const ChartIrrigationRecordPage({
     Key? key,
-    required this.data,
+    required this.store,
   }) : super(key: key);
 
   @override
@@ -22,7 +21,7 @@ class _ChartIrrigationRecordPageState extends State<ChartIrrigationRecordPage> {
   @override
   void initState() {
     super.initState();
-
+    //widget.store.fetchRegisters();
     _trackballBehavior = TrackballBehavior(
         enable: true,
         tooltipDisplayMode: TrackballDisplayMode.groupAllPoints,
@@ -35,26 +34,24 @@ class _ChartIrrigationRecordPageState extends State<ChartIrrigationRecordPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Registros'),
-        centerTitle: true,
-      ),
-      body: Center(
-          child: SfCartesianChart(
-              primaryYAxis: NumericAxis(),
-              primaryXAxis: DateTimeAxis(),
-              trackballBehavior: _trackballBehavior,
-              series: <ChartSeries>[
-            // Renders line chart
-            FastLineSeries<IrrigationRecord, DateTime>(
-              dataSource: widget.data,
-              xValueMapper: (IrrigationRecord data, _) =>
-                  DateTime.parse(data.dataLeitura),
-              yValueMapper: (IrrigationRecord data, _) =>
-                  num.parse(data.tensaoMedia),
-              markerSettings: const MarkerSettings(isVisible: true),
-            )
-          ])),
-    );
+        appBar: AppBar(
+          title: const Text('Registros'),
+          centerTitle: true,
+        ),
+        body: SfCartesianChart(
+            primaryYAxis: NumericAxis(),
+            primaryXAxis: DateTimeAxis(),
+            trackballBehavior: _trackballBehavior,
+            series: <ChartSeries>[
+              // Renders line chart
+              FastLineSeries<IrrigationRecord, DateTime>(
+                dataSource: widget.store.state.irrigationRegisters,
+                xValueMapper: (IrrigationRecord data, _) =>
+                    DateTime.parse(data.dataLeitura),
+                yValueMapper: (IrrigationRecord data, _) =>
+                    num.parse(data.tensaoMedia),
+                markerSettings: const MarkerSettings(isVisible: true),
+              )
+            ]));
   }
 }

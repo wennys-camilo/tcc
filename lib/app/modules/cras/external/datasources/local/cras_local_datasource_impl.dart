@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:logger/logger.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:tcc/app/modules/cras/domain/models/cras_chart.dart';
 import 'package:tcc/app/modules/cras/domain/models/cras_equotion.dart';
@@ -147,6 +148,8 @@ class CrasLocalDataSourceImpl implements CrasLocalDataSource {
 
   @override
   Future<bool> saveCultureData(CultureData cultureData) async {
+    Logger().v(CultureDataMapper().to(cultureData));
+
     try {
       final response = await _localStorage.setString(
           'culture_data', jsonEncode(CultureDataMapper().to(cultureData)));

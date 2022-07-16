@@ -18,7 +18,7 @@ class IrrigationRecordsModule extends Module {
     ),
     ChildRoute('/irrigation-record-chart',
         child: (context, args) => ChartIrrigationRecordPage(
-              data: args.data,
+              store: context.read(),
             ))
   ];
 }

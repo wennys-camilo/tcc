@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
 import 'package:flutter_triple/flutter_triple.dart';
 import 'package:intl/intl.dart';
 import 'package:tcc/app/core/domain/domain.dart';
@@ -9,8 +8,8 @@ import 'package:tcc/app/modules/cras/presentation/widgets/text_input_widget.dart
 import 'package:tcc/app/modules/cras/submodules/culture_irrigation_system_data/presentation/state/culture_irrigation_system_state.dart';
 import 'package:tcc/app/modules/cras/submodules/culture_irrigation_system_data/presentation/stores/culture_irrigation_system_store.dart';
 import 'package:tcc/app/modules/cras/submodules/culture_irrigation_system_data/presentation/stores/local_culture_data_store.dart';
-
 import '../../../../../../core/presentation/themes/app_theme.dart';
+import '../../../irrigation_management/presentation/widgets/line_text_custom_widget.dart';
 
 class CultureIrrigationSystemPage extends StatefulWidget {
   final LocalCultureDataStore localCultureDataStore;
@@ -52,7 +51,7 @@ class _CultureIrrigationSystemPageState
       dateinput.text = DateFormat(" d 'de' MMMM 'de' y", "pt_BR")
           .format(DateTime.parse(state.cultureData.plantingDate));
       store.onChangeRootSystem(state.cultureData.rootSystem);
-      blade.text = state.cultureData.blade;
+      blade.text = state.cultureData.blade.replaceAll('.', ',');
       store.onChangeBlade(state.cultureData.blade);
       store.onChangeEfficiency(state.cultureData.efficiency);
       kcController.text = state.cultureData.criticalVoltage;
@@ -65,6 +64,7 @@ class _CultureIrrigationSystemPageState
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        centerTitle: true,
         title: const Text('Dados da Cultura e do Sistema de irrigação'),
       ),
       drawer: const CustomDrawer(),
@@ -82,6 +82,9 @@ class _CultureIrrigationSystemPageState
                       children: [
                         const SizedBox(
                           height: 10,
+                        ),
+                        const LineTextCustomWidget(
+                          text: 'Dados da Cultura',
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
@@ -201,6 +204,9 @@ class _CultureIrrigationSystemPageState
                             suffixText: "kPa",
                             onChanged: store.onChangeCriticalVoltage,
                           ),
+                        ),
+                        const LineTextCustomWidget(
+                          text: 'Sitema de Irrigação',
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),

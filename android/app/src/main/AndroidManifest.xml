@@ -1,5 +1,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.tcc">
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <queries>
+    <intent>
+      <action android:name="android.intent.action.VIEW"/>
+      <data android:scheme="https"/>
+    </intent>
+    <!--#docregion android-queries-->
+  </queries>
+  <!--#enddocregion android-queries-->  
    <application
         android:label="tcc"
         android:name="${applicationName}"

@@ -23,11 +23,12 @@ class EditCrasStore extends StreamStore<Failure, EditCrasState> {
   }
 
   Future<List<CrasChart>> fetch() async {
+    List<CrasChart> chartList = [];
     final response = await _fetchCrasUsecase();
     response.fold((l) {}, (result) {
       update(state.copyWith(listCras: result));
-      return result;
+      chartList = result;
     });
-    return [];
+    return chartList;
   }
 }

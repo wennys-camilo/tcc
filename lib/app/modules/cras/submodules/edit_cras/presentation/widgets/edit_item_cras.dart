@@ -24,7 +24,8 @@ class _EditItemCrasState extends State<EditItemCras> {
   void initState() {
     super.initState();
     kpa = TextEditingController(text: widget.item.kpa.toString());
-    humidity = TextEditingController(text: widget.item.humidity.toString());
+    humidity = TextEditingController(
+        text: widget.item.humidity.toStringAsFixed(4).replaceAll('.', ','));
     humidityWeight = TextEditingController(
         text: (widget.item.humidity * 100).toStringAsFixed(2));
   }
@@ -41,8 +42,10 @@ class _EditItemCrasState extends State<EditItemCras> {
           Expanded(
             flex: 30,
             child: TextInputWidget(
+              //decimalInput: true,
               labelText: "kPa",
               controller: kpa,
+              keyboardType: TextInputType.number,
               inputFormatters: [FilteringTextInputFormatter.digitsOnly],
               validator: (value) {
                 if (value!.isEmpty) {
@@ -63,17 +66,18 @@ class _EditItemCrasState extends State<EditItemCras> {
             width: 10,
           ),
           Expanded(
-            flex: 30,
+            flex: 40,
             child: TextInputWidget(
-              //enabled: triple.state.humidityList.isEmpty || triple.state.edit,
               controller: humidity,
               decimalInput: true,
               labelText: 'Kg água/kg solo',
               onChanged: (value) {
                 if (value.isNotEmpty) {
                   humidityWeight.text =
-                      (double.parse(value) * 100).toStringAsFixed(2);
-                  widget.item.humidity = double.parse(value);
+                      (double.parse(value.replaceAll(',', '.')) * 100)
+                          .toStringAsFixed(2);
+                  widget.item.humidity =
+                      double.parse(value.replaceAll(',', '.'));
                 } else {
                   humidityWeight.text = "";
                 }
@@ -81,7 +85,7 @@ class _EditItemCrasState extends State<EditItemCras> {
               validator: (value) {
                 if (value!.isEmpty) {
                   return "Campo Obrigatório";
-                } else if (double.parse(value) <= 0.0) {
+                } else if (double.parse(value.replaceAll(',', '.')) <= 0.0) {
                   return "Deve ser maior que 0";
                 }
                 return null;
@@ -92,7 +96,7 @@ class _EditItemCrasState extends State<EditItemCras> {
             width: 10,
           ),
           Expanded(
-            flex: 40,
+            flex: 30,
             child: TextInputWidget(
               labelText: "%",
               controller: humidityWeight,

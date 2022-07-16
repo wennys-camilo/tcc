@@ -33,7 +33,7 @@ class _ItemCrasState extends State<ItemCras> {
                           Padding(
                             padding: EdgeInsets.only(bottom: 12),
                             child: Text(
-                              'Poetencial',
+                              'Potencial',
                               maxLines: 1,
                               style: TextStyle(fontWeight: FontWeight.bold),
                             ),
@@ -85,7 +85,7 @@ class _ItemCrasState extends State<ItemCras> {
                     ? const Padding(
                         padding: EdgeInsets.only(bottom: 12),
                         child: Text(
-                          'Umidade em Peso',
+                          'Um. em Peso',
                           maxLines: 1,
                           style: TextStyle(fontWeight: FontWeight.bold),
                         ),

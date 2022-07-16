@@ -1,6 +1,6 @@
 import "dart:math";
 import 'package:flutter/material.dart';
-import 'package:flutter_form_builder/flutter_form_builder.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_triple/flutter_triple.dart';
 import 'package:intl/intl.dart';
@@ -46,6 +46,8 @@ class _IrrigationManagementPageState extends State<IrrigationManagementPage> {
   late final TextEditingController regulagemPercentimetro;
   late final Logger logger;
 
+  late final TextEditingController dateinput;
+
   late final GlobalKey<FormState> _formKey;
   @override
   void initState() {
@@ -66,6 +68,7 @@ class _IrrigationManagementPageState extends State<IrrigationManagementPage> {
 
     regulagemPercentimetro = TextEditingController();
 
+    dateinput = TextEditingController();
     store.observer(onState: (state) {
       if (state.needSoilData) {
         ShowDialogWidget(
@@ -90,6 +93,7 @@ class _IrrigationManagementPageState extends State<IrrigationManagementPage> {
     return Scaffold(
       drawer: const CustomDrawer(),
       appBar: AppBar(
+        centerTitle: true,
         title: const Text('Manejo da Irrigação com o Tensiômetro'),
       ),
       body: SingleChildScrollView(
@@ -107,29 +111,38 @@ class _IrrigationManagementPageState extends State<IrrigationManagementPage> {
                       children: [
                         Padding(
                           padding: const EdgeInsets.all(16.0),
-                          child: FormBuilderDateTimePicker(
+                          child: TextFormField(
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
-                            initialValue: triple.state.readingDate,
-                            name: 'date',
-                            onChanged: (value) {
-                              if (value != null) {
-                                store.onChangeReadingDate(value);
-                              }
-                            },
-                            inputType: InputType.date,
+                            controller: dateinput,
                             textAlign: TextAlign.center,
                             decoration: const InputDecoration(
-                              //suffixIcon: Icon(Icons.calendar_month),
-                              labelText: 'Data de Leitura',
-                              border: OutlineInputBorder(),
-                              enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(width: 1)),
-                            ),
-                            format: DateFormat(" d 'de' MMMM 'de' y", "pt_BR"),
+                                suffixIcon: Icon(Icons.calendar_month),
+                                border: OutlineInputBorder(),
+                                enabledBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(width: 1)),
+                                labelText: "Data de Plantio"),
+                            readOnly: true,
+                            onTap: () async {
+                              DateTime? pickedDate = await showDatePicker(
+                                  context: context,
+                                  initialDate: DateTime.now(),
+                                  firstDate: DateTime(2000),
+                                  lastDate: DateTime(2101));
+                              if (pickedDate != null) {
+                                String formattedDate =
+                                    DateFormat(" d 'de' MMMM 'de' y", "pt_BR")
+                                        .format(pickedDate);
+
+                                store.onChangeReadingDate(pickedDate);
+                                setState(() {
+                                  dateinput.text = formattedDate;
+                                });
+                              } else {}
+                            },
                             validator: (value) {
-                              if (value == null) {
-                                return "Campo obrigatório";
+                              if (value!.isEmpty) {
+                                return "Campo Obrigatório";
                               }
                               return null;
                             },
@@ -138,6 +151,9 @@ class _IrrigationManagementPageState extends State<IrrigationManagementPage> {
                         Padding(
                           padding: const EdgeInsets.fromLTRB(16, 0, 16, 8),
                           child: TextInputWidget(
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
                             controller: layer1Depth,
                             labelText: 'Profundidade camada 1 (superior)',
                             suffixText: 'cm',
@@ -147,6 +163,9 @@ class _IrrigationManagementPageState extends State<IrrigationManagementPage> {
                         Padding(
                           padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
                           child: TextInputWidget(
+                            inputFormatters: [
+                              FilteringTextInputFormatter.digitsOnly
+                            ],
                             controller: layer2Depth,
                             labelText: 'Profundidade camada 2 (inferior)',
                             suffixText: 'cm',
@@ -231,16 +250,18 @@ class _IrrigationManagementPageState extends State<IrrigationManagementPage> {
 
                               //REGULAGEM PERCENTIMETRO
                               if ((100 *
-                                          double.parse(
-                                              triple.state.cultureData.blade)) /
+                                          double.parse(triple
+                                              .state.cultureData.blade
+                                              .replaceAll(',', '.'))) /
                                       (double.parse(
                                           laminaBrutaIrrigacaoTotal.text)) >
                                   100) {
                                 regulagemPercentimetro.text = 'LB < L100%';
                               } else {
                                 regulagemPercentimetro.text = (100 *
-                                        double.parse(
-                                            triple.state.cultureData.blade) /
+                                        double.parse(triple
+                                            .state.cultureData.blade
+                                            .replaceAll(',', '.')) /
                                         double.parse(
                                             laminaBrutaIrrigacaoTotal.text))
                                     .toStringAsFixed(0);
@@ -372,16 +393,18 @@ class _IrrigationManagementPageState extends State<IrrigationManagementPage> {
 
                               //REGULAGEM PERCENTIMETRO
                               if ((100 *
-                                          double.parse(
-                                              triple.state.cultureData.blade)) /
+                                          double.parse(triple
+                                              .state.cultureData.blade
+                                              .replaceAll(',', '.'))) /
                                       (double.parse(
                                           laminaBrutaIrrigacaoTotal.text)) >
                                   100) {
                                 regulagemPercentimetro.text = 'LB < L100%';
                               } else {
                                 regulagemPercentimetro.text = (100 *
-                                        double.parse(
-                                            triple.state.cultureData.blade) /
+                                        double.parse(triple
+                                            .state.cultureData.blade
+                                            .replaceAll(',', '.')) /
                                         double.parse(
                                             laminaBrutaIrrigacaoTotal.text))
                                     .toStringAsFixed(0);
@@ -480,6 +503,11 @@ class _IrrigationManagementPageState extends State<IrrigationManagementPage> {
                             onPressed: () async {
                               if (_formKey.currentState!.validate()) {
                                 await store.registerData();
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Irrigação Registrada!'),
+                                  ),
+                                );
                               }
                             },
                           ),

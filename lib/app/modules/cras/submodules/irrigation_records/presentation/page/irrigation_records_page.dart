@@ -34,6 +34,7 @@ class _IrrigationRecordsPageState extends State<IrrigationRecordsPage> {
         backgroundColor: const Color(0xfff5f5f7),
         drawer: const CustomDrawer(),
         appBar: AppBar(
+          centerTitle: true,
           title: const Text('Registros das Irrigações'),
           backgroundColor: AppTheme.colors.primary,
         ),
@@ -119,7 +120,6 @@ class _IrrigationRecordsPageState extends State<IrrigationRecordsPage> {
                             padding: const EdgeInsets.only(
                                 left: 20, right: 20, top: 8, bottom: 8),
                             child: SizedBox(
-                              height: MediaQuery.of(context).size.height * 0.25,
                               child: RegisterCardItemWidget(
                                 register: register,
                                 onTapDelete: () async {
@@ -144,10 +144,10 @@ class _IrrigationRecordsPageState extends State<IrrigationRecordsPage> {
           builder: (context, triple) {
             if (triple.state.irrigationRegisters.isNotEmpty) {
               return FloatingActionButton.extended(
+                  backgroundColor: AppTheme.colors.primary,
                   onPressed: () {
                     Modular.to.pushNamed(
                       './irrigation-record-chart',
-                      arguments: triple.state.irrigationRegisters,
                     );
                   },
                   label: const Icon(Icons.show_chart));

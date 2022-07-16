@@ -39,9 +39,9 @@ class _EditCrasPageState extends State<EditCrasPage> {
                 child: FutureBuilder<List<CrasChart>>(
                   future: store.fetch(),
                   builder: (context, snapshot) {
-                    if (snapshot.hasData && snapshot.data!.isEmpty) {
+                    if (snapshot.hasData) {
                       return FormField<List<CrasChart>>(
-                        initialValue: store.state.listCras,
+                        initialValue: snapshot.data,
                         validator: (sizes) {
                           if (sizes!.isEmpty) return 'Insira um tamanho';
                           return null;

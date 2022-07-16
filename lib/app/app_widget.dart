@@ -13,7 +13,7 @@ class AppWidget extends StatelessWidget {
 
     return MaterialApp.router(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Slidy',
+      title: 'IRRIGATION MANAGEMENT',
       theme: ThemeData(
         textTheme: GoogleFonts.robotoTextTheme(
           Theme.of(context).textTheme,

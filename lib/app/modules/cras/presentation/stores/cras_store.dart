@@ -31,7 +31,7 @@ class CrasStore extends StreamStore<Failure, CrasState> {
         ));
 
   //TODO: NOVA FORMA DE OBTER CRAS
-  Future<List<CrasChart>> fetchList() async {
+  /*Future<List<CrasChart>> fetchList() async {
     final response = await _fetchCrasUsecase();
     response.fold((l) {}, (result) async {
       update(state.copyWith(chartList: result));
@@ -39,6 +39,13 @@ class CrasStore extends StreamStore<Failure, CrasState> {
       return result;
     });
     return [];
+  }*/
+  Future<void> fetchList() async {
+    final response = await _fetchCrasUsecase();
+    response.fold((l) {}, (result) async {
+      update(state.copyWith(chartList: result));
+      await getFittedPoints(result);
+    });
   }
 
   onChangeEquation(String value) {

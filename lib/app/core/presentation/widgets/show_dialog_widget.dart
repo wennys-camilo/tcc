@@ -7,10 +7,12 @@ class ShowDialogWidget extends StatelessWidget {
   final String bodyText;
   final bool? barrierDismissible;
   final VoidCallback? action;
+  final String? msgAction;
   const ShowDialogWidget({
     Key? key,
     this.barrierDismissible,
     this.action,
+    this.msgAction,
     required this.bodyText,
   }) : super(key: key);
 
@@ -27,7 +29,7 @@ class ShowDialogWidget extends StatelessWidget {
       insetPadding: const EdgeInsets.symmetric(horizontal: 45, vertical: 24.0),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       child: Container(
-        constraints: BoxConstraints(maxWidth: 500),
+        constraints: const BoxConstraints(maxWidth: 500),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -80,7 +82,7 @@ class ShowDialogWidget extends StatelessWidget {
               child: Column(
                 children: [
                   CustomTextButtonWidget(
-                    text: 'OK',
+                    text: msgAction ?? 'OK',
                     onPressed:
                         action != null ? action! : () => Modular.to.pop(),
                     backgroundcolor: Colors.green,

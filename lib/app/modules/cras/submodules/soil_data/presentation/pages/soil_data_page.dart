@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_triple/flutter_triple.dart';
 import 'package:tcc/app/core/domain/domain.dart';
+import 'package:tcc/app/core/presentation/widgets/show_dialog_widget.dart';
 import 'package:tcc/app/modules/cras/submodules/soil_data/presentation/state/soil_data_state.dart';
 import '../../../../domain/models/soil_data.dart';
 import '../../../../../../core/presentation/themes/app_theme.dart';
@@ -60,7 +62,8 @@ class _SoilDataPageState extends State<SoilDataPage> {
               state.soilData.fieldCapacityHumidity;
           moistureAtWiltingPointController.text =
               state.soilData.wiltingPointMoisture;
-          soilDensityController.text = state.soilData.soilDensity;
+          soilDensityController.text =
+              state.soilData.soilDensity.replaceAll('.', ',');
         }
       },
     );
@@ -73,6 +76,7 @@ class _SoilDataPageState extends State<SoilDataPage> {
     return Scaffold(
       drawer: const CustomDrawer(),
       appBar: AppBar(
+        centerTitle: true,
         title: const Text('Dados do Solo'),
       ),
       body: SingleChildScrollView(
@@ -163,6 +167,12 @@ class _SoilDataPageState extends State<SoilDataPage> {
                               labelText:
                                   'Umidade da Capacidade de Campo (UCC):',
                               suffixText: '%',
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "Campo Obrigatório";
+                                }
+                                return null;
+                              },
                             ),
                           ),
                           Padding(
@@ -175,6 +185,12 @@ class _SoilDataPageState extends State<SoilDataPage> {
                               controller: moistureAtWiltingPointController,
                               labelText: 'Umidade no ponto de murcha (UPM):',
                               suffixText: '%',
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return "Campo Obrigatório";
+                                }
+                                return null;
+                              },
                             ),
                           ),
                           Padding(
@@ -218,7 +234,7 @@ class _SoilDataPageState extends State<SoilDataPage> {
                 fieldCapacityVoltage: fieldCapacityVoltageController.text,
                 fieldCapacityHumidity: fieldCapacityMoistureController.text,
                 wiltingPointMoisture: moistureAtWiltingPointController.text,
-                soilDensity: soilDensityController.text,
+                soilDensity: soilDensityController.text.replaceAll(',', '.'),
               ),
             );
             ScaffoldMessenger.of(context).showSnackBar(
@@ -226,6 +242,15 @@ class _SoilDataPageState extends State<SoilDataPage> {
                 content: Text('Dados solo salvos!'),
               ),
             );
+          } else if (moistureAtWiltingPointController.text.isEmpty) {
+            ShowDialogWidget(
+              bodyText:
+                  'Os campos de umidade são preenchidos de acordo com os dados da retenção de água do solo, faça o preenchimento na tela anterior',
+              action: () {
+                Modular.to.navigate('/cras');
+                Modular.to.pop();
+              },
+            ).show(context);
           }
         },
         label: const Icon(Icons.save),

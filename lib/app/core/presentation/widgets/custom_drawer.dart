@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 
 import 'package:tcc/app/core/presentation/widgets/drawer_item_tile_widget.dart';
+import 'package:tcc/app/core/presentation/widgets/show_dialog_widget.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({Key? key}) : super(key: key);
@@ -72,10 +74,33 @@ class _CustomDrawerState extends State<CustomDrawer> {
                   Modular.to.navigate('/registers-irrigation/');
                 },
               ),
+              DrawerItemTileWidget(
+                title: 'AVALIE O APLICATIVO',
+                icon: Icons.rate_review,
+                selected: false,
+                onTap: () async {
+                  ShowDialogWidget(
+                    bodyText:
+                        'Clique no botão abaixo para ser direcionado para o formulário',
+                    action: _launchUrl,
+                    msgAction: 'Avaliar',
+                  ).show(context);
+                },
+              ),
             ],
           );
         }),
       ),
     );
+  }
+
+  Future<void> _launchUrl() async {
+    final Uri _url = Uri.parse('https://forms.gle/SStMQ4hf5RHgs16B7');
+    if (!await launchUrl(
+      _url,
+      mode: LaunchMode.externalApplication,
+    )) {
+      throw 'Could not launch $_url';
+    }
   }
 }

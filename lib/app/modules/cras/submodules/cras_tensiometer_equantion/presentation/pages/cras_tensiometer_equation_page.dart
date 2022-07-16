@@ -41,6 +41,7 @@ class _CrasTensiometerEquationPageState
     return Scaffold(
       drawer: const CustomDrawer(),
       appBar: AppBar(
+        centerTitle: true,
         title: const Text('Equação da Cras/Tensiômetro'),
       ),
       body: Container(
@@ -75,6 +76,7 @@ class _CrasTensiometerEquationPageState
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: TextInputWidget(
+                            enabled: false,
                             controller: coefficientTextEditController,
                           ),
                         ),
@@ -100,6 +102,7 @@ class _CrasTensiometerEquationPageState
                         child: Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: TextInputWidget(
+                            enabled: false,
                             controller: exponentTextEditController,
                           ),
                         ),

@@ -1,9 +1,7 @@
 import 'package:flutter_triple/flutter_triple.dart';
 import 'package:tcc/app/modules/cras/domain/models/soil_data.dart';
 import 'package:tcc/app/modules/cras/domain/usecases/fetch_cras_usecase.dart';
-import 'package:tcc/app/modules/cras/domain/usecases/fetch_list_cras_usecase.dart';
 import '../../../../../../core/domain/helpers/errors/failure.dart';
-import '../../../../domain/models/cras_chart.dart';
 import '../../../../domain/usecases/save_soil_data_usecase.dart';
 import '../../../../presentation/stores/cras_store.dart';
 import '../state/soil_data_state.dart';

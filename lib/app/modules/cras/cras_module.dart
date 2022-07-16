@@ -10,7 +10,6 @@ import 'package:tcc/app/modules/cras/domain/usecases/save_register_irrigation_us
 import 'package:tcc/app/modules/cras/domain/usecases/save_soil_data_usecase_impl.dart';
 import 'package:tcc/app/modules/cras/external/datasources/local/irrigation_record_local_datasource_impl.dart';
 import 'package:tcc/app/modules/cras/infra/repositories/irrigation_record_repository_impl.dart';
-import 'package:tcc/app/modules/cras/presentation/pages/cras_page.dart';
 import 'package:tcc/app/modules/cras/submodules/cras_tensiometer_equantion/cras_tensiometer_equation_module.dart';
 import 'package:tcc/app/modules/cras/submodules/culture_irrigation_system_data/culture_irrigation_system_module.dart';
 import 'package:tcc/app/modules/cras/submodules/edit_cras/edit_cras_module.dart';

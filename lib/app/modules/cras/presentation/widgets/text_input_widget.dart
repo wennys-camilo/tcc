@@ -69,7 +69,7 @@ class TextInputWidget extends StatelessWidget {
         inputFormatters: !decimalInput
             ? inputFormatters
             : [
-                FilteringTextInputFormatter.allow((RegExp(r'^\d+\.?\d{0,6}'))),
+                FilteringTextInputFormatter.allow((RegExp(r'^\d+\,?\d{0,6}'))),
                 LengthLimitingTextInputFormatter(7),
               ],
         keyboardType: !decimalInput
