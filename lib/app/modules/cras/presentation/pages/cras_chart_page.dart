@@ -60,22 +60,6 @@ class _CrasChartPageState extends State<CrasChartPage> {
       ),
       body: Center(
         child: SfCartesianChart(
-          /*annotations: <CartesianChartAnnotation>[
-            CartesianChartAnnotation(
-                widget: TripleBuilder<CrasStore, Failure, CrasState>(
-                    builder: (context, triple) {
-                  return Column(
-                    children: [
-                      Text(triple.state.equotion),
-                      Text(triple.state.square),
-                    ],
-                  );
-                }),
-                // Coordinate unit type
-                coordinateUnit: CoordinateUnit.logicalPixel,
-                x: 700,
-                y: 20)
-          ],*/
           primaryXAxis: NumericAxis(interval: 200, maximum: 1600),
           primaryYAxis: NumericAxis(),
           trackballBehavior: _trackballBehavior,

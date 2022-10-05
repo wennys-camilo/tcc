@@ -85,11 +85,6 @@ class _ChartWidgetState extends State<ChartWidget> {
                     type: TrendlineType.power,
                     color: Colors.blue,
                     onRenderDetailsUpdate: (TrendlineRenderParams args) {
-                      /*print('Slope value: ' + args.slope![0].toString());
-                      print('rSquare value: ' + args.rSquaredValue.toString());
-                      print(
-                          'Intercept value (x): ' + args.intercept.toString());*/
-
                       square = (double.parse(
                               (args.rSquaredValue)!.toStringAsFixed(4)))
                           .toString();

@@ -171,29 +171,6 @@ class _CultureIrrigationSystemPageState
                             },
                           ),
                         ),
-                        /*Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: FormBuilderDateTimePicker(
-                            lastDate: DateTime.now(),
-                            initialValue: triple.state.plantingDate,
-                            name: 'date',
-                            initialDate: triple.state.plantingDate,
-                            onChanged: (value) {
-                              if (value != null) {
-                                store.onChangePlantinDate(value);
-                              }
-                            },
-                            inputType: InputType.date,
-                            decoration: const InputDecoration(
-                              suffixIcon: Icon(Icons.calendar_month),
-                              labelText: 'Data de Plantio',
-                              border: OutlineInputBorder(),
-                              enabledBorder: OutlineInputBorder(
-                                  borderSide: BorderSide(width: 0)),
-                            ),
-                            format: DateFormat(" d 'de' MMMM 'de' y", "pt_BR"),
-                          ),
-                        ),*/
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: TextInputWidget(

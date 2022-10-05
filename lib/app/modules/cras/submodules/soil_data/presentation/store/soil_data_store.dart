@@ -55,25 +55,6 @@ class SoilDataStore extends StreamStore<Failure, SoilDataState> {
     }
   }
 
-  /*String moisure() {
-    for (var element in crasStore.state.chartList) {
-      if (element.kpa == state.capacityVoltage) {
-        return (element.humidity * 100).toStringAsFixed(2);
-      }
-    }
-    return "";
-  }
-
-   String moistureAtWiltingPoint() {
-    if (crasStore.state.chartList.isNotEmpty) {
-      String moistureAtWiltingPoit =
-          (crasStore.state.chartList.last.humidity * 100).toStringAsFixed(2);
-      update(state.copyWith(moistureAtWiltingPoint: moistureAtWiltingPoit));
-      return moistureAtWiltingPoit;
-    }
-    return "";
-  }*/
-
   Future<void> saveSoilData(SoilData soilData) async {
     setLoading(true);
     final response = await _saveSoilDataUsecase(soilData);

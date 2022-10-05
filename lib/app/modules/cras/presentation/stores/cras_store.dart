@@ -30,16 +30,6 @@ class CrasStore extends StreamStore<Failure, CrasState> {
           square: '',
         ));
 
-  //TODO: NOVA FORMA DE OBTER CRAS
-  /*Future<List<CrasChart>> fetchList() async {
-    final response = await _fetchCrasUsecase();
-    response.fold((l) {}, (result) async {
-      update(state.copyWith(chartList: result));
-      await getFittedPoints(result);
-      return result;
-    });
-    return [];
-  }*/
   Future<void> fetchList() async {
     final response = await _fetchCrasUsecase();
     response.fold((l) {}, (result) async {
