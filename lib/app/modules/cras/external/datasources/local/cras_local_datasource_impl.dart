@@ -5,9 +5,11 @@ import 'package:tcc/app/modules/cras/domain/models/cras_chart.dart';
 import 'package:tcc/app/modules/cras/domain/models/cras_equotion.dart';
 import 'package:tcc/app/modules/cras/domain/models/culture_data.dart';
 import 'package:tcc/app/modules/cras/domain/models/soil_data.dart';
+import 'package:tcc/app/modules/cras/domain/models/system_irrigation.dart';
 import 'package:tcc/app/modules/cras/external/mappers/cras_equotion_mapper.dart';
 import 'package:tcc/app/modules/cras/external/mappers/cras_mapper.dart';
 import 'package:tcc/app/modules/cras/external/mappers/culture_data_mapper.dart';
+import 'package:tcc/app/modules/cras/external/mappers/system_irrigation_mapper.dart';
 
 import '../../../../../core/domain/helpers/errors/failure.dart';
 import '../../../infra/datasources/cras_local_datasource.dart';
@@ -105,7 +107,8 @@ class CrasLocalDataSourceImpl implements CrasLocalDataSource {
     try {
       final response = _localStorage.getString('curve_equation');
       if (response != null) {
-        return CrasEquotionMapper().from(jsonDecode(response));
+        var result = CrasEquotionMapper().from(jsonDecode(response));
+        return result;
       }
       return null;
     } on Failure {
@@ -168,6 +171,38 @@ class CrasLocalDataSourceImpl implements CrasLocalDataSource {
       final response = _localStorage.getString('culture_data');
       if (response != null) {
         return CultureDataMapper().from(jsonDecode(response));
+      }
+      return null;
+    } on Failure {
+      rethrow;
+    } catch (error, stackTrace) {
+      throw DatasourceFailure(
+          message: error.toString(), stackTrace: stackTrace);
+    }
+  }
+
+  @override
+  Future<bool> saveSystemIrrigation(SystemIrrigation systemIrrigation) async {
+    Logger().v(SystemIrrigationMapper().to(systemIrrigation));
+
+    try {
+      final response = await _localStorage.setString('system_irrigation',
+          jsonEncode(SystemIrrigationMapper().to(systemIrrigation)));
+      return response;
+    } on Failure {
+      rethrow;
+    } catch (error, stackTrace) {
+      throw DatasourceFailure(
+          message: error.toString(), stackTrace: stackTrace);
+    }
+  }
+
+  @override
+  Future<SystemIrrigation?> fetchSystemIrrigation() async {
+    try {
+      final response = _localStorage.getString('system_irrigation');
+      if (response != null) {
+        return SystemIrrigationMapper().from(jsonDecode(response));
       }
       return null;
     } on Failure {

@@ -8,19 +8,14 @@ import 'package:tcc/app/modules/cras/domain/usecases/save_equotion_usecase.dart'
 import '../../../../core/domain/helpers/errors/failure.dart';
 import '../../domain/models/cras_chart.dart';
 import '../../domain/models/cras_equotion.dart';
-import '../../domain/usecases/fetch_list_cras_usecase.dart';
-import '../../domain/usecases/save_list_cras_usecase.dart';
+
 import '../state/cras_state.dart';
 
 class CrasStore extends StreamStore<Failure, CrasState> {
-  final SaveListCrasUsecase _saveListCrasUsecase;
-  final FetchListCrasUsecase _fetchListCrasUsecase;
   final SaveEquotionUsecase _saveEquotionUsecase;
   final FetchCrasUsecase _fetchCrasUsecase;
 
   CrasStore(
-    this._saveListCrasUsecase,
-    this._fetchListCrasUsecase,
     this._saveEquotionUsecase,
     this._fetchCrasUsecase,
   ) : super(CrasState(
@@ -31,11 +26,13 @@ class CrasStore extends StreamStore<Failure, CrasState> {
         ));
 
   Future<void> fetchList() async {
+    setLoading(true);
     final response = await _fetchCrasUsecase();
     response.fold((l) {}, (result) async {
       update(state.copyWith(chartList: result));
       await getFittedPoints(result);
     });
+    setLoading(false);
   }
 
   onChangeEquation(String value) {

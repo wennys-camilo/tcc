@@ -69,7 +69,7 @@ class _IrrigationRecordsPageState extends State<IrrigationRecordsPage> {
               physics: const BouncingScrollPhysics(),
               child: Center(
                 child: Container(
-                  constraints: BoxConstraints(maxWidth: 800),
+                  constraints: const BoxConstraints(maxWidth: 800),
                   child: Column(
                     children: [
                       const SizedBox(

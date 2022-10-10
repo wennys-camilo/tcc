@@ -1,8 +1,8 @@
 import 'package:intl/intl.dart';
-
 import 'package:tcc/app/modules/cras/domain/models/cras_equotion.dart';
 import 'package:tcc/app/modules/cras/domain/models/culture_data.dart';
 import 'package:tcc/app/modules/cras/domain/models/soil_data.dart';
+import 'package:tcc/app/modules/cras/domain/models/system_irrigation.dart';
 
 class IrrigationManagementState {
   final List<int> readingTensiometer;
@@ -10,18 +10,20 @@ class IrrigationManagementState {
   final int? readingOnLayerOneTensiometer;
   final int? readingOnLayerTwoTensiometer;
   final SoilData soilData;
-  final bool needSoilData;
+  final bool isNeedData;
   final CultureData cultureData;
   final DateTime? readingDate;
+  final SystemIrrigation systemIrrigation;
   final String bluntBlade;
   final String message;
   IrrigationManagementState({
+    required this.systemIrrigation,
     required this.readingTensiometer,
     required this.crasEquotion,
     required this.readingOnLayerOneTensiometer,
     required this.readingOnLayerTwoTensiometer,
     required this.soilData,
-    required this.needSoilData,
+    required this.isNeedData,
     required this.cultureData,
     required this.readingDate,
     required this.bluntBlade,
@@ -37,9 +39,10 @@ class IrrigationManagementState {
     int? readingOnLayerOneTensiometer,
     int? readingOnLayerTwoTensiometer,
     SoilData? soilData,
-    bool? needSoilData,
+    bool? isNeedData,
     CultureData? cultureData,
     DateTime? readingDate,
+    SystemIrrigation? systemIrrigation,
     String? bluntBlade,
     String? message,
   }) {
@@ -51,9 +54,10 @@ class IrrigationManagementState {
       readingOnLayerTwoTensiometer:
           readingOnLayerTwoTensiometer ?? this.readingOnLayerTwoTensiometer,
       soilData: soilData ?? this.soilData,
-      needSoilData: needSoilData ?? this.needSoilData,
+      isNeedData: isNeedData ?? this.isNeedData,
       cultureData: cultureData ?? this.cultureData,
       readingDate: readingDate ?? this.readingDate,
+      systemIrrigation: systemIrrigation ?? this.systemIrrigation,
       bluntBlade: bluntBlade ?? this.bluntBlade,
       message: message ?? this.message,
     );
@@ -61,6 +65,11 @@ class IrrigationManagementState {
 
   static IrrigationManagementState initialState() {
     return IrrigationManagementState(
+      systemIrrigation: SystemIrrigation(
+        blade: "",
+        efficiency: 0,
+        rootSystem: 0,
+      ),
       message: '',
       readingTensiometer: List.generate(90, (index) => index + 1),
       crasEquotion: CrasEquotion(
@@ -76,15 +85,12 @@ class IrrigationManagementState {
         wiltingPointMoisture: '',
         soilDensity: '',
       ),
-      needSoilData: false,
+      isNeedData: false,
       cultureData: CultureData(
         plantingDate: '',
-        rootSystem: 0,
-        efficiency: 0,
         cultivateHybrid: '',
         criticalVoltage: '',
         culture: '',
-        blade: '',
       ),
       readingDate: null,
       bluntBlade: '',

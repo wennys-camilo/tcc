@@ -50,10 +50,7 @@ class _CultureIrrigationSystemPageState
       store.onChangePlantinDate(DateTime.parse(state.cultureData.plantingDate));
       dateinput.text = DateFormat(" d 'de' MMMM 'de' y", "pt_BR")
           .format(DateTime.parse(state.cultureData.plantingDate));
-      store.onChangeRootSystem(state.cultureData.rootSystem);
-      blade.text = state.cultureData.blade.replaceAll('.', ',');
-      store.onChangeBlade(state.cultureData.blade);
-      store.onChangeEfficiency(state.cultureData.efficiency);
+
       kcController.text = state.cultureData.criticalVoltage;
       store.onChangeCriticalVoltage(state.cultureData.criticalVoltage);
     });
@@ -180,60 +177,6 @@ class _CultureIrrigationSystemPageState
                             centerText: false,
                             suffixText: "kPa",
                             onChanged: store.onChangeCriticalVoltage,
-                          ),
-                        ),
-                        const LineTextCustomWidget(
-                          text: 'Sitema de Irrigação',
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: DropDownWidget<int>(
-                            value: triple.state.rootSystem,
-                            onChanged: (value) =>
-                                store.onChangeRootSystem(value!),
-                            items: store.state.effectiveRootSystemList
-                                .map((value) {
-                              return DropdownMenuItem(
-                                child: Text("$value"),
-                                value: value,
-                              );
-                            }).toList(),
-                            labelText: 'Prof. efetiva do sistema radicular (Z)',
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: TextInputWidget(
-                            decimalInput: true,
-                            controller: blade,
-                            labelText: 'Lâmina à 100% (velocidade máxima):',
-                            centerText: false,
-                            suffixText: "mm/volta",
-                            keyboardType: const TextInputType.numberWithOptions(
-                                decimal: true),
-                            onChanged: store.onChangeBlade,
-                            validator: (value) {
-                              if (value!.isEmpty) {
-                                return "Campo Obrigatório";
-                              }
-                              return null;
-                            },
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: DropDownWidget<int>(
-                            value: triple.state.efficiency,
-                            onChanged: (value) =>
-                                store.onChangeEfficiency(value!),
-                            items:
-                                store.state.irrigationEfficiency.map((value) {
-                              return DropdownMenuItem(
-                                child: Text("$value %"),
-                                value: value,
-                              );
-                            }).toList(),
-                            labelText: 'Eficiência de Irrigação (Ei):',
                           ),
                         ),
                       ],

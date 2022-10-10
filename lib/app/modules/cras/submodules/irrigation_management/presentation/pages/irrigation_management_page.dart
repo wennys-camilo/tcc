@@ -15,7 +15,6 @@ import '../state/irrigation_management_state.dart';
 import '../store/irrigation_management_store.dart';
 import '../widgets/line_text_custom_widget.dart';
 
-//TODO: MOSTRAR UM DIALOG SE NÃO TIVAR AS OPÇÕES DO GRAFICO PREENCHIDAS
 class IrrigationManagementPage extends StatefulWidget {
   final IrrigationManagementStore store;
 
@@ -70,12 +69,12 @@ class _IrrigationManagementPageState extends State<IrrigationManagementPage> {
 
     dateinput = TextEditingController();
     store.observer(onState: (state) {
-      if (state.needSoilData) {
+      if (state.isNeedData) {
         ShowDialogWidget(
           barrierDismissible: false,
           bodyText: state.message,
           action: () {
-            Modular.to.navigate('/soil-data');
+            Modular.to.navigate('/cras');
             Modular.to.pop();
           },
         ).show(context);
@@ -85,6 +84,7 @@ class _IrrigationManagementPageState extends State<IrrigationManagementPage> {
     store.fetchSoilData();
     store.fetchEquotion();
     store.fetchCultureData();
+    store.fetchSystemIrrigation();
     store.requestData();
   }
 
@@ -213,7 +213,8 @@ class _IrrigationManagementPageState extends State<IrrigationManagementPage> {
                               //CALCULO LB
                               var calculoLaminaBruta =
                                   calculoLaminaLiquidaIrrigcao /
-                                      (triple.state.cultureData.efficiency /
+                                      (triple.state.systemIrrigation
+                                              .efficiency /
                                           100);
                               laminaBrutaIrrigacao1.text =
                                   calculoLaminaBruta.toStringAsFixed(2);
@@ -251,7 +252,7 @@ class _IrrigationManagementPageState extends State<IrrigationManagementPage> {
                               //REGULAGEM PERCENTIMETRO
                               if ((100 *
                                           double.parse(triple
-                                              .state.cultureData.blade
+                                              .state.systemIrrigation.blade
                                               .replaceAll(',', '.'))) /
                                       (double.parse(
                                           laminaBrutaIrrigacaoTotal.text)) >
@@ -260,7 +261,7 @@ class _IrrigationManagementPageState extends State<IrrigationManagementPage> {
                               } else {
                                 regulagemPercentimetro.text = (100 *
                                         double.parse(triple
-                                            .state.cultureData.blade
+                                            .state.systemIrrigation.blade
                                             .replaceAll(',', '.')) /
                                         double.parse(
                                             laminaBrutaIrrigacaoTotal.text))
@@ -356,7 +357,8 @@ class _IrrigationManagementPageState extends State<IrrigationManagementPage> {
                               //CALCULO LB
                               var calculoLaminaBruta =
                                   calculoLaminaLiquidaIrrigcao /
-                                      (triple.state.cultureData.efficiency /
+                                      (triple.state.systemIrrigation
+                                              .efficiency /
                                           100);
                               laminaBrutaIrrigacao2.text =
                                   calculoLaminaBruta.toStringAsFixed(2);
@@ -394,7 +396,7 @@ class _IrrigationManagementPageState extends State<IrrigationManagementPage> {
                               //REGULAGEM PERCENTIMETRO
                               if ((100 *
                                           double.parse(triple
-                                              .state.cultureData.blade
+                                              .state.systemIrrigation.blade
                                               .replaceAll(',', '.'))) /
                                       (double.parse(
                                           laminaBrutaIrrigacaoTotal.text)) >
@@ -403,7 +405,7 @@ class _IrrigationManagementPageState extends State<IrrigationManagementPage> {
                               } else {
                                 regulagemPercentimetro.text = (100 *
                                         double.parse(triple
-                                            .state.cultureData.blade
+                                            .state.systemIrrigation.blade
                                             .replaceAll(',', '.')) /
                                         double.parse(
                                             laminaBrutaIrrigacaoTotal.text))

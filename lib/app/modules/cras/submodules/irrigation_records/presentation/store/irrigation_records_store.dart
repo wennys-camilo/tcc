@@ -1,9 +1,9 @@
 import 'package:flutter_triple/flutter_triple.dart';
-import 'package:tcc/app/core/domain/domain.dart';
-import 'package:tcc/app/modules/cras/domain/models/irrigation_record.dart';
-import 'package:tcc/app/modules/cras/domain/usecases/fetch_registers_irrigation_usecase.dart';
-import 'package:tcc/app/modules/cras/domain/usecases/remove_register_irrigation_usecase.dart';
-import 'package:tcc/app/modules/cras/submodules/irrigation_records/presentation/state/irrigation_records_state.dart';
+import '../../../../../../core/domain/domain.dart';
+import '../../../../domain/models/irrigation_record.dart';
+import '../../../../domain/usecases/fetch_registers_irrigation_usecase.dart';
+import '../../../../domain/usecases/remove_register_irrigation_usecase.dart';
+import '../state/irrigation_records_state.dart';
 
 class IrrigationRecordsStore
     extends StreamStore<Failure, IrrigationRecordState> {
@@ -34,7 +34,12 @@ class IrrigationRecordsStore
     setLoading(true);
     final response = await _fetchRegistersIrrigationUsecase();
     response.fold((l) {}, (result) {
-      update(state.copyWith(irrigationRegisters: result));
+      List<IrrigationRecord> auxRecord = [...result];
+      auxRecord.sort((a, b) {
+        return DateTime.parse(a.dataLeitura)
+            .compareTo(DateTime.parse(b.dataLeitura));
+      });
+      update(state.copyWith(irrigationRegisters: auxRecord));
       fetchSummation();
     });
     setLoading(false);

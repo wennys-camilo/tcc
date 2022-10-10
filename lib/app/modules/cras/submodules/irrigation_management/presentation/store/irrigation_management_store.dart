@@ -4,6 +4,7 @@ import 'package:tcc/app/core/domain/domain.dart';
 import 'package:tcc/app/modules/cras/domain/models/irrigation_record.dart';
 import 'package:tcc/app/modules/cras/domain/usecases/fetch_culture_data_usecase.dart';
 import 'package:tcc/app/modules/cras/domain/usecases/fetch_soil_data_usecase.dart';
+import 'package:tcc/app/modules/cras/domain/usecases/fetch_system_irrigation_data_usecase.dart';
 import 'package:tcc/app/modules/cras/domain/usecases/save_register_irrigation_usecase.dart';
 import 'package:uuid/uuid.dart';
 import '../../../../domain/usecases/fetch_equotion_usecase.dart';
@@ -15,18 +16,38 @@ class IrrigationManagementStore
   final FetchSoilDataUsecase _fetchSoilDataUsecase;
   final SaveRegisterIrrigationUsecase _saveRegisterIrrigationUsecase;
   final FetchCultureDataUsecase _fetchCultureDataUsecase;
+  final FetchSystemIrrigationDataUsecase _fetchSystemIrrigationDataUsecase;
   IrrigationManagementStore(
     this._fetchEquotionUsecase,
     this._fetchSoilDataUsecase,
     this._fetchCultureDataUsecase,
     this._saveRegisterIrrigationUsecase,
+    this._fetchSystemIrrigationDataUsecase,
   ) : super(IrrigationManagementState.initialState());
 
-  var uuid = Uuid();
+  final uuid = const Uuid();
 
-  requestData() async {
+  Future<void> requestData() async {
     bool isNeedData = false;
     String message = '';
+
+    final responseInitialCrasValidation = await _fetchEquotionUsecase();
+    responseInitialCrasValidation.fold((l) {}, (result) {
+      if (result != null) {
+        if ((result.coefficient.isEmpty || result.coefficient == 'NaN') &&
+            (result.exponent.isEmpty || result.exponent == 'NaN')) {
+          isNeedData = true;
+          message = 'Preencha a Curva de Retenção';
+          update(state.copyWith(isNeedData: isNeedData, message: message));
+          return;
+        }
+      }
+    });
+
+    if (isNeedData == true) {
+      return;
+    }
+
     await Future.wait([
       _fetchCultureDataUsecase().then((value) => value.fold((l) {}, (response) {
             if (response == null) {
@@ -34,20 +55,21 @@ class IrrigationManagementStore
               message = 'Preencha os dados de Cultura';
             }
           })),
+      _fetchSystemIrrigationDataUsecase()
+          .then((value) => value.fold((l) {}, (response) {
+                if (response == null) {
+                  isNeedData = true;
+                  message = 'Preencha os dados do sistema de irrigação';
+                }
+              })),
       _fetchSoilDataUsecase().then((value) => value.fold((l) {}, (response) {
             if (response == null) {
               isNeedData = true;
               message = 'Preencha os dados de Solo';
             }
           })),
-      _fetchEquotionUsecase().then((value) => value.fold((l) {}, (response) {
-            if (response == null) {
-              isNeedData = true;
-              message = 'Preencha a Curva de Retenção';
-            }
-          }))
     ]);
-    update(state.copyWith(needSoilData: isNeedData, message: message));
+    update(state.copyWith(isNeedData: isNeedData, message: message));
   }
 
   Future<void> fetchCultureData() async {
@@ -55,6 +77,17 @@ class IrrigationManagementStore
     response.fold((l) {}, (result) {
       if (result != null) {
         update(state.copyWith(cultureData: result));
+      } else {
+        //update(state.copyWith(needSoilData: true));
+      }
+    });
+  }
+
+  Future<void> fetchSystemIrrigation() async {
+    final response = await _fetchSystemIrrigationDataUsecase();
+    response.fold((l) {}, (result) {
+      if (result != null) {
+        update(state.copyWith(systemIrrigation: result));
       } else {
         //update(state.copyWith(needSoilData: true));
       }

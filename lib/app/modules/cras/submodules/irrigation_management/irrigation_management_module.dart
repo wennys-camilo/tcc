@@ -5,7 +5,8 @@ import 'presentation/store/irrigation_management_store.dart';
 class IrrigationManagementModule extends Module {
   @override
   final List<Bind> binds = [
-    Bind((i) => IrrigationManagementStore(i.get(), i.get(), i.get(), i.get())),
+    Bind((i) =>
+        IrrigationManagementStore(i.get(), i.get(), i.get(), i.get(), i.get())),
   ];
 
   @override

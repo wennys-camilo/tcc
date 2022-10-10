@@ -23,18 +23,6 @@ class CultureIrrigationSystemStore
     update(state.copyWith(plantingDate: value));
   }
 
-  void onChangeRootSystem(int value) {
-    update(state.copyWith(rootSystem: value));
-  }
-
-  void onChangeBlade(String value) {
-    update(state.copyWith(blade: value));
-  }
-
-  void onChangeEfficiency(int value) {
-    update(state.copyWith(efficiency: value));
-  }
-
   void onChangeCriticalVoltage(String value) {
     update(state.copyWith(criticalVoltage: value));
   }
@@ -45,9 +33,6 @@ class CultureIrrigationSystemStore
       cultivateHybrid: triple.state.cultivateHybrid,
       plantingDate: triple.state.plantingDate.toString(),
       criticalVoltage: triple.state.criticalVoltage,
-      rootSystem: triple.state.rootSystem,
-      blade: triple.state.blade,
-      efficiency: triple.state.efficiency,
     ));
     response.fold((l) {}, (r) {});
   }

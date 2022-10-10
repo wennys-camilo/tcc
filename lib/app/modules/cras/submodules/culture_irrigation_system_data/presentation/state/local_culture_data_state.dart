@@ -17,12 +17,9 @@ class LocalCultureDataState {
   static LocalCultureDataState initialState() {
     return LocalCultureDataState(
       cultureData: CultureData(
-          blade: '',
           criticalVoltage: '',
           cultivateHybrid: '',
           culture: '',
-          rootSystem: 30,
-          efficiency: 0,
           plantingDate: ''),
     );
   }

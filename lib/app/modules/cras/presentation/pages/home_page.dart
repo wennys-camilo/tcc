@@ -10,15 +10,15 @@ import '../../../../core/presentation/themes/app_theme.dart';
 import '../state/cras_state.dart';
 import '../stores/cras_store.dart';
 
-class NewHomePage extends StatefulWidget {
+class HomePage extends StatefulWidget {
   final CrasStore store;
-  const NewHomePage({Key? key, required this.store}) : super(key: key);
+  const HomePage({Key? key, required this.store}) : super(key: key);
 
   @override
-  State<NewHomePage> createState() => _NewHomePageState();
+  State<HomePage> createState() => _HomePageState();
 }
 
-class _NewHomePageState extends State<NewHomePage> {
+class _HomePageState extends State<HomePage> {
   CrasStore get store => widget.store;
 
   @override
@@ -44,6 +44,12 @@ class _NewHomePageState extends State<NewHomePage> {
                 child: TripleBuilder<CrasStore, Failure, CrasState>(
                     store: store,
                     builder: (context, triple) {
+                      if (triple.isLoading) {
+                        return const CircularProgressIndicator(
+                          color: Colors.blue,
+                        );
+                      }
+
                       if (triple.state.chartList.isNotEmpty) {
                         return Center(
                           child: SingleChildScrollView(

@@ -50,12 +50,20 @@ class _CustomDrawerState extends State<CustomDrawer> {
                 },
               ),
               DrawerItemTileWidget(
-                title: 'DADOS DA CULTURA E DO SISTEMA DE IRRIGAÇÃO',
+                title: 'DADOS DA CULTURA',
                 icon: Icons.water,
                 selected:
                     Modular.to.path.endsWith('/culture-irrigation-system/'),
                 onTap: () {
                   Modular.to.navigate('/culture-irrigation-system/');
+                },
+              ),
+              DrawerItemTileWidget(
+                title: 'DADOS DO SISTEMA DE IRRIGAÇÃO',
+                icon: Icons.water,
+                selected: Modular.to.path.endsWith('/system-irrigation/'),
+                onTap: () {
+                  Modular.to.navigate('/system-irrigation/');
                 },
               ),
               DrawerItemTileWidget(

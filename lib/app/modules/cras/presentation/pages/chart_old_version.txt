@@ -1,0 +1,206 @@
+import 'package:fl_chart/fl_chart.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:tcc/app/core/presentation/themes/app_theme.dart';
+import 'package:tcc/app/modules/cras/presentation/stores/cras_store.dart';
+import '../../domain/models/cras_chart.dart';
+
+class CrasChartPage extends StatefulWidget {
+  final List<CrasChart> data;
+  final List<CrasChart> points;
+  final CrasStore crasStore;
+  const CrasChartPage({
+    Key? key,
+    required this.data,
+    required this.crasStore,
+    required this.points,
+  }) : super(key: key);
+
+  @override
+  State<CrasChartPage> createState() => _CrasChartPageState();
+}
+
+class _CrasChartPageState extends State<CrasChartPage> {
+  late TrackballBehavior _trackballBehavior;
+  List<Color> gradientColors = [
+    const Color(0xff23b6e6),
+    const Color.fromARGB(255, 255, 0, 0),
+  ];
+
+  bool showAvg = false;
+  @override
+  void initState() {
+    super.initState();
+
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+    ]);
+    _trackballBehavior = TrackballBehavior(
+        enable: true,
+        tooltipDisplayMode: TrackballDisplayMode.groupAllPoints,
+        activationMode: ActivationMode.singleTap,
+        tooltipSettings: const InteractiveTooltip(
+          decimalPlaces: 5,
+        ));
+  }
+
+  @override
+  dispose() {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.landscapeRight,
+      DeviceOrientation.landscapeLeft,
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Color(0xff232d37),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        title: const Text('CURVA DE RETENÇÃO DE ÁGUA DO SOLO'),
+        centerTitle: true,
+      ),
+      body: Center(
+          child: Stack(
+        children: <Widget>[
+          Padding(
+            padding: const EdgeInsets.only(
+                right: 18.0, left: 12.0, top: 24, bottom: 12),
+            child: LineChart(mainData()),
+          ),
+        ],
+      )),
+    );
+  }
+
+  /*SfCartesianChart(
+          primaryXAxis: NumericAxis(interval: 200, maximum: 1600),
+          primaryYAxis: NumericAxis(),
+          trackballBehavior: _trackballBehavior,
+          series: <CartesianSeries>[
+            FastLineSeries<CrasChart, int>(
+              dataSource: widget.data,
+              xValueMapper: (CrasChart data, _) => data.kpa,
+              yValueMapper: (CrasChart data, _) => data.humidity,
+              //markerSettings: const MarkerSettings(isVisible: true),
+            ),
+            ScatterSeries<CrasChart, int>(
+                dataSource: widget.points,
+                xValueMapper: (CrasChart data, _) => data.kpa,
+                yValueMapper: (CrasChart data, _) => data.humidity)
+          ],
+        ),*/
+
+  Widget leftTitleWidgets(double value, TitleMeta meta) {
+    const style = TextStyle(
+      color: Colors.white,
+      fontWeight: FontWeight.bold,
+      fontSize: 15,
+    );
+
+    return Text(
+      value.toStringAsFixed(2),
+      style: style,
+      textAlign: TextAlign.left,
+    );
+  }
+
+  Widget bottomTitleWidgets(double value, TitleMeta meta) {
+    const style = TextStyle(
+      color: Colors.white,
+      fontWeight: FontWeight.bold,
+      fontSize: 15,
+    );
+
+    return Text(
+      value.toStringAsFixed(0),
+      style: style,
+      textAlign: TextAlign.left,
+    );
+  }
+
+  LineChartData mainData() {
+    return LineChartData(
+      lineTouchData: LineTouchData(),
+      minY: 0,
+      maxX: 1600,
+      gridData: FlGridData(
+        show: true,
+        drawVerticalLine: true,
+        horizontalInterval: 1,
+        verticalInterval: 1,
+        getDrawingHorizontalLine: (value) {
+          return FlLine(
+            color: const Color(0xff37434d),
+            strokeWidth: 1,
+          );
+        },
+        getDrawingVerticalLine: (value) {
+          return FlLine(
+            color: const Color(0xff37434d),
+            strokeWidth: 1,
+          );
+        },
+      ),
+      titlesData: FlTitlesData(
+        show: true,
+        rightTitles: AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
+        topTitles: AxisTitles(
+          sideTitles: SideTitles(showTitles: false),
+        ),
+        leftTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            getTitlesWidget: leftTitleWidgets,
+            reservedSize: 45,
+          ),
+        ),
+        bottomTitles: AxisTitles(
+          sideTitles: SideTitles(
+            showTitles: true,
+            interval: 200,
+            getTitlesWidget: bottomTitleWidgets,
+          ),
+        ),
+      ),
+      borderData: FlBorderData(
+          show: true,
+          border: Border.all(color: const Color(0xff37434d), width: 1)),
+      lineBarsData: [
+        LineChartBarData(
+          spots: widget.data
+              .map((e) => FlSpot(e.kpa.toDouble(),
+                  double.parse(e.humidity.toStringAsFixed(3))))
+              .toList(),
+          gradient: LinearGradient(
+            colors: gradientColors,
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+          ),
+          barWidth: 5,
+          isStrokeCapRound: true,
+          belowBarData: BarAreaData(
+            show: true,
+            gradient: LinearGradient(
+              colors: gradientColors
+                  .map((color) => color.withOpacity(0.3))
+                  .toList(),
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+}

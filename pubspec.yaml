@@ -37,6 +37,7 @@ dependencies:
   shared_preferences: ^2.0.15
   uuid: ^3.0.6
   url_launcher: ^6.1.5
+  #fl_chart: ^0.55.2
 
 dev_dependencies:
   flutter_test:
