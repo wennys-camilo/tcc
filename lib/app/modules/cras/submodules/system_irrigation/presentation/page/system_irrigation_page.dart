@@ -53,190 +53,170 @@ class _SystemIrrigationPageState extends State<SystemIrrigationPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topRight,
-          end: Alignment.bottomLeft,
-          stops: const [
-            0.1,
-            0.4,
-          ],
-          colors: [
-            AppTheme.colors.primary.withOpacity(0.3),
-            Colors.green.withOpacity(0.5),
-          ],
+    return Scaffold(
+      drawer: const CustomDrawer(),
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text('Dados do Sistema de irrigação'),
+      ),
+      body: SingleChildScrollView(
+        child: TripleBuilder<SystemIrrigationStore, Failure,
+            SystemIrrigationState>(
+          store: widget.store,
+          builder: (context, triple) {
+            return Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  const LineTextCustomWidget(
+                    text: 'Sitema de Irrigação',
+                  ),
+                  ...store.state.optionsSystem.map((e) {
+                    return Padding(
+                      padding: const EdgeInsets.all(5.0),
+                      child: ChoiceChip(
+                        disabledColor: AppTheme.colors.primary.withOpacity(0.2),
+                        selectedColor: AppTheme.colors.secondary,
+                        label: Text(
+                          e,
+                          style: TextStyle(
+                              color: triple.state.selectedTypeSystem.contains(e)
+                                  ? Colors.white
+                                  : Colors.black),
+                        ),
+                        selected: triple.state.selectedTypeSystem.contains(e),
+                        onSelected: (_) {
+                          store.onChangeSelectedTtypeSystem(e);
+                        },
+                      ),
+                    );
+                  }).toList(),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  triple.state.selectedTypeSystem[0] == 'Gotejamento'
+                      ? Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextInputWidget(
+                                controller: spacingBetweenEmitters,
+                                centerText: false,
+                                labelText: 'Espaçamento entre emissores',
+                                suffixText: 'm',
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextInputWidget(
+                                controller: spacingBetweenLateralLines,
+                                centerText: false,
+                                labelText: 'Espaçamento entre linhas laterais',
+                                suffixText: 'm',
+                              ),
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextInputWidget(
+                                controller: emitterFlow,
+                                centerText: false,
+                                labelText: 'Vazão do emissor',
+                                suffixText: 'L/h',
+                              ),
+                            ),
+                            const Padding(
+                              padding: EdgeInsets.all(8.0),
+                              child: TextInputWidget(
+                                readOnly: true,
+                                centerText: false,
+                                labelText:
+                                    'Números de emissores por planta (NEP)',
+                                suffixText: 'L/h',
+                              ),
+                            ),
+                          ],
+                        )
+                      : Column(
+                          children: [
+                            /*Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: DropDownWidget<int>(
+                                value: triple.state.rootSystem,
+                                onChanged: (value) =>
+                                    widget.store.onChangeRootSystem(value!),
+                                items: widget
+                                    .store.state.effectiveRootSystemList
+                                    .map((value) {
+                                  return DropdownMenuItem(
+                                    child: Text("$value"),
+                                    value: value,
+                                  );
+                                }).toList(),
+                                labelText:
+                                    'Prof. efetiva do sistema radicular (Z)',
+                              ),
+                            ),*/
+                            Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: TextInputWidget(
+                                decimalInput: true,
+                                controller: blade,
+                                labelText: 'Lâmina à 100% (velocidade máxima):',
+                                centerText: false,
+                                suffixText: "mm/volta",
+                                keyboardType:
+                                    const TextInputType.numberWithOptions(
+                                        decimal: true),
+                                onChanged: widget.store.onChangeBlade,
+                                validator: (value) {
+                                  if (value!.isEmpty) {
+                                    return "Campo Obrigatório";
+                                  }
+                                  return null;
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: DropDownWidget<int>(
+                      value: triple.state.efficiency,
+                      onChanged: (value) =>
+                          widget.store.onChangeEfficiency(value!),
+                      items:
+                          widget.store.state.irrigationEfficiency.map((value) {
+                        return DropdownMenuItem(
+                          child: Text("$value %"),
+                          value: value,
+                        );
+                      }).toList(),
+                      labelText: 'Eficiência de Irrigação (Ei):',
+                    ),
+                  ),
+                ],
+              ),
+            );
+          },
         ),
       ),
-      child: Scaffold(
-        backgroundColor: Colors.transparent,
-        drawer: const CustomDrawer(),
-        appBar: AppBar(
-          centerTitle: true,
-          title: const Text('Dados do Sistema de irrigação'),
-        ),
-        body: SingleChildScrollView(
-          child: TripleBuilder<SystemIrrigationStore, Failure,
-              SystemIrrigationState>(
-            store: widget.store,
-            builder: (context, triple) {
-              return Form(
-                key: _formKey,
-                child: Column(
-                  children: [
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    const LineTextCustomWidget(
-                      text: 'Sitema de Irrigação',
-                    ),
-                    ...store.state.optionsSystem.map((e) {
-                      return Padding(
-                        padding: const EdgeInsets.all(5.0),
-                        child: ChoiceChip(
-                          disabledColor:
-                              AppTheme.colors.primary.withOpacity(0.2),
-                          selectedColor: AppTheme.colors.secondary,
-                          label: Text(
-                            e,
-                            style: TextStyle(
-                                color:
-                                    triple.state.selectedTypeSystem.contains(e)
-                                        ? Colors.white
-                                        : Colors.black),
-                          ),
-                          selected: triple.state.selectedTypeSystem.contains(e),
-                          onSelected: (_) {
-                            store.onChangeSelectedTtypeSystem(e);
-                          },
-                        ),
-                      );
-                    }).toList(),
-                    const SizedBox(
-                      height: 5,
-                    ),
-                    triple.state.selectedTypeSystem[0] == 'Gotejamento'
-                        ? Column(
-                            children: [
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: TextInputWidget(
-                                  controller: spacingBetweenEmitters,
-                                  centerText: false,
-                                  labelText: 'Espaçamento entre emissores',
-                                  suffixText: 'm',
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: TextInputWidget(
-                                  controller: spacingBetweenLateralLines,
-                                  centerText: false,
-                                  labelText:
-                                      'Espaçamento entre linhas laterais',
-                                  suffixText: 'm',
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: TextInputWidget(
-                                  controller: emitterFlow,
-                                  centerText: false,
-                                  labelText: 'Vazão do emissor',
-                                  suffixText: 'L/h',
-                                ),
-                              ),
-                              const Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: TextInputWidget(
-                                  centerText: false,
-                                  labelText:
-                                      'Números de emissores por planta (NEP)',
-                                  suffixText: 'L/h',
-                                ),
-                              ),
-                            ],
-                          )
-                        : Column(
-                            children: [
-                              /*Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: DropDownWidget<int>(
-                                  value: triple.state.rootSystem,
-                                  onChanged: (value) =>
-                                      widget.store.onChangeRootSystem(value!),
-                                  items: widget
-                                      .store.state.effectiveRootSystemList
-                                      .map((value) {
-                                    return DropdownMenuItem(
-                                      child: Text("$value"),
-                                      value: value,
-                                    );
-                                  }).toList(),
-                                  labelText:
-                                      'Prof. efetiva do sistema radicular (Z)',
-                                ),
-                              ),*/
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: TextInputWidget(
-                                  decimalInput: true,
-                                  controller: blade,
-                                  labelText:
-                                      'Lâmina à 100% (velocidade máxima):',
-                                  centerText: false,
-                                  suffixText: "mm/volta",
-                                  keyboardType:
-                                      const TextInputType.numberWithOptions(
-                                          decimal: true),
-                                  onChanged: widget.store.onChangeBlade,
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return "Campo Obrigatório";
-                                    }
-                                    return null;
-                                  },
-                                ),
-                              ),
-                              Padding(
-                                padding: const EdgeInsets.all(8.0),
-                                child: DropDownWidget<int>(
-                                  value: triple.state.efficiency,
-                                  onChanged: (value) =>
-                                      widget.store.onChangeEfficiency(value!),
-                                  items: widget.store.state.irrigationEfficiency
-                                      .map((value) {
-                                    return DropdownMenuItem(
-                                      child: Text("$value %"),
-                                      value: value,
-                                    );
-                                  }).toList(),
-                                  labelText: 'Eficiência de Irrigação (Ei):',
-                                ),
-                              ),
-                            ],
-                          ),
-                  ],
-                ),
-              );
-            },
-          ),
-        ),
-        floatingActionButton: FloatingActionButton.extended(
-          backgroundColor: AppTheme.colors.primary,
-          onPressed: () async {
-            if (_formKey.currentState!.validate()) {
-              await store.saveSystemIrrigation();
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Dados do sistem de irrigação salvos!'),
-                ),
-              );
-            }
-          },
-          label: const Icon(Icons.save),
-          heroTag: null,
-        ),
+      floatingActionButton: FloatingActionButton.extended(
+        backgroundColor: AppTheme.colors.primary,
+        onPressed: () async {
+          if (_formKey.currentState!.validate()) {
+            await store.saveSystemIrrigation();
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(
+                content: Text('Dados do sistem de irrigação salvos!'),
+              ),
+            );
+          }
+        },
+        label: const Icon(Icons.save),
+        heroTag: null,
       ),
     );
   }

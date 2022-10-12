@@ -85,7 +85,8 @@ class _IrrigationManagementPageState extends State<IrrigationManagementPage> {
     store.fetchEquotion();
     store.fetchCultureData();
     store.fetchSystemIrrigation();
-    store.requestData();
+    //store.requestData();
+    //TODO: OBRIGAR O PREENCHIMENTO DE APENAS 1 PIVO - 1 CAMADA
   }
 
   @override
@@ -121,7 +122,7 @@ class _IrrigationManagementPageState extends State<IrrigationManagementPage> {
                                 border: OutlineInputBorder(),
                                 enabledBorder: OutlineInputBorder(
                                     borderSide: BorderSide(width: 1)),
-                                labelText: "Data de Plantio"),
+                                labelText: "Data de inicio do manejo"),
                             readOnly: true,
                             onTap: () async {
                               DateTime? pickedDate = await showDatePicker(
@@ -380,6 +381,10 @@ class _IrrigationManagementPageState extends State<IrrigationManagementPage> {
                                           0))
                                   .toStringAsFixed(2);
 
+                              //CORREÇÃO SOMENTE PARA O CASO DE GOTEJAMENTO
+                              //TODO: laminaliquidaIrrigacaoTotal * AREA (FAIXA OU BULBLO)
+                              //TODO: PARA O SISTEM DE GOTEJAMENTO: MULTIPLCAR O RESULTADO DA LAMINA TOTAL PELA AREA
+
                               //CALCULO LAMINHA BRUTA TOTAL
                               laminaBrutaIrrigacaoTotal.text =
                                   ((double.tryParse(
@@ -481,6 +486,18 @@ class _IrrigationManagementPageState extends State<IrrigationManagementPage> {
                             enabled: false,
                             controller: laminaBrutaIrrigacaoTotal,
                             labelText: 'Lâmina bruta de irrigação (LB):',
+                            suffixText: '%',
+                            keyboardType: TextInputType.number,
+                          ),
+                        ),
+                        const Padding(
+                          padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
+                          child: TextInputWidget(
+                            enabled: false,
+                            //controller: regulagemPercentimetro,
+                            fillColor: Color(0xffffffcc),
+                            centerText: false,
+                            labelText: 'Tempo de irrigação',
                             suffixText: '%',
                             keyboardType: TextInputType.number,
                           ),

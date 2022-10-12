@@ -55,7 +55,7 @@ class _CrasChartPageState extends State<CrasChartPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Gráfico da Cras'),
+        title: const Text('Gráfico da CRAS'),
         centerTitle: true,
       ),
       body: Center(
