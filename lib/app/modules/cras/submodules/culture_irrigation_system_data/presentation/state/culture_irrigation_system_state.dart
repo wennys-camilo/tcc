@@ -5,12 +5,14 @@ class CultureIrrigationSystemState {
   final String cultivateHybrid;
   final DateTime plantingDate;
   final String criticalVoltage;
+  final List<int> effectiveRootSystemList;
 
   CultureIrrigationSystemState({
     required this.culture,
     required this.cultivateHybrid,
     required this.plantingDate,
     required this.criticalVoltage,
+    required this.effectiveRootSystemList,
   });
 
   String get plantingDateFormated =>
@@ -28,6 +30,8 @@ class CultureIrrigationSystemState {
     int? efficiency,
   }) {
     return CultureIrrigationSystemState(
+      effectiveRootSystemList:
+          effectiveRootSystemList ?? this.effectiveRootSystemList,
       culture: culture ?? this.culture,
       cultivateHybrid: cultivateHybrid ?? this.cultivateHybrid,
       plantingDate: plantingDate ?? this.plantingDate,
@@ -37,7 +41,8 @@ class CultureIrrigationSystemState {
 
   static CultureIrrigationSystemState initialState() {
     return CultureIrrigationSystemState(
-      culture: '0',
+      effectiveRootSystemList: List.generate(139, (i) => i + 7),
+      culture: '3',
       cultivateHybrid: '',
       plantingDate: DateTime.now(),
       criticalVoltage: '30 a 60',

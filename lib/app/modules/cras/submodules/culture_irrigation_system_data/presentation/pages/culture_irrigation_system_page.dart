@@ -35,9 +35,15 @@ class _CultureIrrigationSystemPageState
   late final TextEditingController cultivateHybrid;
   late final TextEditingController blade;
 
+  //TODO: NOVOS CAMMPOS
+  late final TextEditingController plantingSpace;
+  late final TextEditingController linePlantingSpace;
+
   @override
   void initState() {
     super.initState();
+    plantingSpace = TextEditingController();
+    linePlantingSpace = TextEditingController();
     dateinput = TextEditingController();
     _formKey = GlobalKey<FormState>();
     cultivateHybrid = TextEditingController();
@@ -88,14 +94,14 @@ class _CultureIrrigationSystemPageState
                           child: DropDownWidget<String>(
                             value: triple.state.culture,
                             onChanged: (value) {
-                              if (value == '0') {
+                              /*if (value == '0') {
                                 kcController.text = "30 a 60";
                               } else if (value == '1') {
                                 kcController.text = "35 a 50";
                               } else if (value == '2') {
                                 kcController.text = "40 a 60";
-                              }
-                              store.onChangeCriticalVoltage(kcController.text);
+                              }*/
+                              //store.onChangeCriticalVoltage(kcController.text);
                               store.onChangeCulture(value!);
                             },
                             items: const [
@@ -110,7 +116,11 @@ class _CultureIrrigationSystemPageState
                               DropdownMenuItem(
                                 child: Text('Feijão'),
                                 value: '2',
-                              )
+                              ),
+                              DropdownMenuItem(
+                                child: Text('Café'),
+                                value: '3',
+                              ),
                             ],
                             labelText: 'Cultura',
                           ),
@@ -119,7 +129,7 @@ class _CultureIrrigationSystemPageState
                           padding: const EdgeInsets.all(8.0),
                           child: TextInputWidget(
                             controller: cultivateHybrid,
-                            labelText: 'Cultivar/híbrido',
+                            labelText: 'Clone/Cultivar/híbrido',
                             centerText: false,
                             onChanged: store.onChangeCultivateHybrid,
                             validator: (value) {
@@ -170,15 +180,53 @@ class _CultureIrrigationSystemPageState
                         ),
                         Padding(
                           padding: const EdgeInsets.all(8.0),
+                          child: DropDownWidget<int>(
+                            //value: triple.state.rootSystem,
+                            onChanged: (value) {
+                              //TODO: SALVAR
+                            },
+                            items: widget.store.state.effectiveRootSystemList
+                                .map((value) {
+                              return DropdownMenuItem(
+                                child: Text("$value"),
+                                value: value,
+                              );
+                            }).toList(),
+                            labelText: 'Prof. efetiva do sistema radicular (Z)',
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextInputWidget(
+                            decimalInput: true,
+                            controller: plantingSpace,
+                            centerText: false,
+                            labelText: 'Espaçamento entre plantas',
+                            suffixText: 'm',
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: TextInputWidget(
+                            decimalInput: true,
+                            controller: linePlantingSpace,
+                            centerText: false,
+                            labelText: 'Espaçamento entre fileiras de plantas',
+                            suffixText: 'm',
+                          ),
+                        ),
+
+                        /*Padding(
+                          padding: const EdgeInsets.all(8.0),
                           child: TextInputWidget(
                             readOnly: true,
                             controller: kcController,
-                            labelText: 'Tensão Crítica par a Cultura (Tc)',
+                            labelText: 'Tensão Crítica para Cultura (Tc)',
                             centerText: false,
                             suffixText: "kPa",
                             onChanged: store.onChangeCriticalVoltage,
                           ),
-                        ),
+                        ),*/
                       ],
                     );
                   }),
