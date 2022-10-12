@@ -7,10 +7,9 @@ import 'package:tcc/app/modules/cras/domain/models/culture_data.dart';
 import 'package:tcc/app/modules/cras/domain/models/soil_data.dart';
 import 'package:tcc/app/modules/cras/domain/models/system_irrigation.dart';
 import 'package:tcc/app/modules/cras/external/mappers/cras_equotion_mapper.dart';
-import 'package:tcc/app/modules/cras/external/mappers/cras_mapper.dart';
-import 'package:tcc/app/modules/cras/external/mappers/culture_data_mapper.dart';
-import 'package:tcc/app/modules/cras/external/mappers/system_irrigation_mapper.dart';
-
+import '../../mappers/cras_mapper.dart';
+import '../../mappers/culture_data_mapper.dart';
+import '../../mappers/system_irrigation_mapper.dart';
 import '../../../../../core/domain/helpers/errors/failure.dart';
 import '../../../infra/datasources/cras_local_datasource.dart';
 import '../../mappers/soil_data_mapper.dart';
