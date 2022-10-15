@@ -6,16 +6,20 @@ class CultureDataMapper {
       'culture': cultureData.culture,
       'cultivateHybrid': cultureData.cultivateHybrid,
       'plantingDate': cultureData.plantingDate,
-      'criticalVoltage': cultureData.criticalVoltage,
+      "rootSystem": cultureData.rootSystem,
+      "spacingBetweenRowsPlants": cultureData.spacingBetweenRowsPlants,
+      "plantSpacing": cultureData.plantSpacing,
     };
   }
 
   CultureData from(Map<String, dynamic> map) {
     return CultureData(
+      plantSpacing: map['plantSpacing'],
+      spacingBetweenRowsPlants: map['spacingBetweenRowsPlants'],
+      rootSystem: map['rootSystem'],
       culture: map['culture'] ?? '',
       cultivateHybrid: map['cultivateHybrid'] ?? '',
       plantingDate: map['plantingDate'] ?? '',
-      criticalVoltage: map['criticalVoltage'] ?? '',
     );
   }
 }

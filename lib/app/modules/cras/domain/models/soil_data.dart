@@ -4,7 +4,7 @@ class SoilData {
   final String fieldCapacityHumidity;
   final String wiltingPointMoisture;
   final String soilDensity;
-  SoilData({
+  const SoilData({
     required this.soilTexture,
     required this.fieldCapacityVoltage,
     required this.fieldCapacityHumidity,

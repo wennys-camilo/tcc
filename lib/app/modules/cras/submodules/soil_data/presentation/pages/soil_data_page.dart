@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_triple/flutter_triple.dart';
-import 'package:tcc/app/core/domain/domain.dart';
-import 'package:tcc/app/core/presentation/widgets/show_dialog_widget.dart';
-import 'package:tcc/app/modules/cras/submodules/soil_data/presentation/state/soil_data_state.dart';
-import '../../../../domain/models/soil_data.dart';
+import '../../../../../../core/domain/domain.dart';
 import '../../../../../../core/presentation/themes/app_theme.dart';
 import '../../../../../../core/presentation/widgets/custom_drawer.dart';
+import '../../../../../../core/presentation/widgets/show_dialog_widget.dart';
+import '../../../../domain/models/soil_data.dart';
 import '../../../../presentation/widgets/drop_down_widget.dart';
 import '../../../../presentation/widgets/text_input_widget.dart';
+import '../state/soil_data_state.dart';
 import '../store/local_soil_data_store.dart';
 import '../store/soil_data_store.dart';
 
@@ -36,16 +36,13 @@ class _SoilDataPageState extends State<SoilDataPage> {
   @override
   void initState() {
     super.initState();
-
     store.fetchListChart();
-
     fieldCapacityVoltageController = TextEditingController(text: '10');
     fieldCapacityMoistureController = TextEditingController();
     moistureAtWiltingPointController = TextEditingController();
     soilDensityfocusNode = FocusNode();
     soilDensityController = TextEditingController();
     _formkey = GlobalKey<FormState>();
-
     store.observer(onState: (state) {
       fieldCapacityMoistureController.text =
           state.fieldCapacityMoisture.toStringAsFixed(2);

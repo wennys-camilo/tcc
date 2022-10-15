@@ -1,5 +1,5 @@
-import 'package:tcc/app/core/presentation/themes/app_colors.dart';
-import 'package:tcc/app/core/presentation/themes/app_images.dart';
+import 'app_colors.dart';
+import 'app_images.dart';
 
 class AppTheme {
   AppTheme._();

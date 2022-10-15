@@ -1,4 +1,4 @@
-import 'package:tcc/app/modules/cras/domain/models/soil_data.dart';
+import '../../../../domain/models/soil_data.dart';
 
 class LocalSoilDataState {
   final SoilData soilData;
@@ -8,7 +8,7 @@ class LocalSoilDataState {
 
   static LocalSoilDataState initialState() {
     return LocalSoilDataState(
-      soilData: SoilData(
+      soilData: const SoilData(
         soilTexture: '',
         fieldCapacityVoltage: '',
         fieldCapacityHumidity: '',

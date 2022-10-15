@@ -1,14 +1,11 @@
 import 'dart:math';
-
 import 'package:flutter_triple/flutter_triple.dart';
 import 'package:logger/logger.dart';
-import 'package:tcc/app/modules/cras/domain/usecases/fetch_cras_usecase.dart';
-import 'package:tcc/app/modules/cras/domain/usecases/save_equotion_usecase.dart';
-
+import '../../domain/usecases/fetch_cras_usecase.dart';
+import '../../domain/usecases/save_equotion_usecase.dart';
 import '../../../../core/domain/helpers/errors/failure.dart';
 import '../../domain/models/cras_chart.dart';
 import '../../domain/models/cras_equotion.dart';
-
 import '../state/cras_state.dart';
 
 class CrasStore extends StreamStore<Failure, CrasState> {

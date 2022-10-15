@@ -1,8 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'package:tcc/app/core/domain/domain.dart';
-import 'package:tcc/app/modules/cras/domain/models/cras_equotion.dart';
-import 'package:tcc/app/modules/cras/domain/repositories/cras_repository.dart';
-
+import '../../../../core/domain/domain.dart';
+import '../models/cras_equotion.dart';
+import '../repositories/cras_repository.dart';
 import 'fetch_equotion_usecase.dart';
 
 class FetchEquotionUsecaseImpl implements FetchEquotionUsecase {

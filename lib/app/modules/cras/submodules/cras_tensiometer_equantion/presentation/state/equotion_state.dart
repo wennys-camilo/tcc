@@ -16,7 +16,7 @@ class EquotionState {
 
   static EquotionState initialState() {
     return EquotionState(
-      crasEquotion: CrasEquotion(coefficient: '', exponent: ''),
+      crasEquotion: const CrasEquotion(coefficient: '', exponent: ''),
     );
   }
 }

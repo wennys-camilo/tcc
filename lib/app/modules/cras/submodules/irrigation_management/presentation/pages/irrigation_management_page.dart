@@ -47,12 +47,16 @@ class _IrrigationManagementPageState extends State<IrrigationManagementPage> {
 
   late final TextEditingController dateinput;
 
+  //GOTEJAMENTO
+  late final TextEditingController pamController;
+
   late final GlobalKey<FormState> _formKey;
   @override
   void initState() {
     super.initState();
     _formKey = GlobalKey<FormState>();
     logger = Logger();
+    pamController = TextEditingController();
     layer1Depth = TextEditingController(text: '20');
     layer2Depth = TextEditingController(text: '10');
     currentSoilMoistureLayer1 = TextEditingController();
@@ -87,6 +91,10 @@ class _IrrigationManagementPageState extends State<IrrigationManagementPage> {
     store.fetchSystemIrrigation();
     //store.requestData();
     //TODO: OBRIGAR O PREENCHIMENTO DE APENAS 1 PIVO - 1 CAMADA
+  }
+
+  void onChangeFetchPAM() {
+    //TODO: CALCULAR
   }
 
   @override
@@ -502,18 +510,19 @@ class _IrrigationManagementPageState extends State<IrrigationManagementPage> {
                             keyboardType: TextInputType.number,
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
-                          child: TextInputWidget(
-                            enabled: false,
-                            controller: regulagemPercentimetro,
-                            fillColor: const Color(0xffffffcc),
-                            centerText: false,
-                            labelText: 'Regulagem do percentímetro:',
-                            suffixText: '%',
-                            keyboardType: TextInputType.number,
+                        if (triple.state.systemIrrigation.typeSystem == 0)
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                            child: TextInputWidget(
+                              enabled: false,
+                              controller: regulagemPercentimetro,
+                              fillColor: const Color(0xffffffcc),
+                              centerText: false,
+                              labelText: 'Regulagem do percentímetro:',
+                              suffixText: '%',
+                              keyboardType: TextInputType.number,
+                            ),
                           ),
-                        ),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(16, 8, 16, 16),
                           child: CustomTextButtonWidget(

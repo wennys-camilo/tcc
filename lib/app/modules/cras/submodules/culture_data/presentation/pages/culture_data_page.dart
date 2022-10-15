@@ -1,40 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_triple/flutter_triple.dart';
 import 'package:intl/intl.dart';
-import 'package:tcc/app/core/domain/domain.dart';
-import 'package:tcc/app/core/presentation/widgets/custom_drawer.dart';
-import 'package:tcc/app/modules/cras/presentation/widgets/drop_down_widget.dart';
-import 'package:tcc/app/modules/cras/presentation/widgets/text_input_widget.dart';
-import 'package:tcc/app/modules/cras/submodules/culture_irrigation_system_data/presentation/state/culture_irrigation_system_state.dart';
-import 'package:tcc/app/modules/cras/submodules/culture_irrigation_system_data/presentation/stores/culture_irrigation_system_store.dart';
-import 'package:tcc/app/modules/cras/submodules/culture_irrigation_system_data/presentation/stores/local_culture_data_store.dart';
+import '../../../../../../core/domain/domain.dart';
 import '../../../../../../core/presentation/themes/app_theme.dart';
+import '../../../../../../core/presentation/widgets/custom_drawer.dart';
+import '../../../../presentation/widgets/drop_down_widget.dart';
+import '../../../../presentation/widgets/text_input_widget.dart';
 import '../../../irrigation_management/presentation/widgets/line_text_custom_widget.dart';
+import '../state/culture_data_state.dart';
+import '../stores/culture_data_store.dart';
+import '../stores/local_culture_data_store.dart';
 
-class CultureIrrigationSystemPage extends StatefulWidget {
+class CultureDataPage extends StatefulWidget {
   final LocalCultureDataStore localCultureDataStore;
-  final CultureIrrigationSystemStore store;
-  const CultureIrrigationSystemPage(
+  final CultureDataStore store;
+  const CultureDataPage(
       {Key? key, required this.localCultureDataStore, required this.store})
       : super(key: key);
 
   @override
-  State<CultureIrrigationSystemPage> createState() =>
-      _CultureIrrigationSystemPageState();
+  State<CultureDataPage> createState() => _CultureDataPageState();
 }
 
-class _CultureIrrigationSystemPageState
-    extends State<CultureIrrigationSystemPage> {
+class _CultureDataPageState extends State<CultureDataPage> {
   LocalCultureDataStore get localCultureDataStore =>
       widget.localCultureDataStore;
-  CultureIrrigationSystemStore get store => widget.store;
-
+  CultureDataStore get store => widget.store;
   late final GlobalKey<FormState> _formKey;
   late final TextEditingController dateinput;
-  late final TextEditingController kcController;
   late final TextEditingController cultivateHybrid;
-  late final TextEditingController blade;
-
   //TODO: NOVOS CAMMPOS
   late final TextEditingController plantingSpace;
   late final TextEditingController linePlantingSpace;
@@ -47,18 +41,22 @@ class _CultureIrrigationSystemPageState
     dateinput = TextEditingController();
     _formKey = GlobalKey<FormState>();
     cultivateHybrid = TextEditingController();
-    blade = TextEditingController();
-    kcController = TextEditingController(text: '30 a 60');
+
     localCultureDataStore.observer(onState: (state) {
+      plantingSpace.text =
+          state.cultureData.plantSpacing.toString().replaceAll('.', ',');
+      store.onChangePlantSpacing(state.cultureData.plantSpacing);
+      linePlantingSpace.text = state.cultureData.spacingBetweenRowsPlants
+          .toString()
+          .replaceAll('.', ',');
+      store.onChangePlantRowSpacing(state.cultureData.spacingBetweenRowsPlants);
       store.onChangeCulture(state.cultureData.culture);
       cultivateHybrid.text = state.cultureData.cultivateHybrid;
       store.onChangeCultivateHybrid(state.cultureData.cultivateHybrid);
       store.onChangePlantinDate(DateTime.parse(state.cultureData.plantingDate));
       dateinput.text = DateFormat(" d 'de' MMMM 'de' y", "pt_BR")
           .format(DateTime.parse(state.cultureData.plantingDate));
-
-      kcController.text = state.cultureData.criticalVoltage;
-      store.onChangeCriticalVoltage(state.cultureData.criticalVoltage);
+      store.onChangeRootSystem(state.cultureData.rootSystem);
     });
     localCultureDataStore.fetchCultureData();
   }
@@ -68,7 +66,7 @@ class _CultureIrrigationSystemPageState
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('Dados da Cultura e do Sistema de irrigação'),
+        title: const Text('Dados da Cultura'),
       ),
       drawer: const CustomDrawer(),
       body: SingleChildScrollView(
@@ -77,8 +75,7 @@ class _CultureIrrigationSystemPageState
             constraints: const BoxConstraints(maxWidth: 800),
             child: Form(
               key: _formKey,
-              child: TripleBuilder<CultureIrrigationSystemStore, Failure,
-                      CultureIrrigationSystemState>(
+              child: TripleBuilder<CultureDataStore, Failure, CultureDataState>(
                   store: store,
                   builder: (context, triple) {
                     return Column(
@@ -94,14 +91,6 @@ class _CultureIrrigationSystemPageState
                           child: DropDownWidget<String>(
                             value: triple.state.culture,
                             onChanged: (value) {
-                              /*if (value == '0') {
-                                kcController.text = "30 a 60";
-                              } else if (value == '1') {
-                                kcController.text = "35 a 50";
-                              } else if (value == '2') {
-                                kcController.text = "40 a 60";
-                              }*/
-                              //store.onChangeCriticalVoltage(kcController.text);
                               store.onChangeCulture(value!);
                             },
                             items: const [
@@ -181,10 +170,9 @@ class _CultureIrrigationSystemPageState
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: DropDownWidget<int>(
-                            //value: triple.state.rootSystem,
-                            onChanged: (value) {
-                              //TODO: SALVAR
-                            },
+                            value: triple.state.rootSystem,
+                            onChanged: (value) =>
+                                store.onChangeRootSystem(value!),
                             items: widget.store.state.effectiveRootSystemList
                                 .map((value) {
                               return DropdownMenuItem(
@@ -203,6 +191,18 @@ class _CultureIrrigationSystemPageState
                             centerText: false,
                             labelText: 'Espaçamento entre plantas',
                             suffixText: 'm',
+                            onChanged: (value) {
+                              if (value.isNotEmpty) {
+                                store.onChangePlantSpacing(
+                                    double.parse(value.replaceAll(',', '.')));
+                              }
+                            },
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "Campo Obrigatório";
+                              }
+                              return null;
+                            },
                           ),
                         ),
                         Padding(
@@ -213,20 +213,20 @@ class _CultureIrrigationSystemPageState
                             centerText: false,
                             labelText: 'Espaçamento entre fileiras de plantas',
                             suffixText: 'm',
+                            onChanged: (value) {
+                              if (value.isNotEmpty) {
+                                store.onChangePlantRowSpacing(
+                                    double.parse(value.replaceAll(',', '.')));
+                              }
+                            },
+                            validator: (value) {
+                              if (value!.isEmpty) {
+                                return "Campo Obrigatório";
+                              }
+                              return null;
+                            },
                           ),
                         ),
-
-                        /*Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: TextInputWidget(
-                            readOnly: true,
-                            controller: kcController,
-                            labelText: 'Tensão Crítica para Cultura (Tc)',
-                            centerText: false,
-                            suffixText: "kPa",
-                            onChanged: store.onChangeCriticalVoltage,
-                          ),
-                        ),*/
                       ],
                     );
                   }),

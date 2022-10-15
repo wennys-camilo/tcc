@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:tcc/app/modules/cras/domain/models/irrigation_record.dart';
-import 'package:tcc/app/modules/cras/external/mappers/irrigation_record_mapper.dart';
 import '../../../../../core/domain/helpers/errors/failure.dart';
+import '../../../domain/models/irrigation_record.dart';
 import '../../../infra/datasources/irrigation_record_local_datasource.dart';
+import '../../mappers/irrigation_record_mapper.dart';
 
 class IrrigationRecordLocalDataSourceImpl
     implements IrrigationRecordLocalDataSource {

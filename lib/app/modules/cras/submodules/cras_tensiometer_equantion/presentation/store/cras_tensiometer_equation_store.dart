@@ -13,7 +13,7 @@ class CrasTensiometerEquotionStore
 
   Future<void> save() async {
     final response = await _saveEquotionUsecase(
-      CrasEquotion(coefficient: '0.2851', exponent: '-0.093'),
+      const CrasEquotion(coefficient: '0.2851', exponent: '-0.093'),
     );
     response.fold((l) {}, (r) {});
   }

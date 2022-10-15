@@ -1,4 +1,4 @@
-import 'package:tcc/app/modules/cras/domain/models/culture_data.dart';
+import '../../../../domain/models/culture_data.dart';
 
 class LocalCultureDataState {
   final CultureData cultureData;
@@ -17,10 +17,13 @@ class LocalCultureDataState {
   static LocalCultureDataState initialState() {
     return LocalCultureDataState(
       cultureData: CultureData(
-          criticalVoltage: '',
-          cultivateHybrid: '',
-          culture: '',
-          plantingDate: ''),
+        spacingBetweenRowsPlants: 0,
+        plantSpacing: 0,
+        cultivateHybrid: '',
+        culture: '',
+        plantingDate: '',
+        rootSystem: 0,
+      ),
     );
   }
 }

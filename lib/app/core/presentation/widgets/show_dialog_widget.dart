@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:tcc/app/core/presentation/themes/app_theme.dart';
+import '../themes/app_theme.dart';
 import 'custom_text_button_widget.dart';
 
 class ShowDialogWidget extends StatelessWidget {

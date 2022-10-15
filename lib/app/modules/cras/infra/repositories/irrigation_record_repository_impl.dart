@@ -1,9 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:tcc/app/core/domain/domain.dart';
-import 'package:tcc/app/modules/cras/domain/models/irrigation_record.dart';
-import 'package:tcc/app/modules/cras/infra/datasources/irrigation_record_local_datasource.dart';
-
+import '../../../../core/domain/domain.dart';
+import '../../domain/models/irrigation_record.dart';
 import '../../domain/repositories/irrigation_record_repository.dart';
+import '../datasources/irrigation_record_local_datasource.dart';
 
 class IrrigationRecordRepositoryImpl implements IrrigationRecordRepository {
   final IrrigationRecordLocalDataSource _localDataSource;

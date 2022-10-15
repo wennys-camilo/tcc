@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_triple/flutter_triple.dart';
-import 'package:tcc/app/core/presentation/widgets/custom_drawer.dart';
-import 'package:tcc/app/core/presentation/widgets/show_dialog_widget.dart';
-import 'package:tcc/app/modules/cras/presentation/widgets/item_cras.dart';
-import 'package:tcc/app/modules/cras/presentation/widgets/steps_dialog_widget.dart';
 import '../../../../core/domain/helpers/errors/failure.dart';
 import '../../../../core/presentation/themes/app_theme.dart';
+import '../../../../core/presentation/widgets/custom_drawer.dart';
+import '../../../../core/presentation/widgets/show_dialog_widget.dart';
 import '../state/cras_state.dart';
 import '../stores/cras_store.dart';
+import '../widgets/item_cras.dart';
+import '../widgets/steps_dialog_widget.dart';
 
 class HomePage extends StatefulWidget {
   final CrasStore store;

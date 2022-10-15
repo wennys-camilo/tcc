@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'package:tcc/app/core/domain/domain.dart';
-import 'package:tcc/app/modules/cras/domain/models/system_irrigation.dart';
-import 'package:tcc/app/modules/cras/domain/repositories/cras_repository.dart';
+import '../../../../core/domain/domain.dart';
+import '../models/system_irrigation.dart';
+import '../repositories/cras_repository.dart';
 import 'save_system_irrigation_data_usecase.dart';
 
 class SaveSystemIrrigationDataUsecaseImpl

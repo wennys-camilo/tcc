@@ -65,20 +65,27 @@ class IrrigationManagementState {
 
   static IrrigationManagementState initialState() {
     return IrrigationManagementState(
-      systemIrrigation: SystemIrrigation(
+      systemIrrigation: const SystemIrrigation(
+        typeSystem: 0,
         blade: "",
         efficiency: 0,
-        rootSystem: 0,
+        spacingBetweenEmitters: 0,
+        emitterFlow: 0,
+        nep: 0,
+        spacingBetweenLateralLines: 0,
+        selectedCondition: 0,
+        condition: 0,
+        area: 0,
       ),
       message: '',
       readingTensiometer: List.generate(90, (index) => index + 1),
-      crasEquotion: CrasEquotion(
+      crasEquotion: const CrasEquotion(
         coefficient: '',
         exponent: '',
       ),
       readingOnLayerOneTensiometer: null,
       readingOnLayerTwoTensiometer: null,
-      soilData: SoilData(
+      soilData: const SoilData(
         soilTexture: '',
         fieldCapacityVoltage: '',
         fieldCapacityHumidity: '',
@@ -87,10 +94,12 @@ class IrrigationManagementState {
       ),
       isNeedData: false,
       cultureData: CultureData(
+        spacingBetweenRowsPlants: 0,
+        plantSpacing: 0,
         plantingDate: '',
         cultivateHybrid: '',
-        criticalVoltage: '',
         culture: '',
+        rootSystem: 0,
       ),
       readingDate: null,
       bluntBlade: '',

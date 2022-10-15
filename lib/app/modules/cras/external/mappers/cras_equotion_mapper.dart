@@ -1,4 +1,4 @@
-import 'package:tcc/app/modules/cras/domain/models/cras_equotion.dart';
+import '../../domain/models/cras_equotion.dart';
 
 class CrasEquotionMapper {
   Map<String, dynamic> to(CrasEquotion crasEquotion) {

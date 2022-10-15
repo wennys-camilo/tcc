@@ -1,4 +1,4 @@
-import 'package:tcc/app/modules/cras/domain/models/cras_chart.dart';
+import '../../../../domain/models/cras_chart.dart';
 
 class SoilDataState {
   final String soilTexture;

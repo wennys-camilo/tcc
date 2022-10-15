@@ -6,7 +6,7 @@ import 'presentation/store/system_irrigation_store.dart';
 class SystemIrrigationModule extends Module {
   @override
   final List<Bind> binds = [
-    Bind((i) => SystemIrrigationStore(i.get())),
+    Bind((i) => SystemIrrigationStore(i.get(), i.get())),
     Bind((i) => LocalSystemIrrigationStore(i.get())),
   ];
 

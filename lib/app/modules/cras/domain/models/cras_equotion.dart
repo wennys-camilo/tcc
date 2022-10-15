@@ -1,7 +1,7 @@
 class CrasEquotion {
   final String coefficient;
   final String exponent;
-  CrasEquotion({
+  const CrasEquotion({
     required this.coefficient,
     required this.exponent,
   });

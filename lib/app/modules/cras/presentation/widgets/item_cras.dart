@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
-
-import 'package:tcc/app/modules/cras/domain/models/cras_chart.dart';
-import 'package:tcc/app/modules/cras/presentation/widgets/text_input_widget.dart';
+import 'text_input_widget.dart';
+import '../../domain/models/cras_chart.dart';
 
 class ItemCras extends StatefulWidget {
   const ItemCras({

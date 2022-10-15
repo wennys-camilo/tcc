@@ -1,6 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:tcc/app/modules/cras/submodules/soil_data/presentation/store/local_soil_data_store.dart';
 import 'presentation/pages/soil_data_page.dart';
+import 'presentation/store/local_soil_data_store.dart';
 import 'presentation/store/soil_data_store.dart';
 
 class SoilDataModule extends Module {

@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
-import 'package:tcc/app/modules/cras/domain/models/soil_data.dart';
-import 'package:tcc/app/modules/cras/domain/repositories/cras_repository.dart';
 import '../../../../core/domain/helpers/errors/failure.dart';
+import '../models/soil_data.dart';
+import '../repositories/cras_repository.dart';
 import 'fetch_soil_data_usecase.dart';
 
 class FetchSoilDataUsecaseImpl implements FetchSoilDataUsecase {

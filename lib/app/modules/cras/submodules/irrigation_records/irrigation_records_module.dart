@@ -1,6 +1,5 @@
 import 'package:flutter_modular/flutter_modular.dart';
-
-import 'presentation/page/chart_irrigation_record_paged.dart';
+import 'presentation/page/chart_irrigation_record_page.dart';
 import 'presentation/page/irrigation_records_page.dart';
 import 'presentation/store/irrigation_records_store.dart';
 

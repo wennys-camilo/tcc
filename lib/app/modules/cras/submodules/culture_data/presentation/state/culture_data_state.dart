@@ -1,51 +1,57 @@
 import 'package:intl/intl.dart';
 
-class CultureIrrigationSystemState {
+class CultureDataState {
   final String culture;
   final String cultivateHybrid;
   final DateTime plantingDate;
-  final String criticalVoltage;
   final List<int> effectiveRootSystemList;
+  final int rootSystem;
+  final double plantSpacing;
+  final double plantRowSpacing;
 
-  CultureIrrigationSystemState({
+  const CultureDataState({
     required this.culture,
     required this.cultivateHybrid,
     required this.plantingDate,
-    required this.criticalVoltage,
     required this.effectiveRootSystemList,
+    required this.rootSystem,
+    required this.plantSpacing,
+    required this.plantRowSpacing,
   });
 
   String get plantingDateFormated =>
       DateFormat('dd/MM/yyyy').format(plantingDate);
 
-  CultureIrrigationSystemState copyWith({
-    List<int>? effectiveRootSystemList,
-    List<int>? irrigationEfficiency,
+  CultureDataState copyWith({
     String? culture,
     String? cultivateHybrid,
     DateTime? plantingDate,
-    String? criticalVoltage,
+    List<int>? effectiveRootSystemList,
     int? rootSystem,
-    String? blade,
-    int? efficiency,
+    double? plantSpacing,
+    double? plantRowSpacing,
   }) {
-    return CultureIrrigationSystemState(
-      effectiveRootSystemList:
-          effectiveRootSystemList ?? this.effectiveRootSystemList,
+    return CultureDataState(
       culture: culture ?? this.culture,
       cultivateHybrid: cultivateHybrid ?? this.cultivateHybrid,
       plantingDate: plantingDate ?? this.plantingDate,
-      criticalVoltage: criticalVoltage ?? this.criticalVoltage,
+      effectiveRootSystemList:
+          effectiveRootSystemList ?? this.effectiveRootSystemList,
+      rootSystem: rootSystem ?? this.rootSystem,
+      plantSpacing: plantSpacing ?? this.plantSpacing,
+      plantRowSpacing: plantRowSpacing ?? this.plantRowSpacing,
     );
   }
 
-  static CultureIrrigationSystemState initialState() {
-    return CultureIrrigationSystemState(
+  static CultureDataState initialState() {
+    return CultureDataState(
+      plantRowSpacing: 0,
+      plantSpacing: 0,
+      rootSystem: 30,
       effectiveRootSystemList: List.generate(139, (i) => i + 7),
       culture: '3',
       cultivateHybrid: '',
       plantingDate: DateTime.now(),
-      criticalVoltage: '30 a 60',
     );
   }
 }

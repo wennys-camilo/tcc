@@ -1,7 +1,9 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:tcc/app/modules/cras/presentation/stores/cras_store.dart';
+import '../stores/cras_store.dart';
 import '../../domain/models/cras_chart.dart';
 
 class CrasChartPage extends StatefulWidget {
@@ -21,6 +23,25 @@ class CrasChartPage extends StatefulWidget {
 
 class _CrasChartPageState extends State<CrasChartPage> {
   late TrackballBehavior _trackballBehavior;
+  double minimumValueY() {
+    double min = widget.data[0].humidity;
+    for (int i = 0; i < widget.data.length; i++) {
+      if (widget.data[i].humidity < min) {
+        min = widget.data[i].humidity;
+      }
+    }
+    return min;
+  }
+
+  double maximumValueX() {
+    int max = widget.data[0].kpa;
+    for (int i = 0; i < widget.data.length; i++) {
+      if (widget.data[i].kpa > max) {
+        max = widget.data[i].kpa;
+      }
+    }
+    return max.toDouble();
+  }
 
   @override
   void initState() {
@@ -60,12 +81,13 @@ class _CrasChartPageState extends State<CrasChartPage> {
       ),
       body: Center(
         child: SfCartesianChart(
-          primaryXAxis: NumericAxis(interval: 200, maximum: 1600),
-          primaryYAxis: NumericAxis(),
+          primaryYAxis: NumericAxis(minimum: minimumValueY() - 0.01),
+          primaryXAxis: NumericAxis(maximum: maximumValueX()),
           trackballBehavior: _trackballBehavior,
           series: <CartesianSeries>[
-            FastLineSeries<CrasChart, int>(
+            SplineSeries<CrasChart, int>(
               dataSource: widget.data,
+              splineType: SplineType.monotonic,
               xValueMapper: (CrasChart data, _) => data.kpa,
               yValueMapper: (CrasChart data, _) => data.humidity,
               //markerSettings: const MarkerSettings(isVisible: true),

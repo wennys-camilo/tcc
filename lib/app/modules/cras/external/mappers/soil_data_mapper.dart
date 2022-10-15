@@ -1,4 +1,4 @@
-import 'package:tcc/app/modules/cras/domain/models/soil_data.dart';
+import '../../domain/models/soil_data.dart';
 
 class SoilDataMapper {
   Map<String, dynamic> to(SoilData soilData) {

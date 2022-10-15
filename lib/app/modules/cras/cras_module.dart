@@ -20,7 +20,7 @@ import 'presentation/pages/cras_chart_page.dart';
 import 'presentation/pages/home_page.dart';
 import 'presentation/stores/cras_store.dart';
 import 'submodules/cras_tensiometer_equantion/cras_tensiometer_equation_module.dart';
-import 'submodules/culture_irrigation_system_data/culture_irrigation_system_module.dart';
+import 'submodules/culture_data/culture_data_module.dart';
 import 'submodules/edit_cras/edit_cras_module.dart';
 import 'submodules/irrigation_management/irrigation_management_module.dart';
 import 'submodules/irrigation_records/irrigation_records_module.dart';
@@ -68,7 +68,7 @@ class CrasModule extends Module {
           ),
           ModuleRoute(
             '/culture-irrigation-system',
-            module: CultureIrrigationSystemModule(),
+            module: CultureDataModule(),
           ),
           ModuleRoute(
             '/system-irrigation',

@@ -8,10 +8,17 @@ class LocalSystemIrrigationState {
 
   static LocalSystemIrrigationState initialState() {
     return LocalSystemIrrigationState(
-      systemIrrigation: SystemIrrigation(
-        blade: '',
+      systemIrrigation: const SystemIrrigation(
+        typeSystem: 0,
+        blade: "",
         efficiency: 0,
-        rootSystem: 0,
+        spacingBetweenEmitters: 0,
+        emitterFlow: 0,
+        nep: 0,
+        spacingBetweenLateralLines: 0,
+        selectedCondition: 0,
+        condition: 0,
+        area: 0,
       ),
     );
   }

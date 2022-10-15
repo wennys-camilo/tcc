@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:tcc/app/modules/cras/domain/models/irrigation_record.dart';
-import 'package:tcc/app/modules/cras/submodules/irrigation_records/presentation/store/irrigation_records_store.dart';
+import '../../../../domain/models/irrigation_record.dart';
+import '../store/irrigation_records_store.dart';
 
 class ChartIrrigationRecordPage extends StatefulWidget {
   final IrrigationRecordsStore store;

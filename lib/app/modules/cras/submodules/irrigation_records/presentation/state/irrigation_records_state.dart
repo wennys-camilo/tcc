@@ -1,4 +1,4 @@
-import 'package:tcc/app/modules/cras/domain/models/irrigation_record.dart';
+import '../../../../domain/models/irrigation_record.dart';
 
 class IrrigationRecordState {
   final List<IrrigationRecord> irrigationRegisters;

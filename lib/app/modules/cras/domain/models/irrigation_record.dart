@@ -6,7 +6,7 @@ class IrrigationRecord {
   final String dataLeitura;
   final String tensaoMedia;
   final String laminaBruta;
-  IrrigationRecord({
+  const IrrigationRecord({
     required this.id,
     required this.cultura,
     required this.culTivarHibrido,

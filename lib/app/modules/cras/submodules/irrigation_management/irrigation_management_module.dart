@@ -14,6 +14,6 @@ class IrrigationManagementModule extends Module {
     ChildRoute(
       '/',
       child: (context, args) => IrrigationManagementPage(store: context.read()),
-    )
+    ),
   ];
 }

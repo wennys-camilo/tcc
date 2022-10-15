@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-
-import 'package:tcc/app/core/presentation/widgets/drawer_item_tile_widget.dart';
-import 'package:tcc/app/core/presentation/widgets/show_dialog_widget.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'drawer_item_tile_widget.dart';
+import 'show_dialog_widget.dart';
 
 class CustomDrawer extends StatefulWidget {
   const CustomDrawer({Key? key}) : super(key: key);

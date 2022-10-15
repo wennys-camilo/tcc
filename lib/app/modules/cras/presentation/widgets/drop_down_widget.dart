@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import '../../../../core/presentation/themes/app_theme.dart';
 
 class DropDownWidget<T> extends StatelessWidget {
