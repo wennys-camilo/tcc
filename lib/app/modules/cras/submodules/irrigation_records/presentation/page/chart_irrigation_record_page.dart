@@ -39,13 +39,13 @@ class _ChartIrrigationRecordPageState extends State<ChartIrrigationRecordPage> {
           centerTitle: true,
         ),
         body: SfCartesianChart(
-            primaryYAxis: NumericAxis(),
+            primaryYAxis: NumericAxis(labelFormat: '{value} kPa'),
             primaryXAxis: DateTimeAxis(),
             trackballBehavior: _trackballBehavior,
             series: <ChartSeries>[
               // Renders line chart
               FastLineSeries<IrrigationRecord, DateTime>(
-                dataSource: widget.store.state.irrigationRegisters,
+                dataSource: widget.store.irrigations.value,
                 xValueMapper: (IrrigationRecord data, _) =>
                     DateTime.parse(data.dataLeitura),
                 yValueMapper: (IrrigationRecord data, _) =>

@@ -10,6 +10,7 @@ class IrrigationRecordMapper {
       'dataLeitura': irrigationRecord.dataLeitura,
       'tensaoMedia': irrigationRecord.tensaoMedia,
       'laminaBruta': irrigationRecord.laminaBruta,
+      'typeSystem': irrigationRecord.typeSystem,
     };
   }
 
@@ -22,6 +23,7 @@ class IrrigationRecordMapper {
       dataLeitura: map['dataLeitura'] ?? '',
       tensaoMedia: map['tensaoMedia'] ?? '',
       laminaBruta: map['laminaBruta'] ?? '',
+      typeSystem: map['typeSystem'],
     );
   }
 }

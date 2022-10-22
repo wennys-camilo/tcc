@@ -1,47 +1,56 @@
-import 'package:flutter_triple/flutter_triple.dart';
-import '../../../../../../core/domain/domain.dart';
+import 'package:flutter/cupertino.dart';
 import '../../../../domain/models/irrigation_record.dart';
 import '../../../../domain/usecases/fetch_registers_irrigation_usecase.dart';
 import '../../../../domain/usecases/remove_register_irrigation_usecase.dart';
-import '../state/irrigation_records_state.dart';
 
-class IrrigationRecordsStore
-    extends StreamStore<Failure, IrrigationRecordState> {
+class IrrigationRecordsStore {
   final FetchRegistersIrrigationUsecase _fetchRegistersIrrigationUsecase;
   final RemoveRegisterIrrigationUsecase _removeRegisterIrrigationUsecase;
 
   IrrigationRecordsStore(
     this._fetchRegistersIrrigationUsecase,
     this._removeRegisterIrrigationUsecase,
-  ) : super(IrrigationRecordState.initialState());
+  );
+  final ValueNotifier<List<IrrigationRecord>> irrigations =
+      ValueNotifier<List<IrrigationRecord>>([]);
 
-  fetchSummation() {
-    double summation = 0.0;
-    for (var element in triple.state.irrigationRegisters) {
-      summation = summation + double.parse(element.laminaBruta);
-    }
-    update(state.copyWith(summation: summation));
+  Future<void> fetchIrrigations() async {
+    final response = await _fetchRegistersIrrigationUsecase();
+    response.fold((l) {}, (result) {
+      irrigations.value = result;
+    });
   }
 
   Future<void> removeRegisters(IrrigationRecord value) async {
-    setLoading(true);
-    final response = await _removeRegisterIrrigationUsecase(value);
+    final response = await _removeRegisterIrrigationUsecase(value.id);
     response.fold((l) {}, (result) {});
-    setLoading(false);
+    fetchIrrigations();
   }
 
-  Future<void> fetchRegisters() async {
-    setLoading(true);
-    final response = await _fetchRegistersIrrigationUsecase();
-    response.fold((l) {}, (result) {
-      List<IrrigationRecord> auxRecord = [...result];
-      auxRecord.sort((a, b) {
-        return DateTime.parse(a.dataLeitura)
-            .compareTo(DateTime.parse(b.dataLeitura));
-      });
-      update(state.copyWith(irrigationRegisters: auxRecord));
-      fetchSummation();
-    });
-    setLoading(false);
+  List<IrrigationRecord> fetchPivot() {
+    final response =
+        irrigations.value.where((element) => element.typeSystem == 0).toList();
+    return response;
+  }
+
+  List<IrrigationRecord> fetchDrip() {
+    final response =
+        irrigations.value.where((element) => element.typeSystem == 1).toList();
+    return response;
+  }
+
+  double fetchSummation(int typeSystem) {
+    double summation = 0.0;
+    if (typeSystem == 0) {
+      for (var element in irrigations.value.where((e) => e.typeSystem == 0)) {
+        summation = summation + double.parse(element.laminaBruta);
+      }
+      return summation;
+    } else {
+      for (var element in irrigations.value.where((e) => e.typeSystem == 1)) {
+        summation = summation + double.parse(element.laminaBruta);
+      }
+      return summation;
+    }
   }
 }

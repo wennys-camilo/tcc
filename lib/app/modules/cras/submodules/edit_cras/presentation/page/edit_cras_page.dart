@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:tcc/app/modules/cras/domain/models/cras_chart.dart';
-import 'package:tcc/app/modules/cras/submodules/edit_cras/presentation/store/edit_cras_store.dart';
-import 'package:tcc/app/modules/cras/submodules/edit_cras/presentation/widgets/edit_item_cras.dart';
 import '../../../../../../core/presentation/themes/app_theme.dart';
+import '../../../../domain/models/cras_chart.dart';
+import '../store/edit_cras_store.dart';
+import '../widgets/edit_item_cras.dart';
 
 class EditCrasPage extends StatefulWidget {
   final EditCrasStore store;

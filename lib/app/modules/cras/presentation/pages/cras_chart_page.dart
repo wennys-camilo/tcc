@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -20,6 +22,7 @@ class CrasChartPage extends StatefulWidget {
 }
 
 class _CrasChartPageState extends State<CrasChartPage> {
+  late GlobalKey<SfCartesianChartState> _cartesianChartKey;
   late TrackballBehavior _trackballBehavior;
   double minimumValueY() {
     double min = widget.data[0].humidity;
@@ -44,7 +47,7 @@ class _CrasChartPageState extends State<CrasChartPage> {
   @override
   void initState() {
     super.initState();
-
+    _cartesianChartKey = GlobalKey();
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.landscapeRight,
       DeviceOrientation.landscapeLeft,
@@ -76,9 +79,16 @@ class _CrasChartPageState extends State<CrasChartPage> {
       appBar: AppBar(
         title: const Text('Gráfico da CRAS'),
         centerTitle: true,
+        actions: const [
+          /*IconButton(
+            icon: Icon(Icons.save),
+            onPressed: () => _renderChartAsImage(),
+          ),*/
+        ],
       ),
       body: Center(
         child: SfCartesianChart(
+          key: _cartesianChartKey,
           primaryYAxis: NumericAxis(minimum: minimumValueY() - 0.01),
           primaryXAxis: NumericAxis(maximum: maximumValueX()),
           trackballBehavior: _trackballBehavior,
@@ -99,4 +109,20 @@ class _CrasChartPageState extends State<CrasChartPage> {
       ),
     );
   }
+
+  /*Future<void> _renderChartAsImage() async {
+    final ui.Image data =
+        await _cartesianChartKey.currentState!.toImage(pixelRatio: 3.0);
+    final ByteData? bytes =
+        await data.toByteData(format: ui.ImageByteFormat.png);
+    final Uint8List imageBytes =
+        bytes!.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes);
+    await Navigator.of(context).push<dynamic>(
+      MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) {
+          return SafeArea(child: Scaffold(body: Image.memory(imageBytes)));
+        },
+      ),
+    );
+  }*/
 }

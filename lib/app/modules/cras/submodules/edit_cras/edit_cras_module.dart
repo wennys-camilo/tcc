@@ -1,6 +1,6 @@
 import 'package:flutter_modular/flutter_modular.dart';
-import 'package:tcc/app/modules/cras/submodules/edit_cras/presentation/page/edit_cras_page.dart';
-import 'package:tcc/app/modules/cras/submodules/edit_cras/presentation/store/edit_cras_store.dart';
+import 'presentation/page/edit_cras_page.dart';
+import 'presentation/store/edit_cras_store.dart';
 
 class EditCrasModule extends Module {
   @override

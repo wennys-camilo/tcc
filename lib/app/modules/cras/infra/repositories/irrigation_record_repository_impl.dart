@@ -30,9 +30,9 @@ class IrrigationRecordRepositoryImpl implements IrrigationRecordRepository {
   }
 
   @override
-  Future<Either<Failure, bool>> remove(IrrigationRecord value) async {
+  Future<Either<Failure, bool>> remove(String id) async {
     try {
-      final response = await _localDataSource.remove(value);
+      final response = await _localDataSource.remove(id);
       return Right(response);
     } on Failure catch (error) {
       return Left(error);

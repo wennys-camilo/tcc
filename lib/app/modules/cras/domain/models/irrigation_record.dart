@@ -6,6 +6,8 @@ class IrrigationRecord {
   final String dataLeitura;
   final String tensaoMedia;
   final String laminaBruta;
+  final int typeSystem;
+
   const IrrigationRecord({
     required this.id,
     required this.cultura,
@@ -14,5 +16,6 @@ class IrrigationRecord {
     required this.dataLeitura,
     required this.tensaoMedia,
     required this.laminaBruta,
+    required this.typeSystem,
   });
 }

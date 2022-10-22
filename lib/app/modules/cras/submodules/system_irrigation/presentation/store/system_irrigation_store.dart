@@ -1,10 +1,9 @@
 import 'dart:math';
-
 import 'package:flutter_triple/flutter_triple.dart';
-import 'package:tcc/app/modules/cras/domain/models/system_irrigation.dart';
-import 'package:tcc/app/modules/cras/domain/usecases/fetch_culture_data_usecase.dart';
-import 'package:tcc/app/modules/cras/domain/usecases/save_system_irrigation_data_usecase.dart';
 import '../../../../../../core/domain/domain.dart';
+import '../../../../domain/models/system_irrigation.dart';
+import '../../../../domain/usecases/fetch_culture_data_usecase.dart';
+import '../../../../domain/usecases/save_system_irrigation_data_usecase.dart';
 import '../state/system_irrigation_state.dart';
 
 class SystemIrrigationStore

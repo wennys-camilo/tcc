@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_triple/flutter_triple.dart';
+import 'package:tcc/app/core/domain/domain.dart';
+import 'package:tcc/app/modules/cras/submodules/cras_tensiometer_equantion/presentation/state/equotion_state.dart';
 import '../../../../../../core/presentation/themes/app_theme.dart';
 import '../../../../../../core/presentation/widgets/custom_drawer.dart';
-import '../../../../presentation/widgets/text_input_widget.dart';
 import '../store/cras_tensiometer_equation_store.dart';
 import '../store/equotion_store.dart';
 
@@ -50,68 +52,135 @@ class _CrasTensiometerEquationPageState
           child: Container(
             constraints: const BoxConstraints(maxWidth: 800),
             width: MediaQuery.of(context).size.width,
-            child: Column(
-              children: [
-                const SizedBox(
-                  height: 10,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
+            child: TripleBuilder<EquotionStore, Failure, EquotionState>(
+                store: equotionStore,
+                builder: (context, triple) {
+                  return Column(
                     children: [
-                      const Expanded(
-                        flex: 4,
+                      const SizedBox(
+                        height: 15,
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width,
                         child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            'Coeficiente da Curva de retenção de água do solo:',
-                            style: TextStyle(
-                              fontSize: 15,
+                          padding: const EdgeInsets.all(16.0),
+                          child: Card(
+                            elevation: 5,
+                            child: Center(
+                                child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Column(
+                                children: [
+                                  const Text(
+                                    'Coeficiente da Curva de retenção de água do solo',
+                                    style: TextStyle(fontSize: 18),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  Divider(
+                                    color: AppTheme.colors.primary,
+                                    thickness: 1,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      coefficientTextEditController.text,
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                          child: Card(
+                            elevation: 5,
+                            child: Center(
+                                child: Padding(
+                              padding: const EdgeInsets.all(16.0),
+                              child: Column(
+                                children: [
+                                  const Text(
+                                    'Expoente da Curva de retençao de água do solo',
+                                    style: TextStyle(fontSize: 18),
+                                    textAlign: TextAlign.center,
+                                  ),
+                                  Divider(
+                                    color: AppTheme.colors.primary,
+                                    thickness: 1,
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.all(8.0),
+                                    child: Text(
+                                      exponentTextEditController.text,
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            )),
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width,
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                          child: Card(
+                            color: AppTheme.colors.primary,
+                            elevation: 5,
+                            child: Center(
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: Column(
+                                  children: [
+                                    RichText(
+                                      text: TextSpan(children: [
+                                        TextSpan(
+                                          text:
+                                              "f(x) = ${coefficientTextEditController.text}",
+                                          style: const TextStyle(
+                                            fontSize: 18,
+                                            color: Colors.white,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        WidgetSpan(
+                                          child: Transform.translate(
+                                            offset: const Offset(2, -4),
+                                            child: Text(
+                                              exponentTextEditController.text,
+                                              textScaleFactor: 0.7,
+                                              style: const TextStyle(
+                                                fontSize: 18,
+                                                color: Colors.white,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      ]),
+                                    )
+                                  ],
+                                ),
+                              ),
                             ),
                           ),
                         ),
                       ),
-                      Flexible(
-                        flex: 5,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: TextInputWidget(
-                            enabled: false,
-                            controller: coefficientTextEditController,
-                          ),
-                        ),
-                      ),
                     ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Row(
-                    children: [
-                      const Expanded(
-                        flex: 4,
-                        child: Padding(
-                          padding: EdgeInsets.all(8.0),
-                          child: Text(
-                            'Expoente da Curva de retençao de água do solo:',
-                          ),
-                        ),
-                      ),
-                      Flexible(
-                        flex: 5,
-                        child: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: TextInputWidget(
-                            enabled: false,
-                            controller: exponentTextEditController,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+                  );
+                }),
           ),
         ),
       ),

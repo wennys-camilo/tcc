@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-import 'package:tcc/app/modules/cras/domain/models/cras_chart.dart';
-import 'package:tcc/app/modules/cras/presentation/widgets/text_input_widget.dart';
+import '../../../../domain/models/cras_chart.dart';
+import '../../../../presentation/widgets/text_input_widget.dart';
 
 class EditItemCras extends StatefulWidget {
   const EditItemCras({Key? key, required this.item, required this.onRemove})

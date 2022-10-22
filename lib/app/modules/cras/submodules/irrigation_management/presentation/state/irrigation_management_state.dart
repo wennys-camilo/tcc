@@ -1,8 +1,8 @@
 import 'package:intl/intl.dart';
-import 'package:tcc/app/modules/cras/domain/models/cras_equotion.dart';
-import 'package:tcc/app/modules/cras/domain/models/culture_data.dart';
-import 'package:tcc/app/modules/cras/domain/models/soil_data.dart';
-import 'package:tcc/app/modules/cras/domain/models/system_irrigation.dart';
+import '../../../../domain/models/cras_equotion.dart';
+import '../../../../domain/models/culture_data.dart';
+import '../../../../domain/models/soil_data.dart';
+import '../../../../domain/models/system_irrigation.dart';
 
 class IrrigationManagementState {
   final List<int> readingTensiometer;
@@ -78,7 +78,7 @@ class IrrigationManagementState {
         area: 0,
       ),
       message: '',
-      readingTensiometer: List.generate(90, (index) => index + 1),
+      readingTensiometer: List.generate(90, (index) => index),
       crasEquotion: const CrasEquotion(
         coefficient: '',
         exponent: '',

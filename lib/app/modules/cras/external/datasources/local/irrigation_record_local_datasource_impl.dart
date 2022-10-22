@@ -67,12 +67,12 @@ class IrrigationRecordLocalDataSourceImpl
   }
 
   @override
-  Future<bool> remove(IrrigationRecord value) async {
+  Future<bool> remove(String id) async {
     try {
       final registers = await getAll();
       List<IrrigationRecord> auxRegisters = [];
       for (var element in registers) {
-        if (element.id == value.id) {
+        if (element.id == id) {
           auxRegisters.addAll([...registers]..remove(element));
           final response = await _localStorage.setString(
               'irrigation_record',

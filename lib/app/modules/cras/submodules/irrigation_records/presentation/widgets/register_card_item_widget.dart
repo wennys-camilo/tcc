@@ -93,6 +93,20 @@ class RegisterCardItemWidget extends StatelessWidget {
                     Text("${register.laminaBruta} (mm)")
                   ],
                 ),
+                if (register.typeSystem == 1)
+                  const Divider(
+                    thickness: 0.8,
+                  ),
+                if (register.typeSystem == 1)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: const [
+                      Text(
+                        'Tempo de irrigação',
+                      ),
+                      Text("Time (mm)")
+                    ],
+                  ),
               ],
             ),
           )),

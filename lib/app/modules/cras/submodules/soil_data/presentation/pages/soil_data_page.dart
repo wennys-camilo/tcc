@@ -115,23 +115,17 @@ class _SoilDataPageState extends State<SoilDataPage> {
                               },
                               items: const [
                                 DropdownMenuItem(
-                                  child: Center(
-                                    child: Text(
-                                      'Arenosa',
-                                    ),
+                                  child: Text(
+                                    'Arenosa',
                                   ),
                                   value: '0',
                                 ),
                                 DropdownMenuItem(
-                                  child: Center(
-                                    child: Text('Média'),
-                                  ),
+                                  child: Text('Média'),
                                   value: '1',
                                 ),
                                 DropdownMenuItem(
-                                  child: Center(
-                                    child: Text('Argilosa'),
-                                  ),
+                                  child: Text('Argilosa'),
                                   value: '2',
                                 )
                               ],
@@ -143,6 +137,7 @@ class _SoilDataPageState extends State<SoilDataPage> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TextInputWidget(
+                              centerText: false,
                               fillColor: AppTheme.colors.greyLight,
                               controller: fieldCapacityVoltageController,
                               enabled: false,
@@ -156,6 +151,7 @@ class _SoilDataPageState extends State<SoilDataPage> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TextInputWidget(
+                              centerText: false,
                               fillColor: AppTheme.colors.greyLight,
                               controller: fieldCapacityMoistureController,
                               enabled: false,
@@ -175,6 +171,7 @@ class _SoilDataPageState extends State<SoilDataPage> {
                           Padding(
                             padding: const EdgeInsets.all(8.0),
                             child: TextInputWidget(
+                              centerText: false,
                               fillColor: AppTheme.colors.greyLight,
                               enabled: false,
                               style:
@@ -192,24 +189,20 @@ class _SoilDataPageState extends State<SoilDataPage> {
                           ),
                           Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                const Text('g/cm³'),
-                                TextInputWidget(
-                                  decimalInput: true,
-                                  focusNode: soilDensityfocusNode,
-                                  controller: soilDensityController,
-                                  labelText: 'Densidade do solo (ds):',
-                                  validator: (value) {
-                                    if (value!.isEmpty) {
-                                      return 'Campo Obrigatório';
-                                    }
-                                    return null;
-                                  },
-                                  onChanged: store.onChangeSoilDensity,
-                                ),
-                              ],
+                            child: TextInputWidget(
+                              centerText: false,
+                              decimalInput: true,
+                              suffixText: "g/cm³",
+                              focusNode: soilDensityfocusNode,
+                              controller: soilDensityController,
+                              labelText: 'Densidade do solo (ds):',
+                              validator: (value) {
+                                if (value!.isEmpty) {
+                                  return 'Campo Obrigatório';
+                                }
+                                return null;
+                              },
+                              onChanged: store.onChangeSoilDensity,
                             ),
                           ),
                         ],

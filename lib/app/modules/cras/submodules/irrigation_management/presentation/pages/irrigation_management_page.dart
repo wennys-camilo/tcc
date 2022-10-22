@@ -5,10 +5,10 @@ import 'package:flutter_modular/flutter_modular.dart';
 import 'package:flutter_triple/flutter_triple.dart';
 import 'package:intl/intl.dart';
 import 'package:logger/logger.dart';
-import 'package:tcc/app/core/presentation/widgets/custom_text_button_widget.dart';
-import 'package:tcc/app/core/presentation/widgets/show_dialog_widget.dart';
 import '../../../../../../core/domain/domain.dart';
 import '../../../../../../core/presentation/widgets/custom_drawer.dart';
+import '../../../../../../core/presentation/widgets/custom_text_button_widget.dart';
+import '../../../../../../core/presentation/widgets/show_dialog_widget.dart';
 import '../../../../presentation/widgets/drop_down_widget.dart';
 import '../../../../presentation/widgets/text_input_widget.dart';
 import '../state/irrigation_management_state.dart';
@@ -49,8 +49,8 @@ class _IrrigationManagementPageState extends State<IrrigationManagementPage> {
 
   //GOTEJAMENTO
   late final TextEditingController pamController;
-
   late final GlobalKey<FormState> _formKey;
+  late final TextEditingController irrigationTimeController;
   @override
   void initState() {
     super.initState();
@@ -59,6 +59,7 @@ class _IrrigationManagementPageState extends State<IrrigationManagementPage> {
     pamController = TextEditingController();
     layer1Depth = TextEditingController(text: '20');
     layer2Depth = TextEditingController(text: '10');
+    irrigationTimeController = TextEditingController();
     currentSoilMoistureLayer1 = TextEditingController();
     laminaLiquidaIrrigacao1 = TextEditingController();
     laminaBrutaIrrigacao1 = TextEditingController();
@@ -89,12 +90,8 @@ class _IrrigationManagementPageState extends State<IrrigationManagementPage> {
     store.fetchEquotion();
     store.fetchCultureData();
     store.fetchSystemIrrigation();
-    //store.requestData();
+    store.requestData();
     //TODO: OBRIGAR O PREENCHIMENTO DE APENAS 1 PIVO - 1 CAMADA
-  }
-
-  void onChangeFetchPAM() {
-    //TODO: CALCULAR
   }
 
   @override
@@ -205,7 +202,15 @@ class _IrrigationManagementPageState extends State<IrrigationManagementPage> {
                                   calculationCurrentSoilMoisture
                                       .toStringAsFixed(2);
 
+                              if (double.parse(currentSoilMoistureLayer1.text)
+                                  .isInfinite) {
+                                currentSoilMoistureLayer1.text = '0.0';
+                              }
+
                               //CALCULO LL
+                              //CC - UMIDADE ATUAL / 10 * (ds * profunidade) = 3,74
+                              //PARA 40 KPA
+
                               var calculoLaminaLiquidaIrrigcao = ((double.parse(
                                               triple.state.soilData
                                                   .fieldCapacityHumidity) -
@@ -236,45 +241,85 @@ class _IrrigationManagementPageState extends State<IrrigationManagementPage> {
                               }
 
                               //CALCULO LAMINA LIQUIDA TOTAL
-                              laminaliquidaIrrigacaoTotal
-                                  .text = ((double.tryParse(
-                                              laminaLiquidaIrrigacao1.text) ??
-                                          0) +
-                                      (double.tryParse(
-                                              laminaLiquidaIrrigacao2.text) ??
-                                          0))
-                                  .toStringAsFixed(2);
+                              if (triple.state.systemIrrigation.typeSystem ==
+                                  0) {
+                                laminaliquidaIrrigacaoTotal
+                                    .text = ((double.tryParse(
+                                                laminaLiquidaIrrigacao1.text) ??
+                                            0) +
+                                        (double.tryParse(
+                                                laminaLiquidaIrrigacao2.text) ??
+                                            0))
+                                    .toStringAsFixed(2);
+                              } else {
+                                laminaliquidaIrrigacaoTotal.text =
+                                    (((double.tryParse(laminaLiquidaIrrigacao1
+                                                        .text) ??
+                                                    0) +
+                                                (double.tryParse(
+                                                        laminaLiquidaIrrigacao2
+                                                            .text) ??
+                                                    0)) *
+                                            triple.state.systemIrrigation.area)
+                                        .toStringAsFixed(2);
+                              }
 
-                              //CALCULO LAMINHA BRUTA TOTAL
-                              laminaBrutaIrrigacaoTotal.text =
-                                  ((double.tryParse(
-                                                  laminaBrutaIrrigacao1.text) ??
-                                              0) +
-                                          (double.tryParse(
-                                                  laminaBrutaIrrigacao2.text) ??
-                                              0))
-                                      .toStringAsFixed(2);
+                              //CALCULO LAMINA BRUTA TOTAL
+                              if (triple.state.systemIrrigation.typeSystem ==
+                                  0) {
+                                laminaBrutaIrrigacaoTotal
+                                    .text = ((double.tryParse(
+                                                laminaBrutaIrrigacao1.text) ??
+                                            0) +
+                                        (double.tryParse(
+                                                laminaBrutaIrrigacao2.text) ??
+                                            0))
+                                    .toStringAsFixed(2);
 
-                              store.onChangeBluntBlade(
-                                  laminaBrutaIrrigacaoTotal.text);
+                                store.onChangeBluntBlade(
+                                    laminaBrutaIrrigacaoTotal.text);
+                              } else {
+                                laminaBrutaIrrigacaoTotal.text = ((double.parse(
+                                            laminaliquidaIrrigacaoTotal.text)) /
+                                        triple
+                                            .state.systemIrrigation.efficiency /
+                                        100)
+                                    .toStringAsFixed(2);
+                                store.onChangeBluntBlade(
+                                    laminaBrutaIrrigacaoTotal.text);
+                              }
 
                               //REGULAGEM PERCENTIMETRO
-                              if ((100 *
+                              if (triple.state.systemIrrigation.typeSystem ==
+                                  0) {
+                                if ((100 *
+                                            double.parse(triple
+                                                .state.systemIrrigation.blade
+                                                .replaceAll(',', '.'))) /
+                                        (double.parse(
+                                            laminaBrutaIrrigacaoTotal.text)) >
+                                    100) {
+                                  regulagemPercentimetro.text = 'LB < L100%';
+                                } else {
+                                  regulagemPercentimetro.text = (100 *
                                           double.parse(triple
                                               .state.systemIrrigation.blade
-                                              .replaceAll(',', '.'))) /
-                                      (double.parse(
-                                          laminaBrutaIrrigacaoTotal.text)) >
-                                  100) {
-                                regulagemPercentimetro.text = 'LB < L100%';
-                              } else {
-                                regulagemPercentimetro.text = (100 *
-                                        double.parse(triple
-                                            .state.systemIrrigation.blade
-                                            .replaceAll(',', '.')) /
-                                        double.parse(
-                                            laminaBrutaIrrigacaoTotal.text))
-                                    .toStringAsFixed(0);
+                                              .replaceAll(',', '.')) /
+                                          double.parse(
+                                              laminaBrutaIrrigacaoTotal.text))
+                                      .toStringAsFixed(0);
+                                }
+                              }
+
+                              //TEMPO DE IRRIGAÇÃO
+                              if (triple.state.systemIrrigation.typeSystem ==
+                                  1) {
+                                irrigationTimeController.text = ((double.parse(
+                                            laminaBrutaIrrigacaoTotal.text)) /
+                                        (triple.state.systemIrrigation.nep *
+                                            triple.state.systemIrrigation
+                                                .emitterFlow))
+                                    .toStringAsFixed(2);
                               }
                             },
                             items: store.state.readingTensiometer.map((value) {
@@ -349,6 +394,11 @@ class _IrrigationManagementPageState extends State<IrrigationManagementPage> {
                                   calculationCurrentSoilMoisture
                                       .toStringAsFixed(2);
 
+                              if (double.parse(currentSoilMoistureLayer2.text)
+                                  .isInfinite) {
+                                currentSoilMoistureLayer2.text = '0.0';
+                              }
+
                               //CALCULO LL
                               var calculoLaminaLiquidaIrrigcao = ((double.parse(
                                               triple.state.soilData
@@ -380,49 +430,89 @@ class _IrrigationManagementPageState extends State<IrrigationManagementPage> {
                               }
 
                               //CALCULO LAMINA LIQUIDA TOTAL
-                              laminaliquidaIrrigacaoTotal
-                                  .text = ((double.tryParse(
-                                              laminaLiquidaIrrigacao1.text) ??
-                                          0) +
-                                      (double.tryParse(
-                                              laminaLiquidaIrrigacao2.text) ??
-                                          0))
-                                  .toStringAsFixed(2);
+                              if (triple.state.systemIrrigation.typeSystem ==
+                                  0) {
+                                laminaliquidaIrrigacaoTotal
+                                    .text = ((double.tryParse(
+                                                laminaLiquidaIrrigacao1.text) ??
+                                            0) +
+                                        (double.tryParse(
+                                                laminaLiquidaIrrigacao2.text) ??
+                                            0))
+                                    .toStringAsFixed(2);
+                              } else {
+                                laminaliquidaIrrigacaoTotal.text =
+                                    (((double.tryParse(laminaLiquidaIrrigacao1
+                                                        .text) ??
+                                                    0) +
+                                                (double.tryParse(
+                                                        laminaLiquidaIrrigacao2
+                                                            .text) ??
+                                                    0)) *
+                                            triple.state.systemIrrigation.area)
+                                        .toStringAsFixed(2);
+                              }
 
                               //CORREÇÃO SOMENTE PARA O CASO DE GOTEJAMENTO
-                              //TODO: laminaliquidaIrrigacaoTotal * AREA (FAIXA OU BULBLO)
-                              //TODO: PARA O SISTEM DE GOTEJAMENTO: MULTIPLCAR O RESULTADO DA LAMINA TOTAL PELA AREA
+                              //COMPATIBILIZAR A PROFUNDIDADE DAS CAMADAS 1 E 2 COM A PROFUNDIDADE SO SISTEMA RADICULAR
 
                               //CALCULO LAMINHA BRUTA TOTAL
-                              laminaBrutaIrrigacaoTotal.text =
-                                  ((double.tryParse(
-                                                  laminaBrutaIrrigacao1.text) ??
-                                              0) +
-                                          (double.tryParse(
-                                                  laminaBrutaIrrigacao2.text) ??
-                                              0))
-                                      .toStringAsFixed(2);
+                              if (triple.state.systemIrrigation.typeSystem ==
+                                  0) {
+                                laminaBrutaIrrigacaoTotal
+                                    .text = ((double.tryParse(
+                                                laminaBrutaIrrigacao1.text) ??
+                                            0) +
+                                        (double.tryParse(
+                                                laminaBrutaIrrigacao2.text) ??
+                                            0))
+                                    .toStringAsFixed(2);
 
-                              store.onChangeBluntBlade(
-                                  laminaBrutaIrrigacaoTotal.text);
+                                store.onChangeBluntBlade(
+                                    laminaBrutaIrrigacaoTotal.text);
+                              } else {
+                                laminaBrutaIrrigacaoTotal.text = ((double.parse(
+                                            laminaliquidaIrrigacaoTotal.text)) /
+                                        (triple.state.systemIrrigation
+                                                .efficiency /
+                                            100))
+                                    .toStringAsFixed(2);
+
+                                store.onChangeBluntBlade(
+                                    laminaBrutaIrrigacaoTotal.text);
+                              }
 
                               //REGULAGEM PERCENTIMETRO
-                              if ((100 *
+                              if (triple.state.systemIrrigation.typeSystem ==
+                                  0) {
+                                if ((100 *
+                                            double.parse(triple
+                                                .state.systemIrrigation.blade
+                                                .replaceAll(',', '.'))) /
+                                        (double.parse(
+                                            laminaBrutaIrrigacaoTotal.text)) >
+                                    100) {
+                                  regulagemPercentimetro.text = 'LB < L100%';
+                                } else {
+                                  regulagemPercentimetro.text = (100 *
                                           double.parse(triple
                                               .state.systemIrrigation.blade
-                                              .replaceAll(',', '.'))) /
-                                      (double.parse(
-                                          laminaBrutaIrrigacaoTotal.text)) >
-                                  100) {
-                                regulagemPercentimetro.text = 'LB < L100%';
-                              } else {
-                                regulagemPercentimetro.text = (100 *
-                                        double.parse(triple
-                                            .state.systemIrrigation.blade
-                                            .replaceAll(',', '.')) /
-                                        double.parse(
-                                            laminaBrutaIrrigacaoTotal.text))
-                                    .toStringAsFixed(0);
+                                              .replaceAll(',', '.')) /
+                                          double.parse(
+                                              laminaBrutaIrrigacaoTotal.text))
+                                      .toStringAsFixed(0);
+                                }
+                              }
+
+                              //TEMPO DE IRRIGAÇÃO
+                              if (triple.state.systemIrrigation.typeSystem ==
+                                  1) {
+                                irrigationTimeController.text = ((double.parse(
+                                            laminaBrutaIrrigacaoTotal.text)) /
+                                        (triple.state.systemIrrigation.nep *
+                                            triple.state.systemIrrigation
+                                                .emitterFlow))
+                                    .toStringAsFixed(2);
                               }
                             },
                             items: store.state.readingTensiometer.map((value) {
@@ -483,7 +573,7 @@ class _IrrigationManagementPageState extends State<IrrigationManagementPage> {
                             enabled: false,
                             controller: laminaliquidaIrrigacaoTotal,
                             labelText: 'Lâmina líquida de irrigação (LL):',
-                            suffixText: 'kPa',
+                            suffixText: 'mm',
                             keyboardType: TextInputType.number,
                           ),
                         ),
@@ -494,22 +584,42 @@ class _IrrigationManagementPageState extends State<IrrigationManagementPage> {
                             enabled: false,
                             controller: laminaBrutaIrrigacaoTotal,
                             labelText: 'Lâmina bruta de irrigação (LB):',
-                            suffixText: '%',
+                            suffixText: 'mm',
                             keyboardType: TextInputType.number,
                           ),
                         ),
-                        const Padding(
-                          padding: EdgeInsets.fromLTRB(16, 8, 16, 8),
-                          child: TextInputWidget(
-                            enabled: false,
-                            //controller: regulagemPercentimetro,
-                            fillColor: Color(0xffffffcc),
-                            centerText: false,
-                            labelText: 'Tempo de irrigação',
-                            suffixText: '%',
-                            keyboardType: TextInputType.number,
+                        if (triple.state.systemIrrigation.typeSystem == 1)
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                            child: TextInputWidget(
+                              controller: pamController
+                                ..text = ((triple.state.systemIrrigation.area) /
+                                        (triple.state.cultureData.plantSpacing *
+                                            triple.state.systemIrrigation
+                                                .spacingBetweenLateralLines) *
+                                        100)
+                                    .toStringAsFixed(1),
+                              enabled: false,
+                              fillColor: const Color(0xffffffcc),
+                              centerText: false,
+                              labelText: 'Porcentagem de água molhada',
+                              suffixText: '%',
+                              keyboardType: TextInputType.number,
+                            ),
                           ),
-                        ),
+                        if (triple.state.systemIrrigation.typeSystem == 1)
+                          Padding(
+                            padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),
+                            child: TextInputWidget(
+                              enabled: false,
+                              controller: irrigationTimeController,
+                              fillColor: const Color(0xffffffcc),
+                              centerText: false,
+                              labelText: 'Tempo de irrigação',
+                              suffixText: 'Hrs',
+                              keyboardType: TextInputType.number,
+                            ),
+                          ),
                         if (triple.state.systemIrrigation.typeSystem == 0)
                           Padding(
                             padding: const EdgeInsets.fromLTRB(16, 8, 16, 8),

@@ -1,10 +1,9 @@
 import 'package:flutter_triple/flutter_triple.dart';
-import 'package:tcc/app/core/domain/domain.dart';
-import 'package:tcc/app/modules/cras/domain/usecases/fetch_cras_usecase.dart';
-import 'package:tcc/app/modules/cras/domain/usecases/save_cras_usecase.dart';
-import 'package:tcc/app/modules/cras/submodules/edit_cras/presentation/state/edit_cras_state.dart';
-
+import '../../../../../../core/domain/domain.dart';
 import '../../../../domain/models/cras_chart.dart';
+import '../../../../domain/usecases/fetch_cras_usecase.dart';
+import '../../../../domain/usecases/save_cras_usecase.dart';
+import '../state/edit_cras_state.dart';
 
 class EditCrasStore extends StreamStore<Failure, EditCrasState> {
   final FetchCrasUsecase _fetchCrasUsecase;

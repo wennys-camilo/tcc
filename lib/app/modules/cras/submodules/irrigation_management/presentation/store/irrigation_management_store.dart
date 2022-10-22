@@ -1,13 +1,13 @@
 import 'package:flutter_triple/flutter_triple.dart';
 import 'package:intl/intl.dart';
-import 'package:tcc/app/core/domain/domain.dart';
-import 'package:tcc/app/modules/cras/domain/models/irrigation_record.dart';
-import 'package:tcc/app/modules/cras/domain/usecases/fetch_culture_data_usecase.dart';
-import 'package:tcc/app/modules/cras/domain/usecases/fetch_soil_data_usecase.dart';
-import 'package:tcc/app/modules/cras/domain/usecases/fetch_system_irrigation_data_usecase.dart';
-import 'package:tcc/app/modules/cras/domain/usecases/save_register_irrigation_usecase.dart';
 import 'package:uuid/uuid.dart';
+import '../../../../../../core/domain/domain.dart';
+import '../../../../domain/models/irrigation_record.dart';
+import '../../../../domain/usecases/fetch_culture_data_usecase.dart';
 import '../../../../domain/usecases/fetch_equotion_usecase.dart';
+import '../../../../domain/usecases/fetch_soil_data_usecase.dart';
+import '../../../../domain/usecases/fetch_system_irrigation_data_usecase.dart';
+import '../../../../domain/usecases/save_register_irrigation_usecase.dart';
 import '../state/irrigation_management_state.dart';
 
 class IrrigationManagementStore
@@ -146,6 +146,7 @@ class IrrigationManagementStore
               2)
           .toString(),
       laminaBruta: triple.state.bluntBlade,
+      typeSystem: state.systemIrrigation.typeSystem,
     ));
     response.fold((l) {}, (result) {});
     setLoading(false);

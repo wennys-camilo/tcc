@@ -4,6 +4,6 @@ import '../models/irrigation_record.dart';
 
 abstract class IrrigationRecordRepository {
   Future<Either<Failure, bool>> save(IrrigationRecord value);
-  Future<Either<Failure, bool>> remove(IrrigationRecord value);
+  Future<Either<Failure, bool>> remove(String id);
   Future<Either<Failure, List<IrrigationRecord>>> fetch();
 }
